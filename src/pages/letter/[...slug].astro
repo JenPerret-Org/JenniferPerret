@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('letter');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const pillarLabels: Record<string, string> = {
+  'agents-coding': 'Agents Writing Code',
+  'building-agents': 'Building Agentic Solutions',
+  'ai-general': 'AI — The Bigger Picture',
+};
+---
+
+<BaseLayout title={`${post.data.title} — Jennifer Perret`} description={post.data.description}>
+  <article class="max-w-3xl mx-auto px-6 py-20">
+    <header class="mb-12">
+      <div class="flex items-center gap-3 mb-4">
+        <time class="text-sm text-brand-muted" datetime={post.data.pubDate.toISOString()}>
+          {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+        <span class="text-sm text-brand-yellow">{pillarLabels[post.data.pillar] ?? post.data.pillar}</span>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-black leading-tight mb-4">{post.data.title}</h1>
+      <p class="text-lg text-brand-muted">{post.data.description}</p>
+      <div class="flex gap-2 mt-6">
+        {post.data.tags.map((tag: string) => (
+          <span class="tag-pill">{tag}</span>
+        ))}
+      </div>
+    </header>
+
+    <div class="prose prose-invert prose-lg max-w-none
+      prose-headings:font-bold prose-headings:text-brand-light
+      prose-a:text-brand-yellow prose-a:no-underline hover:prose-a:underline
+      prose-strong:text-brand-light
+      prose-code:text-brand-pink prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+      prose-blockquote:border-brand-pink prose-blockquote:text-brand-muted
+      prose-li:text-brand-muted
+      prose-p:text-brand-muted">
+      <Content />
+    </div>
+
+    <footer class="mt-16 pt-8 border-t border-white/5">
+      <div class="bg-white/[0.03] border border-white/10 rounded-xl p-8 text-center">
+        <p class="text-lg font-bold mb-2">Enjoyed this letter?</p>
+        <p class="text-brand-muted mb-4">Get the next one delivered to your inbox.</p>
+        <a
+          href="https://jenniferperret.substack.com"
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center justify-center px-6 py-3 bg-brand-pink text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+        >
+          Subscribe on Substack
+        </a>
+      </div>
+      <div class="mt-8 text-center">
+        <a href="/letter" class="text-brand-yellow hover:underline text-sm">&larr; Back to all letters</a>
+      </div>
+    </footer>
+  </article>
+</BaseLayout>

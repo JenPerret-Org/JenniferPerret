@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = [
+  {
+    name: 'AgentCraftworks',
+    description: 'Enterprise governance platform for AI agent orchestration — rate governors, circuit breakers, cascade detection, and compliance controls (NIST SP 800-53, ISO 42001).',
+    tags: ['TypeScript', 'MCP', 'Governance', 'Multi-Agent'],
+    url: 'https://github.com/AgentCraftworks',
+    highlight: true,
+  },
+  {
+    name: 'Agent Supply Chain Governance',
+    description: 'Exploring how software supply chain security frameworks need to evolve when agents — not humans — are writing the code. Signing, provenance, SBOM generation for agentic workflows.',
+    tags: ['Security', 'Compliance', 'SLSA', 'Supply Chain'],
+    url: '#',
+    highlight: false,
+  },
+  {
+    name: 'Rate Governor Patterns',
+    description: 'Circuit breakers, cascade detectors, and scope isolation patterns for keeping multi-agent systems from spiraling. Battle-tested in production.',
+    tags: ['Resilience', 'Patterns', 'TypeScript'],
+    url: '#',
+    highlight: false,
+  },
+];
+---
+
+<BaseLayout title="Projects — Jennifer Perret">
+  <div class="max-w-4xl mx-auto px-6 py-20">
+    <h1 class="text-3xl font-bold mb-2">Projects</h1>
+    <p class="text-brand-muted mb-12">Things I'm building, breaking, and learning from.</p>
+
+    <div class="space-y-6">
+      {projects.map((project) => (
+        <a
+          href={project.url}
+          target={project.url.startsWith('http') ? '_blank' : undefined}
+          rel={project.url.startsWith('http') ? 'noopener' : undefined}
+          class={`block p-8 rounded-xl border card-hover group ${project.highlight ? 'border-brand-pink/30 bg-brand-pink/[0.03]' : 'border-white/5 bg-white/[0.02]'}`}
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold group-hover:text-brand-yellow transition-colors mb-3">{project.name}</h2>
+              <p class="text-brand-muted leading-relaxed mb-4">{project.description}</p>
+              <div class="flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span class="tag-pill">{tag}</span>
+                ))}
+              </div>
+            </div>
+            {project.url.startsWith('http') && (
+              <svg class="w-5 h-5 text-brand-muted flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

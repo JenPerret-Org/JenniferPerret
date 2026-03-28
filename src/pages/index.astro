@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('letter', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const latestPosts = sortedPosts.slice(0, 6);
+
+const pillarLabels: Record<string, { label: string; color: string; description: string }> = {
+  'agents-coding': {
+    label: 'Agents Writing Code',
+    color: 'text-brand-pink',
+    description: 'How do we ensure the security and compliance guardrails we built for human developers still hold when agents are writing the code? This is where my head is — software supply chain governance in an agentic world.',
+  },
+  'building-agents': {
+    label: 'Building Agentic Solutions',
+    color: 'text-brand-yellow',
+    description: 'Patterns, architectures, and hard-won lessons from building multi-agent orchestration systems. The how of making agents work together.',
+  },
+  'ai-general': {
+    label: 'AI — The Bigger Picture',
+    color: 'text-purple-400',
+    description: 'The broader AI landscape — tools, trends, takes, and the occasional existential question about where all of this is heading.',
+  },
+};
+
+const pillarDots: Record<string, string> = {
+  'text-brand-pink': 'var(--color-brand-pink)',
+  'text-brand-yellow': 'var(--color-brand-yellow)',
+  'text-purple-400': '#a78bfa',
+};
+---
+
+<BaseLayout title="Jennifer Perret — AI Agentic Adventures & Misadventures">
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="max-w-5xl mx-auto px-6 pt-20 pb-16">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="text-brand-yellow font-semibold text-sm uppercase tracking-widest mb-4">Adventures & Misadventures</p>
+          <h1 class="text-4xl md:text-5xl font-black leading-tight mb-6">
+            Learning AI Agentic Development
+            <span class="gradient-text"> in public.</span>
+          </h1>
+          <p class="text-lg text-brand-muted leading-relaxed mb-8">
+            Things are about to get messy. I'm figuring out how agents write code, how to build agentic solutions, and what governance looks like when your developers aren't all human.
+            <strong class="text-brand-light">Every week, I share what I've learned — and what went sideways.</strong>
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="#subscribe" class="inline-flex items-center justify-center px-6 py-3 bg-brand-pink text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+              Subscribe to the Weekly Letter
+            </a>
+            <a href="/letter" class="inline-flex items-center justify-center px-6 py-3 border border-white/10 text-brand-light font-semibold rounded-lg hover:border-white/25 transition-colors">
+              Read the Archive
+            </a>
+          </div>
+        </div>
+        <div class="relative">
+          <img
+            src="/images/things-about-to-get-messy.png"
+            alt="Things are about to get messy — poster held up setting the tone for learning through mistakes"
+            class="rounded-xl shadow-2xl shadow-brand-pink/20 rotate-1 hover:rotate-0 transition-transform duration-300"
+          />
+        </div>
+      </div>
+    </div>
+    <!-- Background gradient blobs -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-brand-pink/10 rounded-full blur-3xl -z-10"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-3xl -z-10"></div>
+  </section>
+
+  <!-- Content Pillars -->
+  <section class="py-20 border-t border-white/5">
+    <div class="max-w-5xl mx-auto px-6">
+      <h2 class="text-2xl font-bold mb-2">What I Write About</h2>
+      <p class="text-brand-muted mb-12">Three pillars. One messy journey.</p>
+      <div class="grid md:grid-cols-3 gap-8">
+        {Object.entries(pillarLabels).map(([key, { label, color, description }]) => (
+          <div class="p-6 rounded-xl border border-white/5 bg-white/[0.02] card-hover">
+            <div class="w-3 h-3 rounded-full mb-4" style={`background: ${pillarDots[color] ?? '#a78bfa'}`}></div>
+            <h3 class={`text-lg font-bold mb-3 ${color}`}>{label}</h3>
+            <p class="text-sm text-brand-muted leading-relaxed">{description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Posts -->
+  <section class="py-20 border-t border-white/5">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="flex items-center justify-between mb-12">
+        <div>
+          <h2 class="text-2xl font-bold">Latest Letters</h2>
+          <p class="text-brand-muted">Fresh from the messy frontier.</p>
+        </div>
+        <a href="/letter" class="text-sm text-brand-yellow hover:underline">View all &rarr;</a>
+      </div>
+      {latestPosts.length === 0 ? (
+        <div class="text-center py-16 border border-dashed border-white/10 rounded-xl">
+          <p class="text-brand-muted text-lg mb-2">First letter coming soon.</p>
+          <p class="text-brand-muted text-sm">Subscribe below to get notified when it drops.</p>
+        </div>
+      ) : (
+        <div class="grid md:grid-cols-2 gap-6">
+          {latestPosts.map((post) => (
+            <a href={`/letter/${post.id}`} class="block p-6 rounded-xl border border-white/5 bg-white/[0.02] card-hover group">
+              <div class="flex items-center gap-3 mb-3">
+                <time class="text-xs text-brand-muted" datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                </time>
+                <span class="tag-pill">{pillarLabels[post.data.pillar]?.label ?? post.data.pillar}</span>
+              </div>
+              <h3 class="text-lg font-bold group-hover:text-brand-yellow transition-colors mb-2">{post.data.title}</h3>
+              <p class="text-sm text-brand-muted line-clamp-2">{post.data.description}</p>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section id="subscribe" class="py-20 border-t border-white/5">
+    <div class="max-w-2xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-4">Get the Weekly Letter</h2>
+      <p class="text-brand-muted mb-8 leading-relaxed">
+        AI agentic development insights, governance lessons, and honest accounts of what went wrong — delivered to your inbox every week.
+      </p>
+      <div class="bg-white/[0.03] border border-white/10 rounded-xl p-8">
+        <p class="text-sm text-brand-muted mb-4">Powered by Substack — no spam, unsubscribe anytime.</p>
+        <!-- Replace with your actual Substack URL once created -->
+        <a
+          href="https://jenniferperret.substack.com"
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center justify-center px-8 py-3 bg-brand-pink text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+        >
+          Subscribe on Substack
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

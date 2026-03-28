@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About — Jennifer Perret">
+  <div class="max-w-3xl mx-auto px-6 py-20">
+    <h1 class="text-3xl font-bold mb-8">About</h1>
+
+    <div class="prose prose-invert prose-lg max-w-none
+      prose-headings:font-bold prose-headings:text-brand-light
+      prose-a:text-brand-yellow prose-a:no-underline hover:prose-a:underline
+      prose-strong:text-brand-light
+      prose-p:text-brand-muted
+      prose-li:text-brand-muted">
+
+      <p>
+        I'm <strong>Jennifer Perret</strong> — and I'm figuring out what happens to software governance when agents start writing the code.
+      </p>
+
+      <p>
+        By day, I work on enterprise platform engineering — building the governance, compliance, and orchestration systems that keep AI agents operating within guardrails. I've spent time deep in frameworks like <strong>NIST SP 800-53</strong> and <strong>ISO 42001</strong>, translating compliance requirements into working controls for multi-agent systems.
+      </p>
+
+      <p>
+        This site is my learning journal. I started it because the transition to AI agentic development is moving fast, the landscape is messy, and I believe the best way to learn is to do it in public — sharing both the breakthroughs and the face-plants.
+      </p>
+
+      <h2>What I'm Focused On</h2>
+
+      <p>
+        My primary question right now: <strong>the security and compliance requirements we built for our software supply chain assumed human developers. How do those need to change when agents are doing the coding?</strong>
+      </p>
+
+      <p>This leads me into territory like:</p>
+
+      <ul>
+        <li>Agent identity, code signing, and provenance attestation</li>
+        <li>Rate governors, circuit breakers, and cascade detection for multi-agent systems</li>
+        <li>Compliance-as-code for agentic workflows</li>
+        <li>The broader question of trust in AI-generated software</li>
+      </ul>
+
+      <h2>Why "Adventures & Misadventures"?</h2>
+
+      <p>
+        Because a growth mindset means being honest about the misadventures. The compliance control that looked great on paper but fell apart at 3am. The architectural decision that seemed clever until it wasn't. Those are the stories worth telling.
+      </p>
+
+      <p>
+        Things are about to get messy. Let's figure it out together.
+      </p>
+
+      <h2>Connect</h2>
+
+      <ul>
+        <li><a href="https://linkedin.com/in/jenperret">LinkedIn</a></li>
+        <li><a href="https://github.com/jenperret">GitHub</a></li>
+        <li><a href="https://jenniferperret.substack.com">Substack</a></li>
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

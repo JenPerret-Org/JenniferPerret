@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('letter', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const pillarLabels: Record<string, string> = {
+  'agents-coding': 'Agents Writing Code',
+  'building-agents': 'Building Agentic Solutions',
+  'ai-general': 'AI — The Bigger Picture',
+};
+
+const pillarColors: Record<string, string> = {
+  'agents-coding': 'text-brand-pink',
+  'building-agents': 'text-brand-yellow',
+  'ai-general': 'text-purple-400',
+};
+---
+
+<BaseLayout title="Weekly Letter — Jennifer Perret">
+  <div class="max-w-3xl mx-auto px-6 py-20">
+    <h1 class="text-3xl font-bold mb-2">The Weekly Letter</h1>
+    <p class="text-brand-muted mb-12">AI Agentic Adventures & Misadventures — learning in public, one week at a time.</p>
+
+    {sortedPosts.length === 0 ? (
+      <div class="text-center py-16 border border-dashed border-white/10 rounded-xl">
+        <p class="text-brand-muted text-lg mb-2">First letter dropping soon.</p>
+        <p class="text-brand-muted text-sm">
+          <a href="/#subscribe" class="text-brand-yellow hover:underline">Subscribe</a> to get notified.
+        </p>
+      </div>
+    ) : (
+      <div class="space-y-6">
+        {sortedPosts.map((post) => (
+          <a href={`/letter/${post.id}`} class="block p-6 rounded-xl border border-white/5 bg-white/[0.02] card-hover group">
+            <div class="flex items-center gap-3 mb-3">
+              <time class="text-xs text-brand-muted" datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+              <span class={`text-xs font-medium ${pillarColors[post.data.pillar] ?? ''}`}>
+                {pillarLabels[post.data.pillar] ?? post.data.pillar}
+              </span>
+            </div>
+            <h2 class="text-xl font-bold group-hover:text-brand-yellow transition-colors mb-2">{post.data.title}</h2>
+            <p class="text-sm text-brand-muted">{post.data.description}</p>
+            <div class="flex gap-2 mt-4">
+              {post.data.tags.map((tag: string) => (
+                <span class="tag-pill">{tag}</span>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>
