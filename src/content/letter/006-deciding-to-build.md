@@ -1,6 +1,6 @@
 ---
 title: "Deciding to Build AgentCraftworks"
-description: "Why a governance platform? Why TypeScript AND .NET? Why MCP? The architectural bets I made before writing a line of code — and the ones that turned out wrong."
+description: "Why a governance platform? Why TypeScript AND .NET? Why MCP? The architectural bets I made before writing a line of code, and the ones that turned out wrong."
 pubDate: 2025-12-15
 tags: ["agentcraftworks", "architecture", "planning", "MCP", "dual-stack"]
 pillar: "building-agents"
@@ -9,7 +9,7 @@ draft: true
 
 ## Before a Single Line of Code
 
-December 2025. I had the questions from my previous letter burning a hole in my brain, and I had the conviction that someone needed to build answers. What I didn't have was a codebase, a team, or — honestly — a clear picture of what the product actually was.
+December 2025. I had the questions from my previous letter burning a hole in my brain, and I had the conviction that someone needed to build answers. What I didn't have was a codebase, a team, or, honestly, a clear picture of what the product actually was.
 
 So I did what any self-respecting ex-enterprise architect would do. I planned. I diagrammed. I wrote strategy documents to an audience of one. I filled notebooks with boxes and arrows and crossed most of them out.
 
@@ -23,7 +23,7 @@ But I kept asking: who governs them once they're running?
 
 The gap wasn't in agent creation. It was in agent accountability. Nobody was building the layer that sits between "we deployed agents" and "we can prove to our auditors, our regulators, and our board that those agents operated within defined boundaries."
 
-Every enterprise I'd worked with at Microsoft had governance requirements. Access control. Audit trails. Compliance attestation. Change management. These aren't nice-to-haves in regulated industries — they're table stakes. And none of the agent frameworks were addressing them as a first-class concern. Governance was always "you can add that later" or "plug in your existing SIEM."
+Every enterprise I'd worked with at Microsoft had governance requirements. Access control. Audit trails. Compliance attestation. Change management. These aren't nice-to-haves in regulated industries; they're table stakes. And none of the agent frameworks were addressing them as a first-class concern. Governance was always "you can add that later" or "plug in your existing SIEM."
 
 I didn't want to build framework number thirty-seven. I wanted to build the thing that makes frameworks one through thirty-six safe to deploy in a Fortune 500.
 
@@ -31,7 +31,7 @@ I didn't want to build framework number thirty-seven. I wanted to build the thin
 
 This is where I need to be honest about a decision that seemed brilliant in December and looked questionable by January.
 
-I planned a dual-stack architecture: TypeScript for the web-facing layer, the MCP integration surface, and the developer tooling. .NET Aspire for the enterprise backend — the heavy lifting of compliance engines, audit storage, and integration with corporate identity providers.
+I planned a dual-stack architecture: TypeScript for the web-facing layer, the MCP integration surface, and the developer tooling. .NET Aspire for the enterprise backend, the heavy lifting of compliance engines, audit storage, and integration with corporate identity providers.
 
 The logic was sound on paper. TypeScript owned the AI/ML ecosystem. npm was where MCP libraries lived. The developer community building agents spoke JavaScript and TypeScript. But enterprise backends at banks and insurance companies? They ran on .NET and Java. Azure services were .NET-native. If I wanted to sell to the Fortune 500, I needed to speak their language.
 
@@ -49,7 +49,7 @@ MCP was still early. Anthropic had published the spec, a few reference implement
 
 But MCP had something the others didn't: it was an open standard designed specifically for the problem of connecting AI models to external tools and data. It wasn't trying to be an agent framework. It was trying to be the protocol that agent frameworks speak. That's a different thing entirely, and it's the right layer for a governance platform to hook into.
 
-If I built on MCP, I could govern agents regardless of which framework created them. I wouldn't be tied to LangChain or CrewAI or whatever the hot framework was next quarter. I'd be at the protocol layer — the place where all agent actions eventually flow through on their way to the real world.
+If I built on MCP, I could govern agents regardless of which framework created them. I wouldn't be tied to LangChain or CrewAI or whatever the hot framework was next quarter. I'd be at the protocol layer, the place where all agent actions eventually flow through on their way to the real world.
 
 That bet held up. It's still holding up as I write this.
 
@@ -61,13 +61,13 @@ Before touching a keyboard, I sketched out core concepts that I thought a govern
 
 **Autonomy dials.** How much freedom does an agent get? I originally designed an eleven-level autonomy scale, from "fully supervised" to "fully autonomous." Eleven levels. I was very proud of those eleven levels. They were carefully differentiated and precisely defined and absolutely nobody would ever configure them correctly. The concept survived but the scale got dramatically simplified. Sometimes less granularity is more governance.
 
-**Action classifiers.** Every action an agent takes — reading a file, calling an API, modifying data, spending money — has a risk profile. I designed a classification system that would tag every action with risk metadata and route it through appropriate approval workflows. This concept survived and became the backbone of the compliance engine.
+**Action classifiers.** Every action an agent takes, reading a file, calling an API, modifying data, spending money, has a risk profile. I designed a classification system that would tag every action with risk metadata and route it through appropriate approval workflows. This concept survived and became the backbone of the compliance engine.
 
 ## Preparation as Momentum
 
 While the architecture was still on paper, I made a deliberate investment: I went and got my Azure AI Fundamentals certification (AI-900). Not because the certification itself would teach me anything I couldn't learn from docs, but because the structured preparation forced me to systematically cover ground I might have skipped. Responsible AI principles. Azure AI service boundaries. The vocabulary that enterprise buyers use when they evaluate AI platforms.
 
-It was also a confidence signal — to myself as much as anyone. I'd been away from hands-on technical work for a long time. The OLE C++ database replication days were decades behind me. Earning a current certification in the AI space was a small but meaningful proof point that I could re-enter the technical arena and hold my own.
+It was also a confidence signal, to myself as much as anyone. I'd been away from hands-on technical work for a long time. The OLE C++ database replication days were decades behind me. Earning a current certification in the AI space was a small but meaningful proof point that I could re-enter the technical arena and hold my own.
 
 ## The Hackathon on the Horizon
 

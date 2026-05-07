@@ -1,5 +1,5 @@
 ---
-title: "Why I'm Starting This — Adventures in AI Agentic Development"
+title: "Why I'm Starting This: Adventures in AI Agentic Development"
 description: "The software supply chain governance we built for humans doesn't just work for agents. This is my attempt to learn in public as I figure out what does."
 pubDate: 2026-03-27
 tags: ["intro", "governance", "software-supply-chain", "growth-mindset"]
@@ -11,7 +11,7 @@ draft: true
 
 Things are about to get messy.
 
-For years, we built governance frameworks — compliance controls, security gates, supply chain integrity checks — with a clear assumption: **humans are writing the code**. We knew how to audit a developer's commit. We had signing, review gates, SBOM generation, and provenance attestation all figured out (mostly).
+For years, we built governance frameworks, compliance controls, security gates, supply chain integrity checks, with a clear assumption: **humans are writing the code**. We knew how to audit a developer's commit. We had signing, review gates, SBOM generation, and provenance attestation all figured out (mostly).
 
 Then agents started coding.
 
@@ -23,7 +23,7 @@ And suddenly, the questions got interesting:
 
 ## What This Weekly Letter Is About
 
-I'm not here to pretend I have the answers. I'm here to **learn in public** — to share what I'm figuring out, what's working, and (maybe more usefully) what's going sideways.
+I'm not here to pretend I have the answers. I'm here to **learn in public:** to share what I'm figuring out, what's working, and (maybe more usefully) what's going sideways.
 
 Three areas I'll be exploring:
 
@@ -31,9 +31,9 @@ Three areas I'll be exploring:
 This is my primary focus. The security and compliance requirements we built for our software supply chain assumed human developers. Now we need to make them work with agents. I think there will be a lot of different approaches and things to learn rapidly.
 
 ### 2. Building Agentic Solutions
-The architectures, patterns, and hard lessons from building multi-agent orchestration systems. Rate governors, circuit breakers, cascade detection — the plumbing that keeps agent systems from going off the rails.
+The architectures, patterns, and hard lessons from building multi-agent orchestration systems. Rate governors, circuit breakers, cascade detection, the plumbing that keeps agent systems from going off the rails.
 
-### 3. AI — The Bigger Picture
+### 3. AI: The Bigger Picture
 The broader landscape. Where is this going? What should we be paying attention to? What are we all getting wrong?
 
 ## Why "Adventures and Misadventures"?
