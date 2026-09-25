@@ -9,7 +9,9 @@ draft: true
 
 ## An Inventory of What We Have
 
-Before I talk about what breaks, I want to take a careful inventory of what exists. The software industry has spent decades building governance into the development lifecycle, and the result is a sophisticated, layered system that works remarkably well, as long as a human is at the center of it.
+Before I talk about what breaks, let me be honest about what we got right.
+
+The software industry has spent decades building governance into the development lifecycle, and the result is a sophisticated, layered system that works remarkably well, as long as a human is at the center of it.
 
 Let me walk through the stack.
 
@@ -37,8 +39,6 @@ Count the assumptions. I get at least twelve points in that flow where the syste
 
 Now hold that number in your head.
 
-## The Compliance Frameworks
-
 I have been studying two compliance frameworks deeply: NIST SP 800-53 and ISO 42001.
 
 **NIST SP 800-53** is the gold standard for federal information security controls. It covers access control, audit and accountability, identification and authentication, system and information integrity, hundreds of controls organized into families. It is thorough, well-structured, and built around the concept of "authorized users" performing "authorized actions." The word "user" appears constantly. The implicit model is a human sitting at a terminal, authenticated and authorized.
@@ -47,9 +47,7 @@ I have been studying two compliance frameworks deeply: NIST SP 800-53 and ISO 42
 
 Both frameworks are essential. Both are incomplete for a world where AI agents are writing code, opening PRs, reviewing changes, and deploying software.
 
-## The Questions I Cannot Answer Yet
-
-This is the part of the letter where I resist the urge to jump to solutions. I have been thinking about these questions for weeks, and I don't have clean answers. What I have is a growing list of precisely articulated problems. Here they are.
+This is the part of the letter where I resist the urge to jump to solutions. I have been thinking about the questions that follow for weeks, and I don't have clean answers. What I have is a growing list of precisely articulated problems. Here they are.
 
 **Identity.** When an AI agent commits code, whose identity is attached? The agent's operator? The platform that hosts the agent? The agent itself, as a non-human entity? Code signing assumes a key maps to a person. What does it mean to sign a commit with an agent's key, and who is responsible when that code introduces a vulnerability?
 
@@ -65,15 +63,15 @@ This is the part of the letter where I resist the urge to jump to solutions. I h
 
 I don't have answers to these questions. Not yet. What I have is the conviction that they are the right questions, and that the industry needs to start asking them seriously before multi-agent systems become entrenched in production environments without governance.
 
-## The Before Photo
-
 Consider this letter a "before" photo. This is the state of software supply chain governance in late 2025: mature, sophisticated, effective, and built entirely around the assumption that humans are the primary actors in the development lifecycle.
 
 That assumption is about to break. Not because the governance is bad, it's genuinely good, but because the world it governs is changing underneath it. AI agents are already writing code in production. They are opening PRs. They are being integrated into CI/CD pipelines. And they are doing all of this inside governance systems that don't know they exist.
 
 The frameworks will need to evolve. The tooling will need to evolve. The mental models will need to evolve. And someone needs to do the careful, detailed work of figuring out exactly how.
 
-That is what I am building toward with AgentCraftworks. But before I could build solutions, I needed to understand the current state with precision. Now I do. The next letters will start exploring what comes after.
+That is what I am building toward with AgentCraftworks. But before I could build solutions, I needed to understand the current state with precision. Now I do.
+
+I keep thinking about that number: twelve. Twelve places in one ordinary flow where we quietly assumed a human. What number is hiding in your own systems?
 
 ---
 

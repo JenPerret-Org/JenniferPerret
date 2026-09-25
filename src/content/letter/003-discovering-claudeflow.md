@@ -9,15 +9,15 @@ draft: true
 
 ## The Moment It Clicked
 
-I wasn't looking for ClaudeFlow. I was doing what I'd been doing for weeks: reading GitHub repos, scanning npm packages, trying to understand the shape of the AI agent ecosystem from the ground level. I had a vague sense that AgentCraftworks needed to be "something about AI governance," but I was still thinking about it as a content platform, maybe a website that explained these concepts. I hadn't yet understood what I was actually going to build.
+I wasn't looking for it. That's usually how the important ones arrive.
+
+I was doing what I'd been doing for weeks: reading GitHub repos, scanning npm packages, trying to understand the shape of the AI agent ecosystem from the ground level. I had a vague sense that AgentCraftworks needed to be "something about AI governance," but I was still thinking about it as a content platform, maybe a website that explained these concepts. I hadn't yet understood what I was actually going to build.
 
 Then I found ClaudeFlow.
 
 It was ruvnet's project, a multi-agent orchestration framework published as an npm package (`claude-flow`) with a GitHub repo that laid out something I had been circling around but couldn't articulate. Agents coordinating with each other. Task decomposition. Parallel execution. Not one agent doing one thing, but multiple agents working together on complex problems, passing context, dividing labor, converging on results.
 
 I spent an entire evening reading the code. Then I spent another evening reading it again.
-
-## What ClaudeFlow Showed Me
 
 The architecture was elegant in a way that made the implications immediately visible. Here was a system where you could define a workflow, break it into tasks, assign those tasks to different agent instances, and have them execute in parallel with coordination logic handling dependencies and results aggregation.
 
@@ -39,9 +39,7 @@ Rate limiting across agent swarms. Identity and authorization for non-human acto
 
 The scope of what I needed to build expanded dramatically in that one evening. And paradoxically, it also came into focus. The problem was no longer vague. It was specific, technical, and urgent.
 
-## Reading the Code
-
-I want to be specific about what I did, because I think it matters for anyone learning in public: I read the source code.
+I want to be specific about what I did next, because I think it matters for anyone learning in public: I read the source code.
 
 Not the README. Not the marketing page. The actual TypeScript. The orchestration logic. The way tasks were defined and dispatched. The way results flowed back. The error handling. The coordination primitives.
 
@@ -61,8 +59,6 @@ ClaudeFlow was transformative for my understanding. It was the intellectual cata
 
 I'm telling you this now, in September 2025, because you are reading these letters in order and you deserve the honest arc. At this moment in the story, I was electrified by discovery. The correction came later. Both parts are true.
 
-## What I Carried Forward
-
 The lasting impact of discovering ClaudeFlow wasn't attachment to a specific tool. It was a permanent change in how I thought about the problem space.
 
 Before: AI agents are individual assistants that help humans do tasks.
@@ -78,7 +74,9 @@ Steve Jobs had that line about connecting dots looking backward. I try not to le
 
 I didn't know what I was looking at yet, not fully. But I knew it mattered. I knew that multi-agent orchestration was going to be a defining pattern of enterprise AI, and I knew that governance for that pattern was wide open. I also knew that I was one of very few people who had both the technical depth to understand the orchestration and the enterprise experience to understand the governance.
 
-That is a narrow intersection. And it is exactly where AgentCraftworks lives.
+That is a narrow intersection. It is exactly where AgentCraftworks lives.
+
+I didn't know what I was looking at yet. I just knew it mattered. Isn't that always how it starts?
 
 ---
 

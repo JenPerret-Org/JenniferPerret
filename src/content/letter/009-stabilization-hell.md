@@ -7,11 +7,11 @@ pillar: "building-agents"
 draft: true
 ---
 
-You know that feeling the morning after a party when you turn on the lights and see what the living room actually looks like? That was February 10 through 15 for AgentCraftworks. The weekend hackathon was over. The adrenaline was gone. And now I had to make all of this code actually work.
+You know that feeling the morning after a party when you turn on the lights and see what the living room actually looks like? That was February 10 through 15 for AgentCraftworks.
+
+The weekend hackathon was over. The adrenaline was gone. And now I had to make all of this code actually work.
 
 It did not go well.
-
-## The Bug Parade
 
 The .NET stack greeted me Monday morning with dozens of `JsonElement` hash and equality contract violations. If you have not had the pleasure of debugging these, the short version is: floating-point precision differences mean that two `JsonElement` values that look identical are not, in fact, equal. The serializer says 1.0, the deserializer says 1.0, and the hash code says "these are different objects and I will throw an exception to prove it."
 
@@ -21,27 +21,15 @@ Then came the EF Core version conflicts. Then the Stateless library deprecation 
 
 And then we found the shell injection vulnerability.
 
-## The Security Wake-Up Call
-
 One of the governance tools accepted a repository path parameter and passed it to a shell command. Unsanitized. In a platform whose entire purpose was to make AI agents safer. The irony was not subtle.
 
 We caught it. We fixed it. But it was a stark reminder that velocity without discipline produces exactly the kind of risk I was building AgentCraftworks to prevent. I was the cobbler whose children had no shoes, except the shoes were input validation and the children were shell commands.
 
-## The Branch Naming Saga
-
-If you ever want to see what it looks like when an AI coding assistant is struggling, look at the branch names. During this week, I watched Copilot generate a cascade of sub-PR branches that told the whole story:
-
-`sub-pr-24`
-
-`sub-pr-24-yet-again`
-
-`sub-pr-24-please-work`
+If you ever want to see what it looks like when an AI coding assistant is struggling, look at the branch names. During this week, I watched Copilot generate a cascade of sub-PR branches that told the whole story: `sub-pr-24`, `sub-pr-24-yet-again`, `sub-pr-24-please-work`.
 
 Copilot was creating branches, opening PRs, hitting merge conflicts with its own previous PRs, creating new branches to fix the conflicts, and then conflicting with those. It was a recursive nightmare of good intentions. I eventually had to step in, manually resolve the conflicts, and force-push to break the cycle.
 
 This is one of the less-discussed realities of AI-assisted development: when things go wrong, they can go wrong in loops. A human developer hits a merge conflict and stops to think. An AI assistant hits a merge conflict and tries to fix it, which creates a new commit, which creates a new conflict, which it tries to fix. The failure mode is not "stuck"; it is "spinning."
-
-## The Big Pivot
 
 By mid-week, the bugs were forcing architectural questions I had been avoiding.
 
@@ -55,17 +43,11 @@ We collapsed to 4 states: pending, active, completed, failed. Clean. Unambiguous
 
 These were not minor tweaks. These were fundamental architecture decisions, the kind that normally happen in design review before any code is written. We were making them in week two because the code was already written and it was telling us the design was wrong.
 
-## The Commit That Says It All
-
-There is one commit message from this week that I keep coming back to:
-
-`fix: stabilize main -- resolve TS/dotnet build errors and CI test failure`
+There is one commit message from this week that I keep coming back to: `fix: stabilize main -- resolve TS/dotnet build errors and CI test failure`
 
 That single commit contained changes across both stacks, fixing build errors, updating test assertions, correcting type definitions, and getting CI green again. It was a stabilization commit, the kind you write when everything is broken and you just need the main branch to compile.
 
 In a well-run project, you should never need a commit like that. In a project where one person scaffolded two full stacks in a weekend with AI assistance, you need a dozen of them.
-
-## The Debt Equation
 
 Here is what I learned during stabilization hell: AI-assisted velocity has a debt multiplier.
 
@@ -75,13 +57,13 @@ The code looked professional. It had proper error handling, reasonable type defi
 
 This is not an argument against AI-assisted development. It is an argument for understanding the trade-off. You can move faster. The debt accumulates faster too. Stabilization is not optional, it is the price of velocity, and you pay it whether you budget for it or not.
 
-## The Irony
-
 I will say it plainly because it deserves to be said plainly: I was building a governance platform for AI agents while my own AI-assisted codebase was ungoverned.
 
 The tools I was building (the action classifier, the permission checker, the autonomy dial) existed precisely to prevent the kind of chaos I was living through. The shell injection vulnerability. The cascading merge conflicts from Copilot. The architectural decisions made under pressure instead of with deliberation.
 
-AgentCraftworks was, in a very real sense, being built to solve the problems that building AgentCraftworks had created. If that is not motivation to ship, I do not know what is.
+AgentCraftworks was, in a very real sense, being built to solve the problems that building AgentCraftworks had created.
+
+If that is not motivation to ship, I do not know what is. What is your own version of that irony?
 
 ---
 
