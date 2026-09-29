@@ -13,8 +13,6 @@ My reaction when I read it wasn't surprise. It was recognition.
 
 I've been hitting these walls for months. I just did not know they were walls yet. I thought they were bugs.
 
-## What "Rate Limited by an Agent Squad" Actually Looks Like
-
 When a single developer hits a rate limit, the experience is simple. You get a 429. You wait. You retry. Life continues.
 
 When a squad of AI agents hits a rate limit, the experience is something else entirely.
@@ -27,15 +25,11 @@ At this point, depending on how your error handling is wired, one of two things 
 
 I experienced both outcomes before I understood what was causing them.
 
-## The Diagnosis
-
 Rate limit errors have a particular signature in the GitHub API: HTTP 403 with a `X-RateLimit-Remaining: 0` header, or HTTP 429 with a `Retry-After` header. But when you are running agents asynchronously and errors are aggregated by an orchestrator, those headers get lost. What surfaces in your logs isn't "rate limited": it's "governance state validation failed" or "audit poll returned unexpected status" or, my personal favorite, a completely silent failure where the agent just stops updating state.
 
 The diagnosis required adding structured logging at the HTTP layer, logging not just the response code but the rate limit headers on every outbound GitHub API call. Once I could see the actual header values, the pattern was immediate: we were burning through 5,000 requests in about forty minutes every time a full squad run kicked off, then sitting in a rate-limited state for the remainder of the hour.
 
 Five thousand requests in forty minutes from a squad of agents isn't pathological. It's actually pretty normal if each agent is doing routine work, checking PR status, reading file contents, posting review comments, triggering workflow dispatches. The problem is that "normal agent work" at squad scale adds up faster than intuition suggests.
-
-## The Rate Governor
 
 This is where the [AgentCraftworks Hub](https://github.com/AgentCraftworks/Hub) rate governor came from. I have mentioned it in passing in previous letters, but the mechanics are worth detailing.
 
@@ -45,8 +39,6 @@ Before an agent makes an outbound GitHub API call, it queries the rate governor 
 
 This means the rate governor adapts to reality, not just to a theoretical model of how many requests we think we will make. If GitHub's API is telling us we have 50 requests left in the current window, we act like we have 50 requests left, not the 800 our local model predicted.
 
-## Circuit Breakers for Cascade Prevention
-
 The rate governor handles steady-state throttling. The circuit breaker handles the failure case.
 
 When a call fails with a rate limit error, the circuit breaker trips for that endpoint. The circuit breaker state has three positions: closed (normal operation), open (failing fast, no calls going through), and half-open (testing recovery). Tripped circuit breakers report their status to the orchestrator through a shared health channel.
@@ -55,41 +47,19 @@ The orchestrator aggregates circuit breaker states across the squad. If more tha
 
 This is the difference between "the agent crashed because it hit a rate limit" and "the squad paused for four minutes and then continued where it left off." The second experience is what you want. The first is what most people have by default.
 
-## The Hub Dashboard
-
 One of the first features I added to [AgentCraftworks Hub](https://github.com/AgentCraftworks/Hub) was rate limit history charts, not just the current remaining count, but a time-series view of consumption over the past 24 hours. I added it because I kept asking "why did the squad stall at 2pm yesterday?" and not being able to answer it without digging through logs.
 
 The charts make the answer obvious. You can see exactly when consumption spiked, correlate it with which workflows were running, and identify the specific agent behaviors that burned the most quota. That visibility turned rate limit management from reactive debugging into proactive capacity planning.
 
 Now when I look at the Hub and see the consumption curve heading toward the circuit breaker threshold, I can manually pause a squad run or adjust the request scheduling before we hit the wall. The wall is still there. We just see it coming now.
 
-## What GitHub's New Limits Mean for Agent Builders
-
-The [changelog entry](https://github.blog/changelog/2026-04-10-enforcing-new-limits-and-retiring-opus-4-6-fast-from-copilot-pro/) distinguishes between two types of limits going forward:
-
-**Service reliability limits** are the ones where you hit a ceiling and have to wait for your session to reset. These are the hard stops. No retry will help; you wait for the window to clear.
-
-**Model and model family capacity limits** are softer, when you hit these, the guidance is to switch to an alternative model. This is actually a useful signal for agent systems: if you are writing agent orchestration code, you should already have a model fallback chain. If Opus 4.6 Fast is at capacity, route to Opus 4.6. If that is constrained, route to Sonnet. The hierarchy should be explicit in your configuration.
+The [changelog entry](https://github.blog/changelog/2026-04-10-enforcing-new-limits-and-retiring-opus-4-6-fast-from-copilot-pro/) distinguishes between two types of limits going forward. Service reliability limits are the ones where you hit a ceiling and have to wait for your session to reset. These are the hard stops. No retry will help; you wait for the window to clear. Model and model family capacity limits are softer, when you hit these, the guidance is to switch to an alternative model. This is actually a useful signal for agent systems: if you are writing agent orchestration code, you should already have a model fallback chain. If Opus 4.6 Fast is at capacity, route to Opus 4.6. If that is constrained, route to Sonnet. The hierarchy should be explicit in your configuration.
 
 The retirement of Opus 4.6 Fast for Copilot Pro+ is a separate signal worth naming: the fastest, cheapest tier of a powerful model is going away because it was being concentrated-burst in ways that put load on shared infrastructure. That is agent usage. That is exactly the pattern I described above, squads making lots of calls in short windows. The retirement is a consequence of that usage pattern at scale.
 
 For teams that were using Opus 4.6 Fast for rapid agent loops specifically because of its speed: you need a fallback now. Opus 4.6 is the recommended alternative. It's slightly slower and slightly more expensive per call, which means the economic pressure to spread requests over time actually increases, not decreases.
 
-## Practical Recommendations
-
-If you are building agentic systems that use the GitHub API or Copilot models, here is what I would recommend based on months of running into this:
-
-**Instrument at the HTTP layer.** Log rate limit headers on every outbound API call. You cannot manage what you cannot see. A 403 or 429 without the accompanying headers is an incomplete error.
-
-**Build a rate governor, not just retry logic.** Retry logic tells you what to do when you hit a limit. A rate governor tells you how not to hit it in the first place. The two are complementary but the governor is more valuable.
-
-**Configure circuit breakers with squad-level awareness.** Individual agent circuit breakers are good. Orchestrator-level aggregation that can pause a whole squad is better. Rate limit errors are correlated, when one agent gets them, others likely will too.
-
-**Use the model fallback chain.** Explicit fallback from fastest model to progressively more conservative models is table stakes for production agent systems. With Opus 4.6 Fast retiring, those chains need updating today.
-
-**Plan for the shape of your consumption, not just the ceiling.** The 5,000 requests per hour limit is not your constraint. The constraint is that 5,000 requests in 40 minutes followed by 20 minutes of silence is a pattern that harms reliability for you and for everyone sharing the infrastructure. Smooth consumption is better consumption.
-
-## The Broader Point
+If you are building agentic systems that use the GitHub API or Copilot models, here is what I would recommend based on months of running into this. Instrument at the HTTP layer: log rate limit headers on every outbound API call, because you cannot manage what you cannot see, and a 403 or 429 without the accompanying headers is an incomplete error. Build a rate governor, not just retry logic; retry logic tells you what to do when you hit a limit, but a rate governor tells you how not to hit it in the first place, and the two are complementary though the governor is more valuable. Configure circuit breakers with squad-level awareness; individual agent circuit breakers are good, but orchestrator-level aggregation that can pause a whole squad is better, since rate limit errors are correlated and when one agent gets them, others likely will too. Use the model fallback chain; explicit fallback from fastest model to progressively more conservative models is table stakes for production agent systems, and with Opus 4.6 Fast retiring, those chains need updating today. And plan for the shape of your consumption, not just the ceiling: the 5,000 requests per hour limit is not your constraint, the constraint is that 5,000 requests in 40 minutes followed by 20 minutes of silence is a pattern that harms reliability for you and for everyone sharing the infrastructure. Smooth consumption is better consumption.
 
 GitHub's announcement is not punitive. It's honest. Shared infrastructure has real limits, and concentrated bursts of high-volume usage, exactly the kind that agent squads produce by default, stress the systems that everyone depends on.
 
@@ -97,7 +67,7 @@ The agentic transition isn't going to slow down because of rate limits. But the 
 
 Rate governors, circuit breakers, consumption visibility, model fallback chains, these are not nice-to-haves for production agent systems. They are the infrastructure that makes agents reliable. The wall was always there. Now GitHub is making it official.
 
-Build the guardrails before you hit the wall. The wall has a schedule now.
+Build the guardrails before you hit the wall. The wall has a schedule now. Is yours ready for it?
 
 ---
 

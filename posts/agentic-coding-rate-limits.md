@@ -1,50 +1,40 @@
 # When Your AI Agents Start Thrashing GitHub: Lessons from Building AgentCraftworks
 
-*How we went from hitting the rate limit wall every morning to a five-layer system that keeps dozens of agents running smoothly — and what every team moving to agentic workflows needs to know.*
+*I went from hitting the rate limit wall every single morning to a five-layer system that keeps dozens of agents running smoothly. Here's what I wish someone had told me before I scaled up.*
 
 ---
 
-## The Morning Wall
+Every morning. Somewhere around 9am. Like clockwork.
 
-It started with a pattern we couldn't ignore.
+My GitHub Actions workflows would start failing. Not crashing, nothing that dramatic. Just quietly returning 403s. Issues weren't getting triaged. PRs weren't getting reviewed. CI failures sat there undiagnosed. The agents I'd built to run my workflow automation had ground to a halt, and for longer than I'd like to admit, I couldn't figure out why.
 
-Every morning, somewhere around 9am, our GitHub Actions workflows would start failing. Not crashing — just quietly returning 403s. Issues weren't being triaged. PRs weren't getting reviewed. CI failures weren't being diagnosed. The agents we'd built to run the team's workflow automation had ground to a halt, and nobody could figure out why.
+When I finally dug in, the answer was embarrassingly simple: **I had run out of GitHub API quota.**
 
-The answer, when we finally dug in, was embarrassingly simple: **we'd run out of GitHub API quota**.
+I felt that one. I'm building [AgentCraftworks](https://github.com/AgentCraftworks/AgentCraftworks), a governance and orchestration platform so enterprises can run AI agents *safely* on GitHub. And my own agents were thrashing the API and taking each other down. Every morning. At 9am.
 
-We were building [AgentCraftworks](https://github.com/AgentCraftworks/AgentCraftworks) — a governance and orchestration platform for AI agents on GitHub. The irony wasn't lost on us. We were building a system to help enterprises run AI agents safely, and our own agents were thrashing the API and taking each other down.
-
-Here's everything we learned, and the five-layer system we built to fix it.
+The irony was not lost on me. It still isn't. But it taught me so much, and I want to share all of it, including the five-layer system I built to fix it.
 
 ---
 
-## Understanding the Problem: You Have One Bucket, Your Agents Have Many Appetites
+The GitHub REST API gives each **authenticated identity** 5,000 requests per hour. That sounds like a lot. It is a lot, for a human. It is not a lot when you have agents.
 
-The GitHub REST API gives each **authenticated identity** 5,000 requests per hour. That sounds like a lot until you have agents doing it:
+My issue triage sweep scanned every open issue, fetched labels, looked for duplicates, and checked PR state, easily 200 to 400 API calls per run. My CI coach read workflow run logs, fetched check annotations, and posted PR comments, another 50 to 100 calls per failure. The Copilot review responder read the diff, fetched CODEOWNERS, and posted suggestion commits for 30 to 80 calls per review. The daily standup report aggregated commits, PRs, and issues across repos for 100 to 200 more. And the link checker? It fetched every URL referenced in the docs. Unbounded.
 
-- **Issue triage sweep**: scans every open issue, fetches labels, finds duplicates, checks PR state — easily 200–400 API calls per run
-- **CI coach**: reads workflow run logs, fetches check annotations, posts PR comments — 50–100 calls per failure
-- **Copilot review responder**: reads the PR diff, fetches CODEOWNERS, posts suggestion commits — 30–80 calls per review
-- **Link checker**: fetches every URL referenced in docs — unbounded
-- **Daily standup report**: aggregates commits, PRs, and issues across repos — 100–200 calls
+Now schedule all of those at 9am. Watch them race to burn through the 5,000-request budget in the first fifteen minutes of the workday. Everything else gets a 403 for the next forty-five.
 
-Now schedule all of these at 9am. Watch them race to consume your 5,000-request budget in the first 15 minutes of the workday. Everything else gets a 403 for the next 45 minutes.
+This is the agentic scaling wall. It hits every team that goes from "a few automations" to "agents running the workflow." And it's going to hit a lot more of us, a lot sooner than we expect, as AI coding tools multiply the number of things calling the GitHub API on our behalf.
 
-This is the agentic scaling wall. It hits every team that goes from "a few automations" to "agents running the workflow." And it's going to hit more teams, sooner than they expect, as AI coding tools multiply the number of things that want to call the GitHub API on your behalf.
+## Layer 0: Identity Collapse, the Root Cause Nobody Talks About
 
----
+Before any of the clever technical fixes, here is the most important lesson, and the one I'm most sheepish about.
 
-## Layer 0: The Root Cause Nobody Talks About — Identity Collapse
+**Every one of my workflows was authenticating as the same human identity.**
 
-Before we get to the technical fixes, the most important lesson:
+Every `GITHUB_TOKEN` in every workflow was scoped to the repo but consumed from the same user quota. Every `gh` CLI call in every script ran as me, the developer who set up the workflows. I had a dozen "agents" doing work, and GitHub saw exactly one user hammering the API.
 
-**All of our workflows were authenticating as the same human identity.**
+The fix was fundamental: stop using human identity for machine work.
 
-Every `GITHUB_TOKEN` in every workflow was scoped to the repo but consumed from the same user quota. Every `gh` CLI call in every script ran as the developer who set up the workflows. We had a dozen "agents" doing work, but GitHub saw it as one user hammering the API.
-
-The fix was fundamental: **stop using human identity for machine work**.
-
-We switched to [GitHub App tokens](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app). GitHub Apps get their own rate limit bucket — **15,000 requests per hour** (3× the personal limit) — and critically, that quota is separate from any human's quota. Your agents stop competing with your developers.
+I switched to [GitHub App tokens](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app). GitHub Apps get their own rate limit bucket, **15,000 requests per hour**, three times the personal limit. And critically, that quota is separate from any human's. My agents stopped competing with me.
 
 ```yaml
 - name: Generate App token
@@ -60,15 +50,13 @@ We switched to [GitHub App tokens](https://docs.github.com/en/apps/creating-gith
   run: # now runs as the App, not as you
 ```
 
-This single change tripled our effective budget. But it wasn't enough on its own — 15,000 requests per hour still runs out if you don't manage how you spend them.
-
----
+That single change tripled my effective budget. I wish I could tell you it was enough. It wasn't. Fifteen thousand requests an hour still runs out if you don't manage how you spend them.
 
 ## Layer 1: Stop Your Agents From Racing Each Other
 
-With human identity fixed, we looked at *when* our agents ran. The answer was: all at once.
+With identity fixed, I looked at *when* my agents ran. The answer was painful: all at once.
 
-Every scheduled workflow was set to run at `0 9 * * *`. Nine o'clock. Every morning. All of them. Together.
+Every scheduled workflow was set to `0 9 * * *`. Nine o'clock. Every morning. All of them. Together.
 
 ```
 9:00am — issue-triage-sweep    starts  → 350 API calls
@@ -78,9 +66,9 @@ Every scheduled workflow was set to run at `0 9 * * *`. Nine o'clock. Every morn
 9:00am — daily-doc-updater     starts  → 90 API calls
 ```
 
-700 API calls in the first minute. On top of any webhooks firing from overnight activity. On top of Dependabot opening its morning batch of PRs.
+Seven hundred API calls in the first minute. On top of every webhook firing from overnight activity. On top of Dependabot opening its morning batch of PRs.
 
-**Fix: Stagger your schedules.** This sounds obvious in retrospect. It wasn't obvious when each workflow was added one at a time by different people.
+The fix was to stagger the schedules. It sounds so obvious in retrospect. It was not obvious when each workflow got added one at a time, on different days, each one perfectly reasonable on its own.
 
 ```yaml
 # Before: all at 9am
@@ -94,7 +82,7 @@ ghaw-sub-issue-closer: '0 12 * * *'  # 3 hours later
 ghaw-daily-doc-updater: '0 9 * * 2-5' # skip Monday (triage day)
 ```
 
-The second fix was **concurrency groups**. Without them, a slow workflow run doesn't block the next trigger — the schedule fires again and you have two copies of the same workflow racing in parallel, each consuming full quota.
+The second fix was **concurrency groups**. Without them, a slow run doesn't block the next trigger. The schedule fires again, and now you have two copies of the same workflow racing in parallel, each one eating full quota.
 
 ```yaml
 concurrency:
@@ -102,17 +90,15 @@ concurrency:
   cancel-in-progress: true
 ```
 
-We added this to 21 workflows in one pass. If a run is still in progress when the next trigger fires, the old run is cancelled. One active run per workflow, always.
-
----
+I added this to 21 workflows in one pass. If a run is still going when the next trigger fires, the old run gets cancelled. One active run per workflow, always.
 
 ## Layer 2: Abort Before You Waste What You Have Left
 
-Even with staggered schedules and concurrency control, a bad day happens: webhook floods, big PRs with hundreds of files, a dependency update that touches every repo. The quota gets low.
+Even with staggered schedules and concurrency control, bad days still happen. Webhook floods. Giant PRs touching hundreds of files. A dependency update that ripples through every repo. The quota gets low.
 
-The worst outcome is an important workflow — say, CI failure diagnosis on a production incident — getting a 403 because a link checker ran first and burned the remaining 200 requests.
+The outcome I feared most was an important workflow, say, diagnosing a CI failure during a production incident, getting a 403 because a link checker ran first and burned the last 200 requests.
 
-**Fix: Rate-limit pre-check steps.** Every bulk scheduled workflow now starts with this:
+So every bulk scheduled workflow now starts with a budget check:
 
 ```yaml
 - name: Check rate limit budget
@@ -130,13 +116,7 @@ The worst outcome is an important workflow — say, CI failure diagnosis on a pr
     GH_TOKEN: ${{ steps.app-token.outputs.token }}
 ```
 
-Three important details here:
-
-1. **The fallback value is permissive, not restrictive.** If the `gh api` call itself fails (network issue, bad token), we default to `5000` — full budget assumed. The pre-check fails *open*, not *closed*. A broken budget check should never block legitimate work.
-
-2. **The threshold is 300, not zero.** You want to stop before you're empty, not when you are. 300 requests is enough for a webhook handler, a PR comment, or a CI status check. It's not enough for a bulk sweep.
-
-3. **Every subsequent step gates on `skip != 'true'`.** The pre-check is useless if steps run anyway.
+Three details matter here, and I learned each of them the hard way. First, the fallback value is permissive, not restrictive. If the `gh api` call itself fails from a network blip or a bad token, it defaults to `5000` and assumes full budget. The check fails *open*, not *closed*, because a broken budget check should never block legitimate work. Second, the threshold is 300, not zero. You want to stop before you're empty, not when you are. Three hundred requests is plenty for a webhook handler, a PR comment, or a CI status check. It is not enough for a bulk sweep. Third, every step after the check has to actually gate on it. A pre-check is useless if the work runs anyway.
 
 ```yaml
 - name: Run triage sweep
@@ -144,15 +124,11 @@ Three important details here:
   run: npx tsx src/jobs/issue-triage-sweep.ts
 ```
 
----
+## Layer 3: Make Fewer Calls for the Same Information
 
-## Layer 3: Make Fewer Calls For The Same Information
+Everything so far is about *managing* quota. This layer is about *needing less of it*, and honestly, it's the one that made me wince the most when I looked at my own code.
 
-The previous layers are about *managing* quota. This layer is about *needing less of it*.
-
-### Replace REST Pagination With GraphQL
-
-Our issue triage sweep was doing this:
+My issue triage sweep was doing this:
 
 ```typescript
 // Fetch 1: paginate all open issues (N pages × 100 items)
@@ -168,9 +144,9 @@ for (const issue of issues) {
 }
 ```
 
-In a repo with 200 open issues and 40 PRs, that's 2 pagination requests + 40 individual PR fetches = **42 API calls** just to build the issue list.
+In a repo with 200 open issues and 40 PRs, that's 2 pagination requests plus 40 individual PR fetches. **Forty-two API calls**, just to build the list.
 
-The GraphQL equivalent is **one request**:
+The GraphQL equivalent is one request per hundred items:
 
 ```graphql
 query($owner: String!, $repo: String!, $cursor: String) {
@@ -188,15 +164,11 @@ query($owner: String!, $repo: String!, $cursor: String) {
 }
 ```
 
-One request per 100 items. No N+1 fetches for PR details. For a repo with 200 issues: **2 GraphQL requests** vs **42 REST calls**. A ~95% reduction.
+No N+1 fetches for PR details. For 200 issues, that's **2 GraphQL requests instead of 42 REST calls**, roughly a 95% reduction. Ninety-five percent. From one query.
 
 > **Important:** Always use `octokit.request()` for REST calls, not `octokit.rest.*`. In Octokit v16+, the `.rest.*` namespace generates additional overhead. GraphQL calls go through `octokit.graphql()`.
 
-### ETag Conditional GETs
-
-GitHub's REST API supports [conditional requests](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#conditional-requests). If you include an `If-None-Match` header with the ETag from your last fetch, GitHub returns **HTTP 304 Not Modified** when the data hasn't changed.
-
-A 304 response is essentially free — it doesn't count against your rate limit in the same way, returns no body, and resolves in milliseconds.
+Then there are ETags. GitHub's REST API supports [conditional requests](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#conditional-requests): send an `If-None-Match` header with the ETag from your last fetch, and if nothing changed, GitHub returns **HTTP 304 Not Modified**. A 304 is essentially free. It doesn't count against your rate limit the same way, returns no body, and resolves in milliseconds.
 
 ```typescript
 export async function fetchWithETag<T>(
@@ -229,15 +201,9 @@ export async function fetchWithETag<T>(
 }
 ```
 
-Store the ETags in a file, persist the file via `actions/cache`, and every subsequent workflow run that fetches unchanged data gets a free 304.
+Store the ETags in a file, persist it with `actions/cache`, and every later run that fetches unchanged data gets a free 304. This shines for things like repo metadata, CODEOWNERS files, and label lists, data that changes rarely but gets fetched constantly.
 
-This is especially effective for things like repo metadata, CODEOWNERS files, and label lists — data that changes rarely but gets fetched constantly.
-
-### Cross-Workflow Deduplication Cache
-
-When five different workflows all start within 10 minutes of each other, they each independently fetch the same "list of open issues" or "list of recent PRs." They're all making identical API calls.
-
-The fix: a shared daily snapshot cache. The first workflow to run fetches and caches. Subsequent workflows read the cache instead of the API.
+The last piece was cross-workflow deduplication. When five workflows all start within ten minutes of each other, they each independently fetch the same list of open issues, the same list of recent PRs. Identical calls, five times over. So now the first workflow to run fetches and caches a daily snapshot, and everyone after it reads the cache instead of the API.
 
 ```yaml
 - name: Restore API snapshot cache
@@ -248,15 +214,13 @@ The fix: a shared daily snapshot cache. The first workflow to run fetches and ca
     restore-keys: api-snapshot-${{ github.repository }}-
 ```
 
-One fetch per day, shared across all workflows. The cache hit rate in a busy repo is extremely high.
+One fetch per day, shared across every workflow. In a busy repo, the cache hit rate is extremely high.
 
----
+## Layer 4: Runtime Enforcement with the Rate Governor
 
-## Layer 4: Runtime Enforcement — The Rate Governor
+Every layer above is *preventive*. It lowers the odds of hitting the wall. But odds aren't certainty, and I needed a runtime safety net for the days things go sideways anyway.
 
-All the previous layers are **preventive**. They reduce the probability of hitting rate limits. But probability isn't certainty — you still need a runtime safety net for when things go sideways.
-
-We built a **Rate Governor** — a 6-pattern in-process rate limiter that wraps all outbound GitHub API calls.
+So I built a **Rate Governor**, a six-pattern in-process rate limiter that wraps every outbound GitHub API call.
 
 ```
 Every API call → checkQuota() → [allowed / throttled / blocked]
@@ -272,11 +236,7 @@ Every API call → checkQuota() → [allowed / throttled / blocked]
          Priority retry queue (P0 critical / P1 high / P2 normal)
 ```
 
-The key insight is **graduated response**. Rather than binary allow/block, the Rate Governor changes behavior as quota decreases:
-
-- **GREEN** (> 60% remaining): full speed, all requests pass
-- **YELLOW** (20–60% remaining): low-priority requests throttled, normal requests proceed
-- **RED** (< 20% remaining): only P0 (critical) requests pass; P1 and P2 queue for retry
+The key insight is graduated response. Instead of a binary allow or block, the governor changes behavior as quota drains. At **GREEN**, above 60% remaining, everything runs full speed. At **YELLOW**, between 20% and 60%, low-priority requests get throttled while normal requests proceed. At **RED**, below 20%, only P0 critical requests pass, and P1 and P2 queue up for retry.
 
 ```typescript
 const result = await checkQuota({
@@ -294,58 +254,34 @@ const response = await octokit.request('GET /repos/{owner}/{repo}/issues', param
 recordResponse(response.headers); // feeds back into governor
 ```
 
-The `recordResponse()` call is critical — it reads the `X-RateLimit-Remaining` header from GitHub's response and updates the governor's state in real time. The governor knows the actual remaining budget, not just an estimate.
-
-If a request gets a 429, `record429()` triggers immediate circuit breaker activation and exponential backoff.
+That `recordResponse()` call is the part that matters most. It reads the `X-RateLimit-Remaining` header from GitHub's response and updates the governor in real time, so it knows the *actual* remaining budget, not a guess. And if a request gets a 429, `record429()` trips the circuit breaker immediately and kicks off exponential backoff.
 
 ---
 
-## Putting It Together: The Five-Layer Defense
+Put together, it looks like this:
 
 ```
-Layer 0: Identity     — GitHub App tokens (15K/hr, separate from human quota)
+lisLayer 0: Identity     — GitHub App tokens (15K/hr, separate from human quota)
 Layer 1: Scheduling   — Staggered crons + concurrency groups (no pile-ons)
 Layer 2: Pre-flight   — Rate budget check at workflow start (abort early)
 Layer 3: Efficiency   — GraphQL, ETags, shared cache (fewer calls needed)
 Layer 4: Runtime      — Rate Governor with traffic light + circuit breaker
 ```
 
-Each layer catches what the layer above it misses. A quota-efficient GraphQL query (Layer 3) still gets pre-checked (Layer 2) and runtime-governed (Layer 4). A staggered schedule (Layer 1) still has an emergency abort (Layer 2). A GitHub App identity (Layer 0) still gets managed by all the other layers.
+Each layer catches what the one above it misses. An efficient GraphQL query still gets pre-checked and runtime-governed. A staggered schedule still has an emergency abort. A GitHub App identity still gets managed by everything else.
 
-The result: we went from hitting the rate limit wall every morning to running comfortably with dozens of agent workflows active, across multiple repos, with headroom to spare.
+The result: I went from hitting the wall every morning to running dozens of agent workflows across multiple repos, comfortably, with headroom to spare.
 
----
+But here's the part I keep sitting with.
 
-## The Deeper Lesson: Agent Scaling Is Different From Human Scaling
+When a human developer uses the GitHub API, the requests come one at a time, with natural thinking time between them. The rate limit was designed for that pattern. For us. When agents use the API, the requests come in parallel, on schedules, in response to webhooks, in coordinated bursts. The rate limit was not designed for that. And my instinct, my usual drive to *make it go faster*, was exactly what created the problem.
 
-When a human developer uses the GitHub API, they make requests sequentially, with natural thinking time between them. The rate limit was designed for this pattern.
+If your team is adopting agentic workflows, more AI-assisted reviews, more automated triage, more multi-agent coordination, you will hit this wall. The only question is whether you hit it reactively, debugging mysterious 403s at 9am like I did, or proactively, before you need to.
 
-When agents use the GitHub API, they make requests in parallel, on schedules, in response to webhooks, and in coordinated bursts. The rate limit was not designed for this pattern.
+The good news is the fixes are well understood and they compose. You don't need all five layers on day one. Start with GitHub App identity and staggered schedules with concurrency groups. Those two alone buy you a lot of room. Add pre-flight checks, GraphQL and ETags, and a runtime governor as your agent footprint grows. And above all, treat rate limits as a shared resource. In a multi-agent system, every agent spends from the same budget. Design them to cooperate, not compete.
 
-As your team adopts agentic workflows — more AI-assisted PR reviews, more automated triage, more multi-agent coordination — you will hit this wall. The question is whether you hit it reactively (debugging mysterious 403s at 9am) or proactively (building the five-layer system before you need it).
-
-The good news: the fixes are well-understood and composable. You don't need to implement all five layers at once. Start with Layer 0 (GitHub App identity) and Layer 1 (staggered schedules + concurrency groups). Those two changes alone will buy you significant headroom. Add the other layers as your agent footprint grows.
+I built all of this because I was too busy shipping to notice my own agents were fighting each other. So the real question for all of us is this: what else are our agents quietly competing over, and will we see it before 9am tomorrow?
 
 ---
 
-## Key Takeaways
-
-1. **Use GitHub App tokens, not human identity, for all agent/automation work.** 15K req/hr vs 5K, and your agents stop competing with your developers.
-
-2. **Stagger your scheduled workflows.** Never run more than one bulk workflow at the same cron time. Add 30–60 minutes of offset between each.
-
-3. **Add concurrency groups to every scheduled workflow.** `cancel-in-progress: true` prevents parallel pile-ons from a slow run.
-
-4. **Pre-check rate budget at the start of every bulk workflow.** Abort gracefully at < 300 remaining. Fail open (permissive default) if the check itself fails.
-
-5. **Use GraphQL for list operations.** A single GraphQL query replacing N+1 REST calls is often a 10–50× reduction in API usage.
-
-6. **Implement ETag caching for frequently-read, rarely-changed data.** 304 Not Modified is essentially free.
-
-7. **Build a runtime governor.** Pre-flight checks are necessary but not sufficient. Wire `X-RateLimit-Remaining` feedback into your in-process rate limiting so your agents respond to reality, not estimates.
-
-8. **Think about rate limits as a shared resource.** In a multi-agent system, every agent is spending from the same budget. Design them to cooperate, not compete.
-
----
-
-*AgentCraftworks is an open-source GitHub App for governing and orchestrating AI agents. The Rate Governor, ETag cache, and workflow patterns described in this post are all available in the [AgentCraftworks repository](https://github.com/AgentCraftworks/AgentCraftworks) under MIT license.*
+*AgentCraftworks is an open-source GitHub App for governing and orchestrating AI agents. The Rate Governor, ETag cache, and workflow patterns in this post are all available in the* [*AgentCraftworks repository*](https://github.com/AgentCraftworks/AgentCraftworks) *under the MIT license.*

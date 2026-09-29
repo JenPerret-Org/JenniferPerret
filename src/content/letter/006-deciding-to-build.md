@@ -9,7 +9,7 @@ draft: true
 
 ## Before a Single Line of Code
 
-December 2025. I had the questions from my previous letter burning a hole in my brain, and I had the conviction that someone needed to build answers. What I didn't have was a codebase, a team, or, honestly, a clear picture of what the product actually was.
+I had the questions from my previous letter burning a hole in my brain. What I didn't have was a codebase, a team, or, honestly, a clear picture of what the product actually was.
 
 So I did what any self-respecting ex-enterprise architect would do. I planned. I diagrammed. I wrote strategy documents to an audience of one. I filled notebooks with boxes and arrows and crossed most of them out.
 
@@ -27,8 +27,6 @@ Every enterprise I'd worked with at Microsoft had governance requirements. Acces
 
 I didn't want to build framework number thirty-seven. I wanted to build the thing that makes frameworks one through thirty-six safe to deploy in a Fortune 500.
 
-## The Dual-Stack Bet
-
 This is where I need to be honest about a decision that seemed brilliant in December and looked questionable by January.
 
 I planned a dual-stack architecture: TypeScript for the web-facing layer, the MCP integration surface, and the developer tooling. .NET Aspire for the enterprise backend, the heavy lifting of compliance engines, audit storage, and integration with corporate identity providers.
@@ -41,8 +39,6 @@ I'll foreshadow the answer: within weeks of actually writing code, the .NET side
 
 But in December, I didn't know that yet. In December, the dual-stack felt like strategic genius.
 
-## Why MCP as the Integration Layer
-
 One bet I don't regret: choosing the Model Context Protocol as the primary integration surface.
 
 MCP was still early. Anthropic had published the spec, a few reference implementations existed, and the community was small but passionate. It wasn't the obvious choice. Most people building agent tooling were using custom APIs, proprietary protocols, or framework-specific abstractions.
@@ -53,8 +49,6 @@ If I built on MCP, I could govern agents regardless of which framework created t
 
 That bet held up. It's still holding up as I write this.
 
-## Concepts on Paper
-
 Before touching a keyboard, I sketched out core concepts that I thought a governance platform needed. Some of these survived to the actual product. Some didn't.
 
 **Handoff state machines.** When Agent A delegates to Agent B, that's a governance event. The state transition needs to be captured, authorized, and auditable. I designed state machines for tracking agent-to-agent handoffs with full provenance chains. This concept survived and became central to the architecture.
@@ -63,13 +57,9 @@ Before touching a keyboard, I sketched out core concepts that I thought a govern
 
 **Action classifiers.** Every action an agent takes, reading a file, calling an API, modifying data, spending money, has a risk profile. I designed a classification system that would tag every action with risk metadata and route it through appropriate approval workflows. This concept survived and became the backbone of the compliance engine.
 
-## Preparation as Momentum
-
 While the architecture was still on paper, I made a deliberate investment: I went and got my Azure AI Fundamentals certification (AI-900). Not because the certification itself would teach me anything I couldn't learn from docs, but because the structured preparation forced me to systematically cover ground I might have skipped. Responsible AI principles. Azure AI service boundaries. The vocabulary that enterprise buyers use when they evaluate AI platforms.
 
 It was also a confidence signal, to myself as much as anyone. I'd been away from hands-on technical work for a long time. The OLE C++ database replication days were decades behind me. Earning a current certification in the AI space was a small but meaningful proof point that I could re-enter the technical arena and hold my own.
-
-## The Hackathon on the Horizon
 
 One more factor shaped the December planning: I'd spotted the Agentic AI Hackathon coming up in January. A deadline. A forcing function. The thing that separates "I'm going to build something" from "I built something."
 
@@ -77,15 +67,13 @@ I didn't know yet exactly what I'd submit. But I knew that having a hard deadlin
 
 I wasn't going to let it.
 
-## The Tension
-
 The honest truth about December 2025 is that I lived in tension between two impulses. One said: plan more, diagram more, research more, get it right before you start. The other said: just open an editor and type something. Ship something. Learn from the thing you shipped rather than the thing you imagined.
 
 Both impulses are right. Both are wrong. The skill is in knowing when to stop planning and start building, and I don't think there's a formula for that. There's just a moment when the planning starts feeling like procrastination, and you have to be honest enough with yourself to recognize it.
 
 I recognized it somewhere around December 28th.
 
-It was time to write code.
+It was time to write code. What's the plan you're still polishing instead of shipping?
 
 ---
 
