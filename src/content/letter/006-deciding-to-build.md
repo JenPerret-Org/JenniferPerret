@@ -11,21 +11,21 @@ draft: true
 
 I had the questions from my previous letter burning a hole in my brain. What I didn't have was a codebase, a team, or, honestly, a clear picture of what the product actually was.
 
-So I did what any self-respecting ex-enterprise architect would do. I planned. I diagrammed. I wrote strategy documents to an audience of one. I filled notebooks with boxes and arrows and crossed most of them out.
+So I made the first mistake before I wrote the first line of code. I planned like planning was progress. I diagrammed. I wrote strategy documents to an audience of one. I filled notebooks with boxes and arrows and crossed most of them out.
 
 Looking back, some of those early decisions were sharp. Others were... optimistic. I'm going to tell you about both, because the whole point of building in public is that you don't get to retroactively edit your judgment.
 
 ## Why Governance, Not Another Agent Framework
 
-The agent framework space in late 2025 was already crowded and getting more crowded by the week. LangChain, CrewAI, AutoGen, Semantic Kernel, and a dozen others were competing to be the thing you build agents WITH. New frameworks were launching monthly. The tooling for making agents was exploding.
+The agent framework space in late 2025 was already crowded and getting more crowded by the week. LangChain, CrewAI, AutoGen, Semantic Kernel, and a dozen others were competing to be the thing you build agents WITH. New frameworks were launching monthly. 
 
 But I kept asking: who governs them once they're running?
 
-The gap wasn't in agent creation. It was in agent accountability. Nobody was building the layer that sits between "we deployed agents" and "we can prove to our auditors, our regulators, and our board that those agents operated within defined boundaries."
+The gap wasn't in agent creation. It was in agent accountability. Nobody was building the layer between "we deployed agents" and "we can prove to auditors, regulators, and our board that those agents operated within defined boundaries."
 
 Every enterprise I'd worked with at Microsoft had governance requirements. Access control. Audit trails. Compliance attestation. Change management. These aren't nice-to-haves in regulated industries; they're table stakes. And none of the agent frameworks were addressing them as a first-class concern. Governance was always "you can add that later" or "plug in your existing SIEM."
 
-I didn't want to build framework number thirty-seven. I wanted to build the thing that makes frameworks one through thirty-six safe to deploy in a Fortune 500.
+I didn't want to build framework number thirty-seven. I wanted to build the thing that makes frameworks one through thirty-six safe to deploy in a Fortune 500. It is possible my numbering system was not peer-reviewed.
 
 This is where I need to be honest about a decision that seemed brilliant in December and looked questionable by January.
 
@@ -57,7 +57,7 @@ Before touching a keyboard, I sketched out core concepts that I thought a govern
 
 **Action classifiers.** Every action an agent takes, reading a file, calling an API, modifying data, spending money, has a risk profile. I designed a classification system that would tag every action with risk metadata and route it through appropriate approval workflows. This concept survived and became the backbone of the compliance engine.
 
-While the architecture was still on paper, I made a deliberate investment: I went and got my Azure AI Fundamentals certification (AI-900). Not because the certification itself would teach me anything I couldn't learn from docs, but because the structured preparation forced me to systematically cover ground I might have skipped. Responsible AI principles. Azure AI service boundaries. The vocabulary that enterprise buyers use when they evaluate AI platforms.
+While the architecture was still on paper, I made a deliberate investment: I went and got my Azure AI Fundamentals certification (AI-900). Not because the certification itself would teach me anything I couldn't learn from docs, but because the structured preparation forced me to cover ground I might have skipped. Responsible AI principles. Azure AI service boundaries. The vocabulary that enterprise buyers use when they evaluate AI platforms.
 
 It was also a confidence signal, to myself as much as anyone. I'd been away from hands-on technical work for a long time. The OLE C++ database replication days were decades behind me. Earning a current certification in the AI space was a small but meaningful proof point that I could re-enter the technical arena and hold my own.
 

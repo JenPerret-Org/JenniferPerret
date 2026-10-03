@@ -9,15 +9,15 @@ draft: true
 
 ## The Month Everything Became Real
 
-January 2026. After weeks of planning, diagramming, and psyching myself up, I finally opened a terminal and typed `git init`. Multiple times, actually, three repositories came to life between January 20th and 22nd.
+January 2026. After weeks of planning, diagramming, and psyching myself up, I finally opened a terminal and typed `git init`. Multiple times, actually, three repositories came to life between January 20th and 22nd. The month also gave me my first public product mistake: I let someone else's project stand too close to my own identity.
 
-And if you've ever come back to something after a very long time away, picked up a guitar after fifteen years, laced up running shoes after a decade on the couch, you know the feeling. Equal parts exhilaration and terror. The muscle memory is there, buried deep, but the landscape has changed so completely that the muscle memory almost makes it worse. You remember enough to know how much you don't know.
+And If you've ever come back to something after a very long time away, picked up a guitar after fifteen years, laced up running shoes after a decade on the couch, you know the feeling. Equal parts exhilaration and terror. The muscle memory is there, buried deep, but the landscape has changed so completely that the muscle memory almost makes it worse. You remember enough to know how much you don't know, which is a rude service memory provides for free.
 
 I hadn't written production code in a meaningful way since the days of OLE C++ and database replication. The tools were different. The patterns were different. The pace was different. But the fundamental act, translating an idea into instructions that a machine will execute, that was the same. And it felt extraordinary to be doing it again.
 
 My day job at Microsoft gave me the first real proving ground. work-iq-mcp was an internal project where I got hands-on with MCP, the Model Context Protocol, in a production-adjacent context. Thirty-seven commits in eight days. MCP Registry implementation. server.json configuration. README documentation. The kind of rapid, focused work that teaches you more about a technology than any tutorial ever could.
 
-What I learned during those eight days shaped everything that came after.
+Those eight days shaped everything that came after.
 
 I learned that MCP's tool registration model was elegant but opinionated; it assumed patterns of agent-tool interaction that matched some workflows perfectly and others awkwardly. I learned that server configuration was where most of the real-world complexity lived, not in the protocol itself but in the deployment and discovery layers around it. I learned that documentation mattered more in the MCP ecosystem than in most, because the developers integrating with your server were often AI agents themselves, parsing your tool descriptions to decide how to use them.
 
@@ -29,15 +29,15 @@ If agents are going to use tools, and governance means controlling which tools t
 
 I wrote enterprise strategy documents. I ran adversarial reviews against my own plans, trying to find the ways a larger competitor could undercut or absorb a skills marketplace. I drafted exit strategy analysis, not because I was planning to exit, but because thinking about how a marketplace ends teaches you about how it needs to begin.
 
-The exploration was valuable even though the skills registry didn't become the core product. It taught me about provenance in a concrete way. When an agent invokes a skill, the governance layer needs to answer: where did this skill come from? Who published it? Has it been tampered with? Is it authorized for use in this security context? Those questions from the marketplace exploration fed directly into the governance engine I'd build later.
+The exploration was valuable even though the skills registry didn't become the core product. It taught me about provenance in a concrete way. When an agent invokes a skill, the governance layer needs to answer: where did this skill come from? Who published it? Has it been tampered with? Is it authorized for use in this security context? Those questions fed directly into the governance engine I'd build later.
 
-Here's the part where I tell you about a mistake I made in public, because that's what building in public means.
+Here's the mistake I made in public, because that's what building in public means.
 
 The first iteration of the AgentCraftworks website was built around Claude-Flow. Not just inspired by it, built AROUND it. The landing page described AgentCraftworks as an "Enterprise AI Orchestration Platform powered by Claude-Flow." There was an npm install command front and center: `npm install -g claude-flow@alpha`. The site linked directly to ruvnet's GitHub repository. The messaging positioned AgentCraftworks as, essentially, the enterprise wrapper around someone else's open-source project.
 
 I was genuinely excited about Claude-Flow. The multi-agent orchestration patterns were sophisticated. The architecture aligned with problems I wanted to solve. And wrapping an open-source project with enterprise features is a proven business model, Red Hat did it, Elastic did it, Databricks did it.
 
-But by January 29th, barely a week after the first commits, I was already pulling back. The npm package link came down first. By February 3rd, most of the Claude-Flow references were gone entirely, replaced by messaging about a GitHub App integration approach. The pivot happened fast because the problem became obvious fast.
+But by January 29th, barely a week after the first commits, I was already pulling back. The npm package link came down first. By February 3rd, most of the Claude-Flow references were gone, replaced by messaging about a GitHub App integration approach. The pivot happened fast because the problem became obvious fast.
 
 The issue wasn't Claude-Flow itself. The project was doing interesting work. The issue was dependency, not technical dependency, but identity dependency.
 
@@ -47,11 +47,11 @@ I'd spent enough years in enterprise to know this instinctively, but I'd let the
 
 You can be inspired by other projects. You can learn from them, integrate with them, contribute to them. But "powered by [someone else]" is not a foundation. It's a dependency.
 
-I'm glad I learned that lesson in week two rather than month six.
+I'm glad I learned that in week two rather than month six.
 
 I want to pause on something that might sound trivial but wasn't trivial to me at all.
 
-Seeing commit hashes with my name on them. After decades.
+Seeing commit hashes with my name on them after decades.
 
 ```
 commit a1b2c3d
@@ -61,7 +61,7 @@ Date:   Tue Jan 21 2026
 
 There's a particular feeling when you've been away from the craft for a very long time and you come back. It's not just nostalgia. It's proof. Proof that you can still do this. Proof that the years of strategy and management and organizational leadership didn't erase the part of your brain that thinks in systems and logic and code.
 
-Every commit in January was a small declaration: I'm back. I'm building. The output might be rough and the architecture might need three more pivots, but the commits are real and the timestamps are real and the diffs are real.
+Every commit in January was a small declaration: I'm back. I'm building. The output might be rough and the architecture might need three more pivots, but the commits, timestamps, and diffs are real.
 
 That matters more than I can properly articulate.
 

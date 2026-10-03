@@ -11,6 +11,8 @@ If you're going to build a governance platform for AI agents, at some point you 
 
 But when a platform engineering lead wants to know why agent spend spiked 40% on Tuesday, they need a dashboard.
 
+The failure was that I built enough moving parts to need a cockpit before I had finished admitting I was flying a plane.
+
 This is the story of how we built ours.
 
 AgentCraftworks Hub started life as a fork of Tangent, an open-source terminal application. On March 18 and 19, we bootstrapped the project in a series of rapid phases that turned a terminal app into an enterprise dashboard.

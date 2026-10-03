@@ -7,42 +7,23 @@ pillar: "agents-coding"
 draft: true
 ---
 
-# Why I'm Starting This
-
 Things are about to get messy.
 
-For years, we built governance frameworks, compliance controls, security gates, supply chain integrity checks, with a clear assumption: **humans are writing the code**. We knew how to audit a developer's commit. We had signing, review gates, SBOM generation, and provenance attestation all figured out (mostly).
+For years we built governance frameworks, compliance controls, security gates, supply chain integrity checks, all resting on one assumption so obvious nobody wrote it down: humans are writing the code. We knew how to audit a developer's commit. We had signing, review gates, SBOM generation, provenance attestation. Mostly figured out.
 
-Then agents started coding.
+Then agents started coding, and every one of those questions got interesting again.
 
-And suddenly, the questions got interesting:
+When an AI agent writes a pull request, who signs it? When a multi-agent system generates a dependency tree, how do you attest provenance? When your "developer" is a cascade of LLM calls orchestrated by a coordinator agent, what does your compliance framework even mean?
 
-- When an AI agent writes a pull request, **who signs it**?
-- When a multi-agent system generates a dependency tree, **how do you attest provenance**?
-- When your "developer" is a cascade of LLM calls orchestrated by a coordinator agent, **what does your compliance framework even mean**?
+I don't have the answers. I have a governance background, a half-built platform, and a growing pile of evidence that the controls I helped design do not survive contact with agents. So I am going to write it down as I go.
 
-## What This Weekly Letter Is About
+Three things I'll be working through here. First, agents writing code: the security and compliance requirements we built for the software supply chain, and what has to change now that the developer isn't a person. This is the one I care most about and the one nobody is answering well. Second, the engineering of it — rate governors, circuit breakers, cascade detection, the unglamorous plumbing that keeps agent systems from going off the rails. Third, the wider view: where this is heading, what we should be paying attention to, and what we are collectively getting wrong.
 
-I'm not here to pretend I have the answers. I'm here to **learn in public:** to share what I'm figuring out, what's working, and (maybe more usefully) what's going sideways.
+The subtitle says "adventures and misadventures," and the second word does most of the work. The cascade detector that didn't catch the cascade. The compliance control that looked immaculate in the design doc and fell apart the first time agents started generating code at 3am. The architectural decision that seemed clever right up until it wasn't. Those are the stories worth telling, partly because they teach more, and partly because I have a healthy supply.
 
-Three areas I'll be exploring:
+A growth mindset isn't optimism. It's a willingness to be publicly wrong on a schedule.
 
-### 1. Agents Writing Code
-This is my primary focus. The security and compliance requirements we built for our software supply chain assumed human developers. Now we need to make them work with agents. I think there will be a lot of different approaches and things to learn rapidly.
-
-### 2. Building Agentic Solutions
-The architectures, patterns, and hard lessons from building multi-agent orchestration systems. Rate governors, circuit breakers, cascade detection, the plumbing that keeps agent systems from going off the rails.
-
-### 3. AI: The Bigger Picture
-The broader landscape. Where is this going? What should we be paying attention to? What are we all getting wrong?
-
-## Why "Adventures and Misadventures"?
-
-Because a growth mindset means being honest about the misadventures. The times the cascade detector didn't catch the cascade. The compliance control that looked great on paper but fell apart when agents started generating code at 3am. The architectural decision that seemed clever until it wasn't.
-
-Those are the stories worth sharing.
-
-**Things are about to get messy. Let's figure it out together.**
+Things are about to get messy. What are you watching break?
 
 ---
 

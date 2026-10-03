@@ -9,11 +9,11 @@ draft: true
 
 ## An Inventory of What We Have
 
-Before I talk about what breaks, let me be honest about what we got right.
+The failure is not that our governance is weak. The failure is that I kept seeing human identity as background plumbing, right up until agents made it load-bearing.
 
 The software industry has spent decades building governance into the development lifecycle, and the result is a sophisticated, layered system that works remarkably well, as long as a human is at the center of it.
 
-Let me walk through the stack.
+The stack looks like this.
 
 **CODEOWNERS.** A file in your repository that maps paths to responsible humans. When a pull request touches `src/auth/`, it automatically requires review from the security team. When someone modifies the CI pipeline, the platform engineering lead has to approve. Simple, effective, and entirely built on the assumption that the entity creating the PR is a person with a name, a team, and an org chart position.
 
@@ -27,7 +27,7 @@ Let me walk through the stack.
 
 **Access controls and secrets management.** Repository permissions, environment secrets, deployment credentials, all scoped to human identities and human-managed service accounts with defined owners.
 
-This is the governance stack we've built over twenty-plus years. It is good. It works. And every single layer assumes a human identity at the critical decision point.
+This is the governance stack we've built over twenty-plus years. It is good. It works. And every layer assumes a human identity at the critical decision point. The org chart is doing more security work than it gets credit for.
 
 ## Walking Through the Lifecycle
 
@@ -47,7 +47,7 @@ I have been studying two compliance frameworks deeply: NIST SP 800-53 and ISO 42
 
 Both frameworks are essential. Both are incomplete for a world where AI agents are writing code, opening PRs, reviewing changes, and deploying software.
 
-This is the part of the letter where I resist the urge to jump to solutions. I have been thinking about the questions that follow for weeks, and I don't have clean answers. What I have is a growing list of precisely articulated problems. Here they are.
+This is where I resist the urge to jump to solutions. I have been thinking about the questions that follow for weeks, and I don't have clean answers. What I have is a growing list of problems.
 
 **Identity.** When an AI agent commits code, whose identity is attached? The agent's operator? The platform that hosts the agent? The agent itself, as a non-human entity? Code signing assumes a key maps to a person. What does it mean to sign a commit with an agent's key, and who is responsible when that code introduces a vulnerability?
 
@@ -61,15 +61,15 @@ This is the part of the letter where I resist the urge to jump to solutions. I h
 
 **Revocation.** When a human employee leaves, you revoke their access. When you discover an agent is behaving unexpectedly, what is the revocation model? Kill the process? Rotate its keys? What about work it has already committed that has not yet been reviewed?
 
-I don't have answers to these questions. Not yet. What I have is the conviction that they are the right questions, and that the industry needs to start asking them seriously before multi-agent systems become entrenched in production environments without governance.
+I don't have answers to these questions. Not yet. I do have the conviction that they are the right questions, and that the industry needs to start asking them before multi-agent systems become entrenched in production environments without governance.
 
 Consider this letter a "before" photo. This is the state of software supply chain governance in late 2025: mature, sophisticated, effective, and built entirely around the assumption that humans are the primary actors in the development lifecycle.
 
-That assumption is about to break. Not because the governance is bad, it's genuinely good, but because the world it governs is changing underneath it. AI agents are already writing code in production. They are opening PRs. They are being integrated into CI/CD pipelines. And they are doing all of this inside governance systems that don't know they exist.
+That assumption is about to break. Not because the governance is bad; it's genuinely good. But the world it governs is changing underneath it. AI agents are already writing code in production. They are opening PRs. They are being integrated into CI/CD pipelines. And they are doing all of this inside governance systems that don't know they exist.
 
 The frameworks will need to evolve. The tooling will need to evolve. The mental models will need to evolve. And someone needs to do the careful, detailed work of figuring out exactly how.
 
-That is what I am building toward with AgentCraftworks. But before I could build solutions, I needed to understand the current state with precision. Now I do.
+That is what I am building toward with AgentCraftworks. But before I could build solutions, I needed to understand the current state with precision.
 
 I keep thinking about that number: twelve. Twelve places in one ordinary flow where we quietly assumed a human. What number is hiding in your own systems?
 

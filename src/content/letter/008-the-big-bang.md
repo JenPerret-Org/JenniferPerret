@@ -7,11 +7,11 @@ pillar: "building-agents"
 draft: true
 ---
 
-There is a particular kind of delusion that takes hold at 11 PM on a Friday night when you have a fresh repo, a clear vision, and absolutely no constraints. You think: I can build all of it. Both stacks. The whole thing. By Monday.
+There is a particular kind of delusion that takes hold at 11 PM on a Friday night when you have a fresh repo, a clear vision, and no constraints. You think: I can build all of it. Both stacks. The whole thing. By Monday.
 
 And then you do. And then you have to live with it.
 
-I know that delusion well. I fall for it every time.
+I know that delusion well. It recognizes me at the door.
 
 ## The Weekend That Started Everything
 
@@ -21,7 +21,7 @@ I had spent twenty years at Microsoft. I knew what it took to stand up a platfor
 
 It felt incredible.
 
-The inventory from that weekend still slightly terrifies me. Across both stacks, we scaffolded a Handoff Service for managing agent-to-human transfers, an Action Classifier that could categorize agent actions by risk level, an Autonomy Dial that controlled how much latitude an agent had, a CODEOWNERS parser that understood repository governance structures, and a Permission Checker for authorization decisions. All of it built twice. Once in TypeScript. Once in .NET.
+The inventory from that weekend still terrifies me a little. Across both stacks, we scaffolded a Handoff Service for managing agent-to-human transfers, an Action Classifier that could categorize agent actions by risk level, an Autonomy Dial that controlled how much latitude an agent had, a CODEOWNERS parser that understood repository governance structures, and a Permission Checker for authorization decisions. All of it built twice. Once in TypeScript. Once in .NET.
 
 We wrote full persona definitions for a reviewer agent, a tester agent, and an architect agent, agent team prompts that weren't throwaway. They had system instructions, tool access patterns, escalation rules. They were the beginning of what would become our multi-agent governance model. We stood up a Model Context Protocol server with governance tools, the connective tissue that let AI coding assistants actually interact with the governance layer. And from day one, I wanted AgentCraftworks to work everywhere developers already worked, so we built integration points for Copilot, Cursor, Windsurf, Cline, and Google Gemini Code Assist. Five platforms. Weekend one.
 
@@ -31,7 +31,7 @@ Let me be direct about something: a single person cannot scaffold two full enter
 
 I would describe the architecture I wanted for the TypeScript handoff service, watch it materialize, then pivot to the .NET window and describe the equivalent patterns there. The agents understood dependency injection, understood middleware patterns, understood state machines. They could generate the boilerplate while I focused on the governance logic that made AgentCraftworks different from yet another agent framework.
 
-This is the promise of AI-assisted development made real. Not replacing the developer, but amplifying one developer's vision across more surface area than any human could cover alone. I was designing, reviewing, correcting, and steering, but the raw output volume was something new entirely.
+This is the promise of AI-assisted development made real. Not replacing the developer, but amplifying one developer's vision across more surface area than any human could cover alone. I was designing, reviewing, correcting, and steering, but the output volume was new.
 
 It was also, I would learn very soon, a way to create technical debt at a pace previously unknown to humanity. But we will get to that.
 
@@ -41,7 +41,7 @@ This reasoning was sound. It was also, in retrospect, a trap.
 
 When you are one person and you build everything twice, you do not have two implementations. You have two things that are each half-maintained. Every bug fix needs to land in two places. Every design decision forks into two conversations. Every test suite doubles. The overhead is not 2x; it is something closer to 3x, because you also pay the cost of keeping the two stacks conceptually synchronized.
 
-But on that Sunday night, riding the high of a weekend where I had gone from zero to a working dual-stack prototype, none of that math had hit yet. I pushed the last commit, looked at the branch graph, and felt the specific euphoria of shipping.
+But on that Sunday night, riding the high of a weekend where I had gone from zero to a working dual-stack prototype, none of that math had hit yet. I pushed the last commit, looked at the branch graph, and felt the euphoria of shipping.
 
 Here is what I did not know on February 10: within two weeks, I would kill the entire .NET stack.
 
@@ -53,7 +53,7 @@ By Sunday night: 6 sprints planned, 2 full stacks scaffolded, agent team prompts
 
 February 2026 was about to become the most intense month of my professional life. This weekend was the ignition event, the moment the project went from theoretical to real, from "I should build this" to "I am building this and it is alive and it has bugs and it needs tests and the CI is red and I love it."
 
-Things were about to get messy. Gloriously, instructively, publicly messy. I wouldn't have had it any other way.
+Things were about to get messy. Gloriously, instructively, publicly messy.
 
 ---
 

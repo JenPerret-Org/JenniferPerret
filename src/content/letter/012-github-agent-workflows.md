@@ -11,7 +11,9 @@ draft: true
 
 There's a phase in every product where it transitions from "concept I can describe" to "thing that exists and does something." For GitHub Agent Workflows, GHAW, that moment arrived in mid-March, under hackathon deadline pressure, which meant it arrived messy, fast, and exhilarating.
 
-GHAW is the answer to a question I've been circling for months: how do you give organizations control over how AI agents operate in their repositories without requiring them to become experts in agent architecture? The answer turned out to be deceptively simple in concept and genuinely complex in execution.
+The failure was that the demo worked best if you treated it like a museum exhibit: follow the arrows, don't touch the glass.
+
+GHAW is the answer to a question I've been circling for months: how do you give organizations control over how AI agents operate in their repositories without requiring them to become experts in agent architecture? The answer was simple in concept and complex in execution.
 
 One config file. Schema-driven. Documented. Enforceable.
 
@@ -25,13 +27,13 @@ This is the shift I keep coming back to: governance as code, not governance as p
 
 The first workflow we built on top of the config was Branch Policy Guard, an automated enforcement layer that ensures branch protection rules are maintained even when agents are operating at scale.
 
-The problem it solves is straightforward: in an enterprise environment, branch protection rules are a critical security control. But when you have multiple agents creating branches and opening PRs, the surface area for misconfiguration expands. An agent might create a branch that bypasses required reviews. A workflow might merge something that shouldn't have been merged.
+The problem it solves is straightforward: in an enterprise environment, branch protection rules are a critical security control. But when multiple agents create branches and open PRs, the surface area for misconfiguration expands. An agent might create a branch that bypasses required reviews. A workflow might merge something that shouldn't have been merged.
 
 Branch Policy Guard reads the GHAW config and enforces the declared policies as a GitHub Actions workflow. It runs on every PR event, validates that the source branch and target branch conform to the repository's policy, and blocks non-compliant changes before they reach a human reviewer. One less thing for the team to manually verify. One more thing that's automated and auditable.
 
 Security hygiene is one of those things that everyone agrees matters and nobody wants to manage manually. The Secret Rotation Reminder is a simple but high-value workflow: it tracks the age of repository secrets and credentials, and proactively alerts when rotation is due.
 
-It's not flashy. It's not the kind of feature that wins hackathon applause. But it's exactly the kind of operational discipline that enterprises need and that agents make easier to maintain. The workflow is configured through GHAW, which means the rotation schedule is part of your governance-as-code policy, not a calendar reminder in someone's inbox that gets ignored when they go on vacation.
+It's not flashy. It's not the kind of feature that wins hackathon applause. But it's exactly the operational discipline enterprises need and agents make easier to maintain. The workflow is configured through GHAW, which means the rotation schedule is part of your governance-as-code policy, not a calendar reminder in someone's inbox that gets ignored when they go on vacation.
 
 This is where things got interesting.
 
@@ -45,9 +47,9 @@ We also integrated the tiered agentic workflows from githubnext/agentics. Tier 1
 
 One decision I'm particularly proud of: accessibility agents are first-class citizens in GHAW, not an afterthought.
 
-We integrated the Community-Access/accessibility-agents framework directly into the routing system. Accessibility fixes get their own priority tier, their own review workflow, and their own quality gates. This isn't just good ethics, though it is that, it's good engineering. Accessibility issues are often caught late in the development cycle because they require specialized knowledge that not every team has in-house. Agents that can catch and fix these issues early, operating within a governed framework that ensures quality, are genuinely transformative for teams that struggle with accessibility compliance.
+We integrated the Community-Access/accessibility-agents framework directly into the routing system. Accessibility fixes get their own priority tier, their own review workflow, and their own quality gates. This isn't just good ethics, though it is that; it's good engineering. Accessibility issues are often caught late in the development cycle because they require specialized knowledge that not every team has in-house. Agents that can catch and fix these issues early, operating within a governed framework that ensures quality, are genuinely transformative for teams that struggle with accessibility compliance.
 
-Let me be honest about the conditions under which all of this came together: hackathon deadline pressure.
+The conditions were not noble and serene: hackathon deadline pressure.
 
 There's a particular flavor of productivity that only emerges when you have a demo date that won't move and a product that isn't yet ready. The Playwright testing scaffold went in with a five-tier test structure that I'm still proud of, even though I wrote most of it at a pace that would make a test engineer wince. The demo workflow ran end to end, but only if you didn't deviate from the exact sequence I'd rehearsed.
 
@@ -63,7 +65,7 @@ That's not a guardrail. That's a platform. And platforms are something people ch
 
 Because nothing happens in isolation when you're a solo founder, all of this was happening alongside a full website overhaul. Hero animations went in. Feature tiles were polished. The FAQ section was written and rewritten. Pricing badges got "Coming Soon" labels because the pricing model was still being refined and I refuse to put numbers on a page until I'm confident in them.
 
-The website work felt like a different part of my brain entirely, visual, marketing-oriented, audience-facing, compared to the deep systems thinking of GHAW. Switching between them was disorienting but useful. Every time I came back to the config schema after writing marketing copy, I saw it with fresh eyes. Every time I went back to the website after debugging a workflow, I had a clearer sense of what mattered to say.
+The website work felt like a different part of my brain entirely, visual, marketing-oriented, audience-facing, compared to the systems thinking of GHAW. Switching between them was disorienting but useful. Every time I came back to the config schema after writing marketing copy, I saw it with fresh eyes. Every time I went back to the website after debugging a workflow, I had a clearer sense of what mattered to say.
 
 GHAW is a product now. It has a config schema, working workflows, a testing scaffold, and a demo that runs end to end. It's early and it's rough, but it exists, and it works, and the architecture is right.
 

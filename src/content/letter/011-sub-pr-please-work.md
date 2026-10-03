@@ -9,7 +9,7 @@ draft: true
 
 ## The Irony Wasn't Lost On Me
 
-Picture this. It's early March 2026. I am, at this exact moment, building an enterprise governance platform whose entire purpose is to ensure AI agents operate within defined guardrails.
+Picture this. It's early March 2026. I am building an enterprise governance platform whose entire purpose is to ensure AI agents operate within defined guardrails.
 
 And in my own repository, an ungoverned Copilot agent is flooding my pull request queue with failed fix attempts, and there is nothing stopping it.
 
@@ -21,9 +21,9 @@ The fix didn't work.
 
 So Copilot tried again. Same clinical message. Same failed approach. And again. And again.
 
-Over the course of a few weeks, Copilot generated more than sixty automated fix attempts against my repository. The vast majority of them did not resolve the underlying issue. Some introduced new problems. A few were so far off base that reviewing them was a net negative: time I could have spent actually fixing the problem, instead spent parsing a machine's confident-but-wrong suggestion.
+Over the course of a few weeks, Copilot generated more than sixty automated fix attempts against my repository. The vast majority did not resolve the underlying issue. Some introduced new problems. A few were so far off base that reviewing them was a net negative: time I could have spent fixing the problem, instead spent parsing a machine's confident-but-wrong suggestion.
 
-The branch names told the emotional arc better than I ever could: `copilot/sub-pr-107`, then `sub-pr-107-again`, `sub-pr-107-another-one`, `sub-pr-107-yet-again`, `sub-pr-107-please-work`, `sub-pr-107-one-more-time`.
+The branch names told the emotional arc better than I could: `copilot/sub-pr-107`, then `sub-pr-107-again`, `sub-pr-107-another-one`, `sub-pr-107-yet-again`, `sub-pr-107-please-work`, `sub-pr-107-one-more-time`.
 
 If you've ever named a branch "please-work," you know exactly where my head was. That's not engineering. That's negotiation. That's a human being bargaining with an automated system that has no concept of your frustration and no mechanism to learn from its own repeated failures.
 
@@ -33,19 +33,19 @@ Copilot was responding to code scanning alerts, legitimate security findings tha
 
 But the agent had no awareness of its own track record. It didn't know that its previous seven attempts at this same fix had all failed. It didn't have a feedback loop that said "my confidence in this fix type is low, maybe I should escalate to a human instead of trying again." It didn't have a rate limit that said "I've submitted five failed PRs for this issue, time to stop and flag this for manual intervention."
 
-It just kept going. High volume, low success rate, flooding the queue.
+It kept going. High volume, low success rate, flooding the queue.
 
 This is what ungoverned agent behavior looks like in practice. Not malice. Not some dramatic AI safety scenario. Just a well-intentioned system operating without the constraints it needs to be genuinely useful.
 
 The comedy deepens when you see what else was happening in my repos during this same period.
 
-I was building demo videos for AgentCraftworks. I was writing the governance framework documentation. I was deploying to Azure, and if you want to see another flavor of rapid-fire iteration, look at March 10th, where I pushed something like ten consecutive `azd` deployment fixes back to back because Azure deployment configuration is its own special form of suffering.
+I was building demo videos for AgentCraftworks. I was writing the governance framework documentation. I was deploying to Azure, and if you want another flavor of rapid-fire iteration, look at March 10th, where I pushed something like ten consecutive `azd` deployment fixes back to back because Azure deployment configuration is its own special form of suffering.
 
 I was launching the website, polishing the hero section, adjusting pricing badges, wiring up the FAQ. I was doing all the things a solo founder does when she's trying to ship a product.
 
 And through all of it, in the background, Copilot was quietly generating its sixty-first failed fix attempt, and my PR queue looked like a help desk ticket system for a particularly persistent robot.
 
-Here's the thing I keep coming back to: I couldn't have designed a better demo of the problem I'm solving.
+I couldn't have designed a better demo of the problem I'm solving.
 
 If I had gone to an enterprise customer and said "imagine an AI agent generating dozens of failed pull requests against your codebase, with no rate limiting, no quality gates, no escalation logic, and no way to distinguish its successful attempts from its unsuccessful ones," they'd nod politely and think I was being hypothetical.
 
@@ -53,7 +53,7 @@ It wasn't hypothetical. It was my Tuesday.
 
 My own repository became the unplanned test case for everything AgentCraftworks is designed to prevent. The supply chain governance problem wasn't abstract anymore. It was sitting in my GitHub notifications, sixty messages deep, all with the same clinical commit message, all from the same automated system, most of them wrong.
 
-Let me put on my product hat for a moment, because this is where the lesson gets concrete.
+This is where the lesson gets concrete.
 
 A governed agent would have rate-limited itself: after three failed attempts at the same issue, it would pause and flag the issue as requiring human intervention instead of continuing to throw fixes at the wall. It would have had quality gates before submission, requiring that a proposed fix actually pass the relevant checks locally before opening a PR, not just "does it compile" but "does it resolve the specific alert it claims to fix." Every one of those sixty-plus commits had the same generic message; a governance framework would attach provenance metadata instead, which model version, which prompt chain, which scanning alert triggered it, what the agent's confidence score was. And it would have had escalation logic: a simple rule that if an agent has failed to fix the same issue more than N times, it stops trying and creates a human-readable summary of what was attempted and why it failed, turning the failure into useful information instead of more noise.
 

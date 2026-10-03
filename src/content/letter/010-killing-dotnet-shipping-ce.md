@@ -11,13 +11,13 @@ I spent a full weekend building the .NET implementation of AgentCraftworks. It w
 
 And on February 20, I decided to kill all of it.
 
-This letter is about that decision: why it was hard, why it was right, and what happened in the four days after when we shipped the Community Edition.
+This is about why it was hard, why it was right, and what happened in the four days after when we shipped the Community Edition.
 
-The technical argument was straightforward. The Model Context Protocol, the connective tissue that lets AI agents interact with governance tools, is a TypeScript-native specification. The MCP ecosystem, the reference implementations, the community tooling: all TypeScript. Every time I needed to implement an MCP feature in .NET, I was translating idioms across a language boundary, and those translations introduced friction and subtle bugs.
+The technical argument was straightforward. The Model Context Protocol, the connective tissue that lets AI agents interact with governance tools, is a TypeScript-native specification. The MCP ecosystem, the reference implementations, the community tooling: all TypeScript. Every time I implemented an MCP feature in .NET, I was translating idioms across a language boundary, and those translations introduced friction and subtle bugs.
 
 But the real argument was simpler than that: I'm one person.
 
-One person maintaining two full platform stacks is not "strategic coverage of the enterprise market." It's a slow-motion failure in both stacks simultaneously. Every hour I spent fixing `JsonElement` hash violations in .NET was an hour I wasn't shipping governance features in TypeScript. Every bug I fixed twice was a feature I didn't build once.
+One person maintaining two full platform stacks is not "strategic coverage of the enterprise market." It's a slow-motion failure in both stacks. Every hour I spent fixing `JsonElement` hash violations in .NET was an hour I wasn't shipping governance features in TypeScript. Every bug I fixed twice was a feature I didn't build once.
 
 The .NET code was not bad. Some of it was better than the TypeScript equivalent. The ASP.NET middleware pipeline for the permission checker was more composable than what I had in Express. The C# type system caught errors at compile time that TypeScript only caught at runtime.
 
@@ -29,9 +29,9 @@ Twenty years at Microsoft means twenty years of thinking in C#. The .NET stack f
 
 There's a voice that shows up when you're about to abandon work you just completed. It says: but you already built it. It says: what about all those hours? It says: maybe you can maintain both if you just try harder.
 
-That voice is the sunk cost fallacy wearing a project manager costume. The hours are spent whether you keep the code or not. The only question that matters is: going forward, what is the best use of the next hour? And the answer was unambiguous. The next hour should go toward shipping TypeScript.
+That voice is the sunk cost fallacy wearing a project manager costume. The hours are spent whether you keep the code or not. The only question that matters is: what is the best use of the next hour? The answer was unambiguous. The next hour should go toward shipping TypeScript.
 
-I archived the .NET code. I didn't delete it, I'm not that brave. But I stopped maintaining it, stopped fixing its bugs, stopped pretending I could serve two masters.
+I archived the .NET code. I didn't delete it; I'm not that brave. But I stopped maintaining it, stopped fixing its bugs, stopped pretending I could serve two masters.
 
 February 24, 2026. The AgentCraftworks-CE repository was born. CE for Community Edition, the open-source version of the governance platform, TypeScript-only, focused and shippable.
 
@@ -41,11 +41,11 @@ On the core libraries side, we finalized type definitions for the entire governa
 
 The integration layer brought a PR handler for governance-aware pull request workflows, autonomy dial API routes for runtime configuration, and an MCP server with 6 governance tools that any compatible AI assistant could call. And then came the part that takes a project from "code on GitHub" to "actual open-source project": a README with architecture diagrams and quickstart instructions, a CONTRIBUTING guide with development workflow, a CODE_OF_CONDUCT, a SECURITY policy with vulnerability reporting process, an MIT LICENSE, and AGENTS.md, a file I am particularly proud of, documenting how AI agents should interact with the codebase. A GitHub Actions workflow handled build, test, and lint, the kind of pipeline that catches the problems before they reach main.
 
-We also shipped something that does not live in the codebase: a pricing proposal and engagement model documentation. Because a Community Edition implies an Enterprise Edition, and an Enterprise Edition requires a business model. This was a deliberate choice, thinking about product and business alongside the code, not after it. Too many open-source projects ship beautiful code with no sustainability story. I wanted AgentCraftworks-CE to be useful to the community AND to be the foundation of something that could sustain ongoing development.
+We also shipped something that does not live in the codebase: a pricing proposal and engagement model documentation. Because a Community Edition implies an Enterprise Edition, and an Enterprise Edition requires a business model. This was deliberate: think about product and business alongside the code, not after it. Too many open-source projects ship beautiful code with no sustainability story. I wanted AgentCraftworks-CE to be useful to the community AND to be the foundation of something that could sustain ongoing development.
 
 Underneath all of it sat deployment infrastructure: Azure OIDC federation for secure CI/CD authentication, a staging deployment pipeline, and self-contained agent instructions so that AI coding assistants could work on the codebase without external context. The kind of operational foundation that turns a repository into a platform.
 
-I want to talk about what it actually feels like to delete working code you wrote three weeks ago, because I think we don't talk about this enough in engineering.
+I want to talk about what it feels like to delete working code you wrote three weeks ago, because I don't think we talk about this enough in engineering.
 
 It feels wasteful. It feels like failure. There is a specific grief to `git rm -r` on a directory of code that compiles, passes tests, and does useful things. You wrote those functions. You debugged those edge cases. You have muscle memory for that codebase's patterns.
 
@@ -53,7 +53,7 @@ And now it is gone. Not because it was wrong, but because something else was mor
 
 This is a skill. It is not a natural one. Every instinct says "keep it, you might need it, it cost you something to make." Learning to override that instinct, learning to value focus over completeness, shipping over coverage, is one of the hardest lessons in building products.
 
-I'm not going to pretend I have fully learned it. I archived the .NET code instead of deleting it. It's still sitting in a branch somewhere, just in case. But I stopped spending time on it, and that is the decision that mattered.
+I'm not going to pretend I have fully learned it. I archived the .NET code instead of deleting it. It's still sitting in a branch somewhere, just in case. But I stopped spending time on it, and that was the decision that mattered.
 
 Shipping one thing well beats shipping two things half-done.
 

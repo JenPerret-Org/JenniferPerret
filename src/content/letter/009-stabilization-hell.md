@@ -13,27 +13,27 @@ The weekend hackathon was over. The adrenaline was gone. And now I had to make a
 
 It did not go well.
 
-The .NET stack greeted me Monday morning with dozens of `JsonElement` hash and equality contract violations. If you have not had the pleasure of debugging these, the short version is: floating-point precision differences mean that two `JsonElement` values that look identical are not, in fact, equal. The serializer says 1.0, the deserializer says 1.0, and the hash code says "these are different objects and I will throw an exception to prove it."
+The .NET stack greeted me Monday morning with dozens of `JsonElement` hash and equality contract violations. If you have not had the pleasure, the short version is: floating-point precision differences mean that two `JsonElement` values that look identical are not, in fact, equal. The serializer says 1.0, the deserializer says 1.0, and the hash code says "these are different objects and I will throw an exception to prove it."
 
-This was not one bug. This was the same conceptual bug manifesting in dozens of places across the governance data models, because when you scaffold an entire platform in a weekend, you scaffold the same mistakes at scale.
+This was not one bug. It was the same conceptual bug manifesting in dozens of places across the governance data models, because when you scaffold an entire platform in a weekend, you scaffold the same mistakes at scale.
 
 Then came the EF Core version conflicts. Then the Stateless library deprecation warnings. Then the TypeScript side started complaining, build errors from unused imports, type mismatches in the handoff service, package-lock reverts that kept undoing each other.
 
 And then we found the shell injection vulnerability.
 
-One of the governance tools accepted a repository path parameter and passed it to a shell command. Unsanitized. In a platform whose entire purpose was to make AI agents safer. The irony was not subtle.
+One of the governance tools accepted a repository path parameter and passed it to a shell command. Unsanitized. In a platform whose entire purpose was to make AI agents safer. The irony arrived wearing a name tag.
 
 We caught it. We fixed it. But it was a stark reminder that velocity without discipline produces exactly the kind of risk I was building AgentCraftworks to prevent. I was the cobbler whose children had no shoes, except the shoes were input validation and the children were shell commands.
 
 If you ever want to see what it looks like when an AI coding assistant is struggling, look at the branch names. During this week, I watched Copilot generate a cascade of sub-PR branches that told the whole story: `sub-pr-24`, `sub-pr-24-yet-again`, `sub-pr-24-please-work`.
 
-Copilot was creating branches, opening PRs, hitting merge conflicts with its own previous PRs, creating new branches to fix the conflicts, and then conflicting with those. It was a recursive nightmare of good intentions. I eventually had to step in, manually resolve the conflicts, and force-push to break the cycle.
+Copilot was creating branches, opening PRs, hitting merge conflicts with its own previous PRs, creating new branches to fix the conflicts, and then conflicting with those. It was a recursive nightmare of good intentions. I had to step in, manually resolve the conflicts, and force-push to break the cycle.
 
 This is one of the less-discussed realities of AI-assisted development: when things go wrong, they can go wrong in loops. A human developer hits a merge conflict and stops to think. An AI assistant hits a merge conflict and tries to fix it, which creates a new commit, which creates a new conflict, which it tries to fix. The failure mode is not "stuck"; it is "spinning."
 
 By mid-week, the bugs were forcing architectural questions I had been avoiding.
 
-The original design had an 11-level autonomy dial. Eleven levels of agent autonomy, from "fully supervised" to "fully autonomous," each with distinct governance rules, escalation paths, and audit requirements. On paper, it was comprehensive. In practice, it was incomprehensible. No one could remember what level 7 meant versus level 8. The governance rules for adjacent levels overlapped in ways that created contradictions.
+The original design had an 11-level autonomy dial. Eleven levels of agent autonomy, from "fully supervised" to "fully autonomous," each with distinct governance rules, escalation paths, and audit requirements. On paper, it was comprehensive. In practice, it was incomprehensible. No one could remember what level 7 meant versus level 8. The governance rules for adjacent levels overlapped and created contradictions.
 
 We collapsed it to a 5-level engagement model. Five levels. Clear names. Distinct behaviors. It was a better design by every measure, and it only emerged because the 11-level version kept producing edge-case bugs that were impossible to reason about.
 
@@ -53,11 +53,11 @@ Here is what I learned during stabilization hell: AI-assisted velocity has a deb
 
 When you write code manually, you create technical debt at human speed. You cut a corner, you know you cut it, and you have a rough mental model of the cleanup cost. When AI helps you generate code at 10x speed, you create technical debt at 10x speed, and your mental model of the cleanup cost is 10x too optimistic because you did not write every line yourself.
 
-The code looked professional. It had proper error handling, reasonable type definitions, sensible file organization. But it also had subtle inconsistencies, slightly different patterns for the same problem in different files, naming conventions that drifted across modules, test coverage that was thorough in some areas and absent in others. The kind of issues that emerge when code is generated by a system that does not have a persistent memory of every decision it has made.
+The code looked professional. It had proper error handling, reasonable type definitions, sensible file organization. But it also had subtle inconsistencies, slightly different patterns for the same problem in different files, naming conventions that drifted across modules, test coverage that was thorough in some areas and absent in others. The kind of issues that emerge when code is generated by a system without a persistent memory of every decision it has made.
 
-This is not an argument against AI-assisted development. It is an argument for understanding the trade-off. You can move faster. The debt accumulates faster too. Stabilization is not optional, it is the price of velocity, and you pay it whether you budget for it or not.
+This is not an argument against AI-assisted development. It is an argument for understanding the trade-off. You can move faster. The debt accumulates faster too. Stabilization is the price of velocity, and you pay it whether you budget for it or not.
 
-I will say it plainly because it deserves to be said plainly: I was building a governance platform for AI agents while my own AI-assisted codebase was ungoverned.
+I will say it plainly: I was building a governance platform for AI agents while my own AI-assisted codebase was ungoverned.
 
 The tools I was building (the action classifier, the permission checker, the autonomy dial) existed precisely to prevent the kind of chaos I was living through. The shell injection vulnerability. The cascading merge conflicts from Copilot. The architectural decisions made under pressure instead of with deliberation.
 
