@@ -7,23 +7,19 @@ pillar: "building-agents"
 draft: true
 ---
 
-## Before a Single Line of Code
-
 I had the questions from my previous letter burning a hole in my brain. What I didn't have was a codebase, a team, or, honestly, a clear picture of what the product actually was.
 
 So I made the first mistake before I wrote the first line of code. I planned like planning was progress. I diagrammed. I wrote strategy documents to an audience of one. I filled notebooks with boxes and arrows and crossed most of them out.
 
 Looking back, some of those early decisions were sharp. Others were... optimistic. I'm going to tell you about both, because the whole point of building in public is that you don't get to retroactively edit your judgment.
 
-## Why Governance, Not Another Agent Framework
-
 The agent framework space in late 2025 was already crowded and getting more crowded by the week. LangChain, CrewAI, AutoGen, Semantic Kernel, and a dozen others were competing to be the thing you build agents WITH. New frameworks were launching monthly. 
 
 But I kept asking: who governs them once they're running?
 
-The gap wasn't in agent creation. It was in agent accountability. Nobody was building the layer between "we deployed agents" and "we can prove to auditors, regulators, and our board that those agents operated within defined boundaries."
+The gap I wanted to address wasn't in agent creation. It was in the evidence between "we deployed agents" and "we can show auditors, regulators, and our board that those agents operated within defined boundaries."
 
-Every enterprise I'd worked with at Microsoft had governance requirements. Access control. Audit trails. Compliance attestation. Change management. These aren't nice-to-haves in regulated industries; they're table stakes. And none of the agent frameworks were addressing them as a first-class concern. Governance was always "you can add that later" or "plug in your existing SIEM."
+Every enterprise I'd worked with at Microsoft had governance requirements. Access control. Audit trails. Compliance attestation. Change management. These aren't nice-to-haves in regulated industries; they're table stakes. I wanted to make them central to my product rather than leave each customer to assemble the integration.
 
 I didn't want to build framework number thirty-seven. I wanted to build the thing that makes frameworks one through thirty-six safe to deploy in a Fortune 500. It is possible my numbering system was not peer-reviewed.
 
@@ -31,21 +27,21 @@ This is where I need to be honest about a decision that seemed brilliant in Dece
 
 I planned a dual-stack architecture: TypeScript for the web-facing layer, the MCP integration surface, and the developer tooling. .NET Aspire for the enterprise backend, the heavy lifting of compliance engines, audit storage, and integration with corporate identity providers.
 
-The logic was sound on paper. TypeScript owned the AI/ML ecosystem. npm was where MCP libraries lived. The developer community building agents spoke JavaScript and TypeScript. But enterprise backends at banks and insurance companies? They ran on .NET and Java. Azure services were .NET-native. If I wanted to sell to the Fortune 500, I needed to speak their language.
+The logic felt sound on paper. TypeScript fit the web-facing tools and MCP libraries I was using. .NET was familiar from my Microsoft years and attractive for enterprise integrations. That was a choice about my tools and prospective customers, not a rule that AI belonged to TypeScript or Azure belonged to .NET.
 
 Two stacks. Two ecosystems. One platform. What could go wrong?
 
-I'll foreshadow the answer: within weeks of actually writing code, the .NET side would be shelved. Not because .NET was wrong for the problem, but because I was one person, building at startup speed, and maintaining two technology stacks with two build systems, two dependency chains, and two mental models was a tax I couldn't afford. The TypeScript ecosystem was moving faster, MCP was TypeScript-native, and every hour I spent on .NET interop was an hour I wasn't shipping governance features.
+I'll foreshadow the answer: in February, the .NET side would be shelved. Not because .NET was wrong for the problem, but because I was one person, building at startup speed, and maintaining two technology stacks with two build systems, two dependency chains, and two mental models was a tax I couldn't afford. MCP is a language-independent protocol; TypeScript simply fit the implementation I chose to maintain.
 
 But in December, I didn't know that yet. In December, the dual-stack felt like strategic genius.
 
 One bet I don't regret: choosing the Model Context Protocol as the primary integration surface.
 
-MCP was still early. Anthropic had published the spec, a few reference implementations existed, and the community was small but passionate. It wasn't the obvious choice. Most people building agent tooling were using custom APIs, proprietary protocols, or framework-specific abstractions.
+MCP was still evolving. Anthropic had introduced it in November 2024, and by the time I was planning this platform it had SDKs and implementations beyond TypeScript. I chose it for the integration boundary, not because it was the only way to connect agents to tools.
 
 But MCP had something the others didn't: it was an open standard designed specifically for the problem of connecting AI models to external tools and data. It wasn't trying to be an agent framework. It was trying to be the protocol that agent frameworks speak. That's a different thing entirely, and it's the right layer for a governance platform to hook into.
 
-If I built on MCP, I could govern agents regardless of which framework created them. I wouldn't be tied to LangChain or CrewAI or whatever the hot framework was next quarter. I'd be at the protocol layer, the place where all agent actions eventually flow through on their way to the real world.
+If I built on MCP, I could expose governance tools to compatible clients without tying them to one agent framework. But only the actions routed through that governed surface would be visible to it. Shell commands and direct API calls could still go around it; MCP was an integration boundary, not a universal checkpoint.
 
 That bet held up. It's still holding up as I write this.
 

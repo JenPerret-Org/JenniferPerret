@@ -13,7 +13,7 @@ The weekend hackathon was over. The adrenaline was gone. And now I had to make a
 
 It did not go well.
 
-The .NET stack greeted me Monday morning with dozens of `JsonElement` hash and equality contract violations. If you have not had the pleasure, the short version is: floating-point precision differences mean that two `JsonElement` values that look identical are not, in fact, equal. The serializer says 1.0, the deserializer says 1.0, and the hash code says "these are different objects and I will throw an exception to prove it."
+The .NET stack greeted me with repeated hash and equality contract violations in our handling of `JsonElement` values and primitive numbers. Our comparison and hashing logic disagreed: values treated as equal could produce different hashes. The February fixes explicitly addressed numeric precision and that mismatch. This was our implementation bug, not evidence that `JsonElement.GetHashCode()` throws an exception whenever two numbers look alike.
 
 This was not one bug. It was the same conceptual bug manifesting in dozens of places across the governance data models, because when you scaffold an entire platform in a weekend, you scaffold the same mistakes at scale.
 

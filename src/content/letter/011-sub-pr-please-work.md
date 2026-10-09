@@ -7,13 +7,11 @@ pillar: "agents-coding"
 draft: true
 ---
 
-## The Irony Wasn't Lost On Me
-
-Picture this. It's early March 2026. I am building an enterprise governance platform whose entire purpose is to ensure AI agents operate within defined guardrails.
+I'm writing this in early March 2026, looking back at February's branch history. I am building an enterprise governance platform whose entire purpose is to ensure AI agents operate within defined guardrails.
 
 And in my own repository, an ungoverned Copilot agent is flooding my pull request queue with failed fix attempts, and there is nothing stopping it.
 
-This is the story of sub-pr-107-please-work.
+This is the story of sub-pr-107-please-work. The branch name is real; it appears in the February 13 UTC commit history.
 
 It started innocuously enough. GitHub's code scanning flagged an issue. Copilot, being helpful, opened a pull request with a potential fix. The commit message was clean, clinical: "Potential fix for code scanning alert."
 
@@ -39,7 +37,7 @@ This is what ungoverned agent behavior looks like in practice. Not malice. Not s
 
 The comedy deepens when you see what else was happening in my repos during this same period.
 
-I was building demo videos for AgentCraftworks. I was writing the governance framework documentation. I was deploying to Azure, and if you want another flavor of rapid-fire iteration, look at March 10th, where I pushed something like ten consecutive `azd` deployment fixes back to back because Azure deployment configuration is its own special form of suffering.
+I was building demo videos for AgentCraftworks. I was writing the governance framework documentation. I was wrestling with deployment configuration, its own special form of suffering.
 
 I was launching the website, polishing the hero section, adjusting pricing badges, wiring up the FAQ. I was doing all the things a solo founder does when she's trying to ship a product.
 
@@ -59,7 +57,7 @@ A governed agent would have rate-limited itself: after three failed attempts at 
 
 None of this is exotic technology. It's the kind of operational discipline we've applied to every other automated system in the enterprise software stack. We rate-limit API calls. We circuit-break failing services. We escalate alerts that auto-remediation can't handle.
 
-We just haven't applied it to AI agents yet. And my PR queue was the evidence of what happens when we don't.
+I hadn't applied enough of it to my own agents yet. My PR queue was the evidence of what happens when I don't.
 
 I'm telling this story with humor because the situation genuinely was funny. Watching branch names escalate from clinical precision to "please-work" is comedy. The irony of building governance software while your own repo is ungoverned is comedy.
 

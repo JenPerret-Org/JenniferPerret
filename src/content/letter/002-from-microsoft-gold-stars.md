@@ -7,8 +7,6 @@ pillar: "ai-general"
 draft: true
 ---
 
-## The Good Track
-
 People assume you leave a company like Microsoft because something broke. Nothing broke.
 
 That was the uncomfortable part. The failure was quieter: I almost treated a real pull as restlessness because the track was comfortable.
@@ -29,13 +27,9 @@ You learn that the developers inside those enterprises are smart, capable people
 
 All of this lives in my bones now. And when I look at the AI agent landscape, I see a massive gap where this kind of understanding should be.
 
-## The Gap Nobody Was Filling
-
 Sometime around 2024, I started watching the AI agent space take shape. Not just chatbots: actual autonomous agents that could write code, execute tasks, make decisions. The capabilities were advancing fast. The tooling was advancing fast. The orchestration frameworks were multiplying.
 
-But governance? Compliance? Enterprise readiness?
-
-Crickets.
+But the governance questions I brought from enterprise software were harder to find in the demos I was watching.
 
 I saw indie builders shipping incredible agent demos. I saw startups raising rounds on agent platforms. I saw open-source orchestration tools gaining stars on GitHub by the thousands. And almost nobody was asking the questions that any enterprise CISO or compliance officer would ask in the first meeting: Who authorized this agent to act? What audit trail exists? How do we revoke access? What happens when it goes wrong?
 
@@ -57,7 +51,7 @@ At Microsoft, I had teams. I had peers. I had the ambient energy of thousands of
 
 Now I have a home office, a terminal, and Claude. The days when I'm deep in code and making progress are exhilarating. The days when I'm stuck on a design decision with nobody to whiteboard with are hard. The days when I question whether I'm building the right thing are harder.
 
-I keep coming back to this: the gap is real. The need is real. Nobody with my specific combination of enterprise experience and technical depth is building this thing. If I don't build it, it either doesn't get built or it gets built by someone who has never sat through a SOC 2 audit and doesn't understand why it matters.
+I keep coming back to this: the gap I see is real. The need is real. My combination of enterprise experience and technical depth gives me a useful way into the problem. It doesn't make me the only person who can solve it. It does make it harder to keep telling myself someone else will.
 
 My office has a poster that says "Things are about to get messy." I bought it as a joke but it turned out to be a mission statement.
 
@@ -69,4 +63,4 @@ Here's the question I keep sitting with: how many of us are standing in a good, 
 
 ---
 
-*This is the second letter in an ongoing series about building enterprise AI governance from scratch. If you want to follow the journey, the breakthroughs and the dead ends, subscribe below.*
+*This is Letter 002 in an ongoing series about building enterprise AI governance from scratch. If you want to follow the journey, the breakthroughs and the dead ends, subscribe below.*

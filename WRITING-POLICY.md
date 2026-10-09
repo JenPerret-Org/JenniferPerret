@@ -100,6 +100,8 @@ Heavy sub-headers and listicle scaffolding — they read as documentation, not a
 
 - [ ] Would someone recognize this as mine with the byline removed?
 - [ ] Is there a sentence here I couldn't defend in a live Q&A?
+- [ ] Are dates, numbers, product claims, and technical explanations supported by a source or clearly labeled as estimates or opinions?
+- [ ] Have I confirmed every first-person experience myself, rather than letting AI invent a scene, failure, emotion, or memory?
 - [ ] Did I cut every word that was doing no work?
 - [ ] Is there at least one moment of genuine wit, not just competence?
 - [ ] Did the writing change my own mind about anything? If not, did I actually think?
@@ -112,3 +114,5 @@ Heavy sub-headers and listicle scaffolding — they read as documentation, not a
 2. I write the draft — or rewrite AI's — until the thinking is mine.
 3. We iterate. That back-and-forth *is* the work; it mirrors the lesson that started all of this.
 4. Every five to ten posts, I come back and revise this document as the voice evolves.
+
+AI must distinguish sourced facts, my confirmed memories, and unresolved claims. A commit message can establish what was recorded; it cannot prove production readiness, compliance, or the reason an incident happened. Keep unresolved claims in the review tracker and keep the piece a draft until I can stand behind them. Never turn an illustrative example into something that supposedly happened to me.

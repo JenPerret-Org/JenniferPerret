@@ -17,7 +17,7 @@ When I finally dug in, the answer was humbling in its simplicity. I had run out 
 
 Not "hit an edge case." Not "discovered a subtle distributed systems problem." Ran out. Like forgetting to check the gas gauge.
 
-The GitHub REST API gives each authenticated identity 5,000 requests per hour. That is a lot, for a human. It is almost nothing once you have agents. My issue triage sweep scanned every open issue, fetched labels, hunted duplicates, checked PR state — two to four hundred calls per run. The CI coach read workflow logs, fetched annotations, posted comments: another fifty to a hundred per failure. The review responder read diffs and fetched CODEOWNERS. The standup report aggregated across repos. The link checker fetched every URL in the docs, unbounded, because I had never once asked myself how many URLs were in the docs.
+GitHub's REST API generally gives authenticated users 5,000 requests per hour, with different limits for some authentication methods and endpoints. That is a lot, for a human. It is almost nothing once you have agents. My issue triage sweep scanned every open issue, fetched labels, hunted duplicates, checked PR state — two to four hundred calls per run. The CI coach read workflow logs, fetched annotations, posted comments: another fifty to a hundred per failure. The review responder read diffs and fetched CODEOWNERS. The standup report aggregated across repos. The link checker fetched every URL in the docs, unbounded, because I had never once asked myself how many URLs were in the docs.
 
 Now schedule all of them at 9am and watch them race to spend the whole budget before the first coffee. Everything afterward gets a 403 for the next forty-five minutes.
 
@@ -25,9 +25,9 @@ That is the agentic scaling wall, and it arrives the moment you cross from "a fe
 
 Here is the part I am most sheepish about, because it wasn't clever at all.
 
-Every single one of my workflows was authenticating as the same human identity. Mine. Every `GITHUB_TOKEN` was scoped to the repo but drawn from my personal quota. Every `gh` call in every script ran as me. I had a dozen agents doing machine work, and GitHub saw exactly one very caffeinated developer hammering the API.
+The important distinction is the credential behind the variable. A personal access token spends from the user's quota. The built-in Actions `GITHUB_TOKEN` does not: its normal REST limit is 1,000 requests per hour per repository, or 15,000 for resources belonging to a GitHub Enterprise Cloud account. Calling a variable `GITHUB_TOKEN` doesn't tell you which credential it contains. Before blaming one very caffeinated developer, I need the workflow's token configuration and response headers.
 
-The fix was to stop using human identity for machine work. GitHub Apps get their own bucket — fifteen thousand requests an hour, three times the personal limit, and critically, separate from any human's.
+A GitHub App installation token separates machine work from a user's quota. Its REST budget starts at 5,000 requests per hour; eligible non-Enterprise installations can scale up to 12,500, and installations on GitHub Enterprise Cloud organizations get 15,000. An App user token is different again: it shares the user's budget. The authentication method matters more than the logo.
 
 ```yaml
 - name: Generate App token
@@ -39,13 +39,13 @@ The fix was to stop using human identity for machine work. GitHub Apps get their
 
 - name: Do agent work
   env:
-    GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-  run: # now runs as the App, not as you
+    GH_TOKEN: ${{ steps.app-token.outputs.token }}
+  run: gh api rate_limit --jq '.resources.core'
 ```
 
-That one change tripled my budget. I would love to tell you it was enough. Fifteen thousand requests an hour still runs out if you have no opinion about how you spend them.
+An installation token can give automation a separate budget, and sometimes a larger one. It does not automatically triple capacity. Even fifteen thousand requests an hour can run out if you have no opinion about how you spend them.
 
-So I looked at *when* the agents ran, and the answer was: all at once. Every scheduled workflow was set to `0 9 * * *`. Nine o'clock. Every morning. Together. Seven hundred API calls in the first minute, on top of every webhook fired overnight, on top of Dependabot's morning PR batch.
+So I looked at *when* the agents ran. Putting several workflows on the same cron schedule creates a pile-on. For example, `0 9 * * *` means 09:00 UTC by default, not 9am Seattle time; local-time schedules need an explicit supported timezone configuration. The exact schedule and request spike need to come from the workflow history, not from my recollection of when I noticed the failures.
 
 Staggering the crons sounds painfully obvious written down. It was not obvious when each workflow was added one at a time, on different days, each one perfectly reasonable on its own. Nobody sits down and designs a pile-on. You assemble one, cheerfully, over about six weeks.
 
@@ -59,13 +59,13 @@ concurrency:
 
 Even so, bad days happen. Webhook floods. A giant PR touching hundreds of files. A dependency update rippling across every repo. The outcome I feared most was an important workflow — diagnosing a CI failure during a real incident — getting a 403 because the link checker had cheerfully spent the last two hundred requests validating a footnote.
 
-So every bulk workflow now checks its budget before it starts, and skips the run if fewer than three hundred requests remain. Three details in that check cost me something to learn. The fallback is permissive: if the budget check itself fails, it assumes full quota and proceeds, because a broken gauge should never ground the plane. The threshold is three hundred rather than zero, so there is still room for a webhook handler or a PR comment after the sweeps stand down. And every subsequent step actually gates on the result, which sounds too obvious to say out loud until the day you discover a pre-check that politely warns and then runs the work anyway.
+The budget check is meant to make bulk work stand down while there's still room for a webhook handler or a PR comment. Three hundred remaining requests is a proposed reserve, not a GitHub requirement or a guarantee that it covers every sweep. If the check fails, an unknown balance is not a full balance. Bulk work should defer or use a bounded, observable fallback, while critical work follows an explicit policy and still honors rate-limit responses. Every subsequent step also needs to gate on the result, which sounds too obvious to say out loud until you see a pre-check that politely warns and then runs the work anyway.
 
 All of that manages consumption. The bigger win was needing less of it, and that is where I had to look at my own code and wince.
 
-My triage sweep paginated every open issue, then made a separate call for each PR to get its state. In a repo with two hundred issues and forty PRs, that is forty-two API calls just to build a list. The GraphQL equivalent gets the same data, PR state included inline, in two requests. Ninety-five percent fewer calls, from one query I had not bothered to write because the REST version already worked.
+Fetching a list and then making a separate request for every item can turn a small sweep into dozens of calls. GraphQL can retrieve related fields together and reduce round trips. But the exact saving depends on the query, pagination, and fields the REST response already includes. GraphQL also has a separate points-based primary budget and shares secondary limits with REST. Fewer HTTP calls is not automatically less quota.
 
-ETags were the next free win. Send an `If-None-Match` header with the ETag from your last fetch, and if nothing changed, GitHub returns a 304 with no body, resolved in milliseconds. Repo metadata, CODEOWNERS files, label lists — data that changes rarely and gets fetched constantly. Cache the ETags to disk, persist with `actions/cache`, and most of those fetches become free.
+ETags offer another saving. For supported endpoints, send `If-None-Match` with the ETag from your last fetch. If the representation hasn't changed, GitHub can return `304 Not Modified`. Correctly authorized conditional requests that receive a 304 do not count against the primary rate limit. They still make a request, so secondary limits and concurrency discipline still matter. Persistent cache storage can retain the ETags between runs; it isn't a promise that every fetch becomes free.
 
 Then cross-workflow deduplication, because five workflows starting within ten minutes of each other were each independently fetching the same list of open issues. Identical calls, five times over. Now the first one to run caches a daily snapshot and the rest read from it.
 
@@ -73,21 +73,21 @@ The last layer is the one that runs when everything above has already failed: a 
 
 Underneath that sits a circuit breaker. When a call fails with a rate limit error, the breaker trips for that endpoint and reports to the orchestrator. If enough endpoints trip at once, the orchestrator does not crash the squad — it checkpoints the work in progress and schedules a resume. The difference between "the agent died because it hit a rate limit" and "the squad paused for four minutes and picked up where it left off" is entirely in that decision. Most systems get the first behavior by default.
 
-The last thing I added was visibility, and I only added it because I kept asking "why did the squad stall at 2pm yesterday?" and not being able to answer without an hour in the logs. Rate limit history charts in the [Hub](https://github.com/AgentCraftworks/Hub) made consumption legible: when it spiked, which workflows were running, which agent behaviors were expensive. That turned rate limits from a debugging problem into a capacity planning one. The wall is still there. We just see it coming now.
+The last thing I added was visibility, and I only added it because I kept asking "why did the squad stall at 2pm yesterday?" and not being able to answer without an hour in the logs. Rate limit history charts in the [Hub](https://github.com/AgentCraftworks/AgentCraftworks-Hub) made consumption legible: when it spiked, which workflows were running, which agent behaviors were expensive. That turned rate limits from a debugging problem into a capacity planning one. The wall is still there. We just see it coming now.
 
 Which brings me to why I am writing this down now rather than six months ago.
 
-GitHub [published a changelog entry](https://github.blog/changelog/2026-04-10-enforcing-new-limits-and-retiring-opus-4-6-fast-from-copilot-pro/) this month announcing that Copilot rate limits are now actively enforced, that Opus 4.6 Fast is being retired for Pro+ users, and asking everyone to distribute requests more evenly rather than sending them in concentrated waves.
+GitHub [published a changelog entry on April 10](https://github.blog/changelog/2026-04-10-enforcing-new-limits-and-retiring-opus-4-6-fast-from-copilot-pro/) announcing service-reliability and model-capacity limits rolling out over the following weeks, retiring Opus 4.6 Fast for Pro+ users, and recommending that requests be distributed rather than sent in concentrated waves.
 
 My reaction was not surprise. It was recognition. I had been hitting those walls for months. I just thought they were bugs.
 
-And the retirement of the fastest, cheapest tier of a powerful model is worth naming plainly. It is going away because it was being burst in exactly the pattern I just described — squads making enormous numbers of calls in short windows. That is agent usage. That is us. The announcement is not punitive; it is honest. Shared infrastructure has real limits, and concentrated bursts stress the systems everyone depends on.
+GitHub cited high concurrency, intense usage, shared infrastructure strain, and a decision to focus resources on the models people use most. It did not establish that agent squads specifically caused this retirement, or that Fast was the cheapest tier. Copilot's model limits are also not the REST API quota I had been investigating. The shared lesson is pacing, not a shared counter.
 
 Here is the part I keep sitting with.
 
-When a human uses the GitHub API, requests arrive one at a time with thinking time in between. The rate limit was designed for that rhythm. For us. Agents call in parallel, on schedules, in response to webhooks, in coordinated bursts, and the limit was never shaped for that. My instinct — the same drive to results that has always been my workhorse, the one that asks *can I make it go faster* — was precisely what built the pile-on.
+When I use the GitHub API interactively, there is often thinking time between requests. That was the rhythm I had in mind when I added the automations, one at a time. Agents call in parallel, on schedules, in response to webhooks, in coordinated bursts. GitHub has primary and secondary limits for that traffic; I had not designed my work to respect both. My instinct — the same drive to results that has always been my workhorse, the one that asks *can I make it go faster* — was precisely what built the pile-on.
 
-You don't need all five layers on day one. App identity and staggered schedules with concurrency groups buy back most of the room. The rest can follow as your agent footprint grows. But the mindset shift has to come first: in a multi-agent system, every agent spends from the same budget. They are not independent. They are roommates sharing a bank account, and none of them can see the balance.
+You don't need all five layers on day one. App identity and staggered schedules with concurrency groups buy back most of the room. The rest can follow as your agent footprint grows. But the mindset shift has to come first: in a multi-agent system, agents using the same credential or installation may spend from the same budget. They are not independent. They are roommates sharing a bank account, and none of them can see the balance.
 
 I built all of this because I was too busy shipping to notice my own agents were fighting each other.
 

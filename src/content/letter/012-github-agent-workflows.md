@@ -7,8 +7,6 @@ pillar: "building-agents"
 draft: true
 ---
 
-## The Moment It Stopped Being an Idea
-
 There's a phase in every product where it transitions from "concept I can describe" to "thing that exists and does something." For GitHub Agent Workflows, GHAW, that moment arrived in mid-March, under hackathon deadline pressure, which meant it arrived messy, fast, and exhilarating.
 
 The failure was that the demo worked best if you treated it like a museum exhibit: follow the arrows, don't touch the glass.
@@ -25,11 +23,11 @@ The schema is strict and documented. You can validate it. You can version it. Yo
 
 This is the shift I keep coming back to: governance as code, not governance as process. Not a wiki page somewhere that describes what agents should do. A machine-readable file that enforces what agents can do.
 
-The first workflow we built on top of the config was Branch Policy Guard, an automated enforcement layer that ensures branch protection rules are maintained even when agents are operating at scale.
+The first workflow we built on top of the config was Branch Policy Guard, a policy check intended to catch non-compliant branch and PR workflows. It still depends on repository settings: a failing check blocks a merge only when it is required, and bypass permissions need their own controls.
 
 The problem it solves is straightforward: in an enterprise environment, branch protection rules are a critical security control. But when multiple agents create branches and open PRs, the surface area for misconfiguration expands. An agent might create a branch that bypasses required reviews. A workflow might merge something that shouldn't have been merged.
 
-Branch Policy Guard reads the GHAW config and enforces the declared policies as a GitHub Actions workflow. It runs on every PR event, validates that the source branch and target branch conform to the repository's policy, and blocks non-compliant changes before they reach a human reviewer. One less thing for the team to manually verify. One more thing that's automated and auditable.
+Branch Policy Guard reads the GHAW config and checks declared policies in GitHub Actions. The workflow's configured triggers determine when it runs. Used as a required check with appropriate branch protections, it can block non-compliant changes from merging. One less thing for the team to manually verify. One more thing that's automated and auditable.
 
 Security hygiene is one of those things that everyone agrees matters and nobody wants to manage manually. The Secret Rotation Reminder is a simple but high-value workflow: it tracks the age of repository secrets and credentials, and proactively alerts when rotation is due.
 

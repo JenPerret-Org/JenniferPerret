@@ -63,4 +63,4 @@ What's the thing you keep telling yourself you'll get back to?
 
 ---
 
-*This is the first edition of my weekly letter. I'm learning in public, sharing what works, what breaks, and what surprises me along the way. [Subscribe](#subscribe) to follow the journey.*
+*This is Letter 001 of my series. I'm learning in public, sharing what works, what breaks, and what surprises me along the way. [Subscribe](#subscribe) to follow the journey.*

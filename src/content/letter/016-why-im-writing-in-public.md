@@ -7,11 +7,11 @@ pillar: "ai-general"
 draft: true
 ---
 
-This is letter number sixteen. The first fifteen were backfill — written after the fact, reconstructed from commit logs, pull requests, and memory. Starting now, these happen in real time.
+This is Letter 016. Letters 000 through 015 were backfill — written after the fact, reconstructed from commit logs, pull requests, and memory. Starting now, the intention is to write alongside the work rather than reconstruct it later.
 
 Which means starting now, I don't get to know how the story ends before I write it down.
 
-The AI agentic transition is moving too fast to learn alone. I don't mean that as hyperbole. The tooling changes weekly. Best practices from January are stale by March. Patterns that work for one model provider break on another. The governance frameworks enterprises actually need do not exist yet, and by the time a standards body publishes guidance, three generations of agent architecture will have come and gone.
+The AI agentic transition is moving too fast to learn alone. I don't mean that as hyperbole. The tooling changes weekly. Best practices from January are stale by March. Patterns that work for one model provider break on another. Existing security and AI management frameworks give us a starting point. Translating them into evidence for rapidly changing agent workflows is the work I'm trying to do.
 
 Nobody has this figured out. Not the big tech companies, not the startups, not the researchers. We are all learning as we go. The difference is that most of that learning happens in private — inside corporate walls, behind NDAs, in Slack channels that evaporate.
 
@@ -23,7 +23,7 @@ A growth mindset isn't believing you'll succeed. It's believing that the process
 
 Some numbers, so the scale is clear. I started in May of 2025 with a Hello World. I had not written code in decades. I was a Microsoft veteran who had spent years on the business side, and the last time I shipped software we were still arguing about whether XML or JSON was the future.
 
-Ten months later: over 3,000 commits across 10 repositories. An enterprise governance platform with NIST SP 800-53 and ISO 42001 compliance frameworks implemented as code. An Electron dashboard. A Go-based terminal session manager. A video production pipeline. A website. Six enterprise sprints shipped in 48 hours.
+Ten months later: over 3,000 commits across 10 repositories. An enterprise governance platform with control mappings and evidence tooling for NIST SP 800-53 and ISO/IEC 42001. That supports compliance work; it is not certification. An Electron dashboard. A Go-based terminal session manager. A video production pipeline. A website. Six enterprise sprints shipped in 48 hours.
 
 I'm not listing that to impress anyone. I'm listing it because none of it would have been possible without AI agents, and none of it would have been possible without a willingness to be messy in public.
 

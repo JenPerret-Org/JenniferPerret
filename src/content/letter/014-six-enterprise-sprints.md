@@ -23,7 +23,7 @@ Sprint 3 was the Sentinel connector and event pipeline. Every governance decisio
 
 Sprint 4 gave Sprint 3 somewhere to live: a Bicep infrastructure module for deploying Sentinel workspaces, data collection rules, and log analytics configuration as code. Infrastructure-as-code for the infrastructure that monitors the agents that write code. The recursion isn't lost on me.
 
-Sprint 5 was the one I'm most proud of and most uncertain about. NIST SP 800-53 and ISO 42001 compliance frameworks, implemented as code. Not a checklist in a spreadsheet. Actual control mappings, actual evidence collection, actual gap analysis, all executable. More on this below.
+Sprint 5 was the one I'm most proud of and most uncertain about. NIST SP 800-53 and ISO/IEC 42001 control mappings, evidence collection, and gap analysis expressed in code. That is tooling to support compliance work, not certification that the system or organization complies.
 
 Sprint 6 rounded it out with nuSquad SDK integration, laying the foundation for multi-agent squad orchestration to plug into the governance framework we had just built.
 
@@ -37,7 +37,7 @@ And then there was the CISO CustomerExperience Validation-Demo Suite, because if
 
 Late on the 28th, with all six sprints passing validation, I hit a wall. The rate-state-store was failing with EPERM errors. But only on Windows.
 
-The bug was in our atomic write implementation. On Linux and in CI, the rename-over-temp-file pattern worked flawlessly. On Windows, file locking semantics are different. A file open for reading by another process can't be renamed over. The error was intermittent, dependent on timing, and maddening.
+The bug was in our atomic write implementation. The rename-over-temp-file pattern could fail on Windows when a conflicting open handle prevented replacement. Whether a file can be renamed depends on the sharing flags used when it was opened; a reader does not always block a rename. The error was intermittent, dependent on timing, and maddening.
 
 The fix was to harden the atomic write path with retry logic and fallback strategies specific to Windows file locking. Not glamorous. Not interesting at a conference talk. Absolutely essential for anyone actually running this on a Windows development machine, which, if you're building enterprise software, you probably are.
 
@@ -49,7 +49,7 @@ Scope key sharing had bugs where two different scopes could accidentally share a
 
 Agents helped me ship six enterprise sprints in two days. That's extraordinary. The volume of code generated, reviewed, tested, and committed was something I couldn't have done alone in two weeks, let alone two days.
 
-But compliance requirements still needed human judgment. No agent understood why NIST SP 800-53 control AC-2 matters for agent identity management. No agent could tell me whether our Conditional Access implementation would satisfy an auditor. No agent had an opinion on whether our Sentinel event schema would integrate cleanly with a SOC team's existing playbooks.
+But compliance requirements still needed accountable human judgment. Agents could help explain controls and propose mappings. That did not make a generated AC-2 mapping an audit finding, a Conditional Access implementation proof of compliance, or a Sentinel event schema a guarantee that it would fit a SOC team's playbooks.
 
 The agents were spectacular at generating the code. I was necessary for knowing what the code needed to do and why. This division of labor, agents for velocity, humans for judgment, is the core thesis of everything I am building. These two days proved it more viscerally than any whiteboard session could.
 

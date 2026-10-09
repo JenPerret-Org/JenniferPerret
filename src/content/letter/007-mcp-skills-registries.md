@@ -7,11 +7,9 @@ pillar: "agents-coding"
 draft: true
 ---
 
-## The Month Everything Became Real
-
 January 2026. After weeks of planning, diagramming, and psyching myself up, I finally opened a terminal and typed `git init`. Multiple times, actually, three repositories came to life between January 20th and 22nd. The month also gave me my first public product mistake: I let someone else's project stand too close to my own identity.
 
-And If you've ever come back to something after a very long time away, picked up a guitar after fifteen years, laced up running shoes after a decade on the couch, you know the feeling. Equal parts exhilaration and terror. The muscle memory is there, buried deep, but the landscape has changed so completely that the muscle memory almost makes it worse. You remember enough to know how much you don't know, which is a rude service memory provides for free.
+And if you've ever come back to something after a very long time away, picked up a guitar after fifteen years, laced up running shoes after a decade on the couch, you know the feeling. Equal parts exhilaration and terror. The muscle memory is there, buried deep, but the landscape has changed so completely that the muscle memory almost makes it worse. You remember enough to know how much you don't know, which is a rude service memory provides for free.
 
 I hadn't written production code in a meaningful way since the days of OLE C++ and database replication. The tools were different. The patterns were different. The pace was different. But the fundamental act, translating an idea into instructions that a machine will execute, that was the same. And it felt extraordinary to be doing it again.
 
@@ -51,13 +49,7 @@ I'm glad I learned that in week two rather than month six.
 
 I want to pause on something that might sound trivial but wasn't trivial to me at all.
 
-Seeing commit hashes with my name on them after decades.
-
-```
-commit a1b2c3d
-Author: Jennifer Perret <jen@...>
-Date:   Tue Jan 21 2026
-```
+Seeing commits with my name on them after decades.
 
 There's a particular feeling when you've been away from the craft for a very long time and you come back. It's not just nostalgia. It's proof. Proof that you can still do this. Proof that the years of strategy and management and organizational leadership didn't erase the part of your brain that thinks in systems and logic and code.
 

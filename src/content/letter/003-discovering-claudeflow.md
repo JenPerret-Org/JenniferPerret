@@ -1,13 +1,11 @@
 ---
 title: "Discovering ClaudeFlow: My First Glimpse of Multi-Agent Orchestration"
-description: "I stumbled on ClaudeFlow (ruvnet's project, now renamed RuFlow) and saw what multi-agent orchestration could look like. It changed what I thought AgentCraftworks should become."
+description: "I stumbled on ClaudeFlow (ruvnet's project, now named Ruflo) and saw what multi-agent orchestration could look like. It changed what I thought AgentCraftworks should become."
 pubDate: 2025-09-01
-tags: ["claudeflow", "ruflow", "multi-agent", "orchestration", "discovery"]
+tags: ["claudeflow", "ruflo", "multi-agent", "orchestration", "discovery"]
 pillar: "building-agents"
 draft: true
 ---
-
-## The Moment It Clicked
 
 I wasn't looking for it. That's usually how the important ones arrive.
 
@@ -29,8 +27,6 @@ I understood distributed systems. I had worked on database replication in the OL
 
 Task decomposition meant an agent could take a complex goal and break it into subtasks. Parallel execution meant multiple agents could work simultaneously. Coordination logic meant results could be assembled, validated, and acted upon. This wasn't a toy. This was the beginning of a real production pattern.
 
-## The Mental Shift
-
 Before ClaudeFlow, I was thinking about AgentCraftworks as a platform that would explain AI governance concepts. Maybe some tools, maybe some templates, maybe a consulting angle. A website with good content and a clear point of view.
 
 After ClaudeFlow, I understood that I wasn't building a website. I was building governance infrastructure.
@@ -49,17 +45,15 @@ This is where my IC background paid off. I could read the code and understand th
 
 The npm package was real, installable, functional. The GitHub repo was active. This wasn't vaporware or a conference slide. Someone had built a working multi-agent orchestration system you could run on your machine today. That concreteness mattered.
 
-## The Lesson I Had Not Learned Yet
-
 Here's the part of this story that requires honesty about what came later.
 
 In January 2026, I would build my first real website iteration for AgentCraftworks heavily centered around Claude-Flow. I structured content around it. I built mental models around it. I treated it as a foundational reference point for the platform.
 
-Then ruvnet renamed the project to RuFlow. The ecosystem shifted. And I learned a lesson that every founder needs to learn early: don't build your brand around someone else's project.
+The project is now named [Ruflo](https://github.com/ruvnet/ruflo). That later name change is separate from the lesson I learned about my own positioning: don't build your brand around someone else's project.
 
 ClaudeFlow was transformative for my understanding. It turned a vague idea into a specific technical vision. I'm grateful for what it taught me. But building my own platform identity on top of it was a mistake I had to unwind. The pivot wasn't painful; it was clarifying. It forced me to articulate what AgentCraftworks was independent of any single orchestration tool.
 
-I'm telling you this now, in September 2025, because you are reading these letters in order and you deserve the honest arc. At this moment in the story, I was electrified by discovery. The correction came later. Both parts are true.
+I'm reconstructing September 2025 with the benefit of hindsight, because you deserve the honest arc. At that moment in the story, I was electrified by discovery. The correction came later. Both parts are true.
 
 The lasting impact of discovering ClaudeFlow wasn't attachment to a specific tool. It was a permanent change in how I thought about the problem space.
 
@@ -69,8 +63,6 @@ After: AI agents are components in distributed systems operating at enterprise s
 That shift changes everything about governance. Individual agent oversight is a solvable problem. Multi-agent system governance (where agents spawn agents, delegate authority, share context, and make collective decisions) is a fundamentally harder problem that requires architectural thinking, not just policy documents.
 
 That's the problem I decided to solve. Not because it was easy, but because I recognized it from my enterprise career: if you don't solve this kind of problem early, it becomes exponentially harder later. And almost nobody was working on it.
-
-## Connecting the Dots
 
 Steve Jobs had that line about connecting dots looking backward. I try not to lean on quotes from tech luminaries because it can feel like borrowed credibility. But my OLE C++ database replication work, my years managing PMs at Microsoft, my understanding of enterprise procurement and compliance, and the evening I spent reading ClaudeFlow's source code are all dots on the same line.
 
@@ -82,4 +74,4 @@ I didn't know what I was looking at yet. I just knew it mattered. Isn't that alw
 
 ---
 
-*This is the third letter in a series about building enterprise AI governance from scratch. If multi-agent systems and the governance questions they raise are interesting to you, subscribe below to follow along.*
+*This is Letter 003 in a series about building enterprise AI governance from scratch. If multi-agent systems and the governance questions they raise are interesting to you, subscribe below to follow along.*

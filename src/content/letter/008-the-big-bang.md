@@ -13,11 +13,9 @@ And then you do. And then you have to live with it.
 
 I know that delusion well. It recognizes me at the door.
 
-## The Weekend That Started Everything
-
 February 9, 2026. I opened two terminal windows, created two project scaffolds, and started typing. By Sunday night, AgentCraftworks existed, not as a slide deck or a design doc, but as running code. TypeScript on one side, .NET Aspire on the other. A dual-stack enterprise governance platform for AI agents, built in 48 hours by one person and a fleet of AI coding assistants.
 
-I had spent twenty years at Microsoft. I knew what it took to stand up a platform. Months of design reviews. Weeks of architecture diagrams. Careful sequencing of dependencies. I threw all of that institutional knowledge out the window and just started building.
+I had spent years at Microsoft. I knew what it took to stand up a platform. Months of design reviews. Weeks of architecture diagrams. Careful sequencing of dependencies. I threw all of that institutional knowledge out the window and just started building.
 
 It felt incredible.
 
@@ -35,7 +33,7 @@ This is the promise of AI-assisted development made real. Not replacing the deve
 
 It was also, I would learn very soon, a way to create technical debt at a pace previously unknown to humanity. But we will get to that.
 
-In the moment, building both TypeScript and .NET felt strategic. Enterprise customers live in both worlds. Microsoft shops run .NET. Startups and the broader web ecosystem run TypeScript. The MCP specification itself was TypeScript-native, but .NET had Aspire for cloud-native orchestration. Why choose when you could serve both?
+In the moment, building both TypeScript and .NET felt strategic. Enterprise customers use both. MCP is language-independent, but my TypeScript tooling was convenient, and .NET had Aspire for cloud-native orchestration. Why choose when you could serve both?
 
 This reasoning was sound. It was also, in retrospect, a trap.
 

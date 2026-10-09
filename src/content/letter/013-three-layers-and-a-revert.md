@@ -1,17 +1,15 @@
 ---
 title: "Three Layers of Multi-Agent Orchestration (and One Painful Revert)"
 description: "The architecture crystallized into three layers. The Rate Governor shipped, got reverted, and shipped again, all in the same day."
-pubDate: 2026-03-17
+pubDate: 2026-03-23
 tags: ["architecture", "multi-agent", "rate-governor", "revert", "orchestration"]
 pillar: "building-agents"
 draft: true
 ---
 
-## The Architecture Finally Has a Shape
-
 There's a specific kind of relief that comes when a complex system you've been circling for months finally snaps into a shape you can draw on a whiteboard. For AgentCraftworks, that moment arrived in mid-March.
 
-Then the Rate Governor shipped, broke, got reverted, and shipped again, all on a Sunday. The whiteboard did not object. Production had notes.
+Then the Rate Governor merged, got reverted, and merged again early on a Monday. The whiteboard did not object. The review had notes.
 
 The shape was three layers.
 
@@ -41,19 +39,17 @@ Trust but verify. And document the verification.
 
 March 23rd was a concentrated lesson in humility.
 
-The Rate Governor MVP was ready. This is a core component of Layer Three, the system that prevents agents from overwhelming repositories with too many operations, too many PRs, too many changes in too short a time. Think of it as a circuit breaker for agent activity. It's literally the component that would have prevented the sub-pr-107-please-work disaster I wrote about two weeks ago.
+The Rate Governor MVP was ready. This is a core component of Layer Three, intended to keep agents from overwhelming repositories with too many operations, too many PRs, too many changes in too short a time. Think of it as a circuit breaker for agent activity. It's the kind of control I wanted after the sub-pr-107-please-work experience, not proof that this version would have prevented it.
 
-The Rate Governor, along with the Squad Coordinator, shipped via PR #657. It was reviewed. It was approved. It was merged.
+The Rate Governor, along with the Squad Coordinator, merged via PR #657 at 1:05am Seattle time on March 23.
 
-It was reverted the same day via PR #660.
+It was reverted via PR #660 less than a minute later.
 
-It was re-landed as v2 via PR #661, also the same day.
+It was re-landed as v2 via PR #661 at 1:41am, the same morning.
 
-Merged. Reverted. Re-landed. All within hours. On a Sunday.
+Merged. Reverted. Re-landed. Thirty-six minutes. On a Monday.
 
-The first version had issues that only surfaced after merge. The specific failure mode matters.
-
-The Rate Governor's interaction with the existing test infrastructure produced failures that weren't caught in the PR's own test suite. The tests passed in isolation. They didn't pass in the integrated environment. This is a classic problem, one that any experienced developer has encountered, but it carries a special flavor of irony when the component that failed is the one designed to prevent rapid, insufficiently-tested changes.
+The v2 PR records thirteen Copilot review comments addressed before re-landing: token accounting, corrupted-state handling, retry-window boundaries, cleanup, and coordination behavior. Both PR descriptions report 62 passing tests. Those records show concrete review corrections. They don't establish an integrated-test failure as the cause of the revert. I won't pretend to know more than the record tells me.
 
 The rate governor was supposed to prevent exactly the kind of rapid-fire merge-and-revert cycle that we ourselves performed in shipping it. If the Rate Governor had been governing its own deployment, it would have flagged: "You just merged a significant change. Maybe wait before merging the next one. Maybe run the full integration suite first."
 
@@ -77,11 +73,11 @@ The three-layer architecture is sound. I'm confident in the decomposition, confi
 
 But "survived" is doing some heavy lifting in that sentence. It survived the way a building survives an earthquake, still standing, but you can see exactly where the cracks formed, and you know where to reinforce.
 
-The Rate Governor v2 is better than v1. Not just because of the bug fix, but because of what the failure taught us about our own testing assumptions. We now run the full integration suite before any governance component merge, not just the component's own tests. We have a checklist. We follow it.
+The Rate Governor v2 addressed concrete issues in v1. That doesn't prove the whole architecture is sound or that every future merge follows a stronger process. Running integration checks and finishing review before merging is the discipline I want to hold myself to, not a practice I can claim these PRs alone establish.
 
 Governance isn't something you build and deploy. It's something you practice. The messiness of March 23rd wasn't a failure of the architecture. It was the architecture teaching us how to use it properly.
 
-I'll take that lesson. Even if it came with a revert. What lesson has your own system tried to teach you, the hard way, on a Sunday?
+I'll take that lesson. Even if it came with a revert. What lesson has your own system tried to teach you, the hard way, before breakfast?
 
 ---
 
