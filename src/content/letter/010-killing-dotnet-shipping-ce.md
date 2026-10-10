@@ -7,65 +7,45 @@ pillar: "agents-coding"
 draft: true
 ---
 
-I spent a full weekend building the .NET implementation of AgentCraftworks. It worked. The middleware was clean, the dependency injection was elegant, the Aspire orchestration was genuinely impressive. And on February 20, I decided to kill all of it.
+I spent a full weekend building the .NET implementation of AgentCraftworks. It worked. The middleware was clean, the dependency injection was elegant, the Aspire orchestration was genuinely impressive.
 
-This letter is about that decision: why it was hard, why it was right, and what happened in the four days after when we shipped the Community Edition.
+By February 15, the git history records the decision: archive .NET and focus on TypeScript.
 
-## The Case for Killing It
+This is about why it was hard, why it was right, and what happened next as we shipped the Community Edition.
 
-The technical argument was straightforward. The Model Context Protocol, the connective tissue that lets AI agents interact with governance tools, is a TypeScript-native specification. The MCP ecosystem, the reference implementations, the community tooling: all TypeScript. Every time I needed to implement an MCP feature in .NET, I was translating idioms across a language boundary, and those translations introduced friction and subtle bugs.
+The technical argument was about my implementation, not the protocol. Model Context Protocol connects AI applications to tools and data using language-independent messages; it has SDKs in TypeScript, C#, Python, and other languages. Maintaining my own equivalent features in two stacks was the friction I needed to remove.
 
 But the real argument was simpler than that: I'm one person.
 
-One person maintaining two full platform stacks is not "strategic coverage of the enterprise market." It's a slow-motion failure in both stacks simultaneously. Every hour I spent fixing `JsonElement` hash violations in .NET was an hour I wasn't shipping governance features in TypeScript. Every bug I fixed twice was a feature I didn't build once.
+One person maintaining two full platform stacks is not "strategic coverage of the enterprise market." It's a slow-motion failure in both stacks. Every hour I spent fixing `JsonElement` hash violations in .NET was an hour I wasn't shipping governance features in TypeScript. Every bug I fixed twice was a feature I didn't build once.
 
-The .NET code was not bad. Some of it was better than the TypeScript equivalent. The ASP.NET middleware pipeline for the permission checker was more composable than what I had in Express. The C# type system caught errors at compile time that TypeScript only caught at runtime.
+The .NET code was not bad. Some of it was better than the TypeScript equivalent. The ASP.NET middleware pipeline for the permission checker was more composable than what I had in Express. Both C# and TypeScript perform static type checking. C# also retains type information at runtime, while TypeScript's types are erased. What mattered here was where my particular implementations caught mistakes, not a claim that TypeScript had no compile-time checks.
 
 None of that mattered. What mattered was focus. And focus meant choosing one stack and shipping it well.
 
-## The Sunk Cost Conversation
-
 I'll be honest about something: I didn't make this decision easily.
 
-Twenty years at Microsoft means twenty years of thinking in C#. The .NET stack felt like home. The TypeScript stack felt like a vacation rental: functional, modern, but not quite mine. Killing .NET wasn't just a technical decision. It was letting go of the implementation that felt most natural to write.
+My Microsoft years made the .NET stack feel familiar. The .NET stack felt like home. The TypeScript stack felt like a vacation rental: functional, modern, but not quite mine. Killing .NET wasn't just a technical decision. It was letting go of the implementation that felt most natural to write.
 
 There's a voice that shows up when you're about to abandon work you just completed. It says: but you already built it. It says: what about all those hours? It says: maybe you can maintain both if you just try harder.
 
-That voice is the sunk cost fallacy wearing a project manager costume. The hours are spent whether you keep the code or not. The only question that matters is: going forward, what is the best use of the next hour? And the answer was unambiguous. The next hour should go toward shipping TypeScript.
+That voice is the sunk cost fallacy wearing a project manager costume. The hours are spent whether you keep the code or not. The only question that matters is: what is the best use of the next hour? The answer was unambiguous. The next hour should go toward shipping TypeScript.
 
-I archived the .NET code. I didn't delete it, I'm not that brave. But I stopped maintaining it, stopped fixing its bugs, stopped pretending I could serve two masters.
-
-## Four Days, 70 Commits
+I archived the .NET code. I didn't delete it; I'm not that brave. But I stopped maintaining it, stopped fixing its bugs, stopped pretending I could serve two masters.
 
 February 24, 2026. The AgentCraftworks-CE repository was born. CE for Community Edition, the open-source version of the governance platform, TypeScript-only, focused and shippable.
 
 In four days, we pushed 70 commits. Not scaffolding commits this time. Shipping commits. Real features, tested, documented, ready for other developers to use.
 
-### What Shipped
+On the core libraries side, we finalized type definitions for the governance model, the handoff state machine (the clean 4-state version that survived stabilization hell), a CODEOWNERS parser for repository routing, and auth utilities for token validation and scope checking. On the services side: the action classifier for categorizing agent operations by risk level, the autonomy dial (the 5-level engagement model, the version that made sense), a context service for maintaining governance state across agent interactions, the handoff service for agent-to-human transfers, permission checker middleware, and webhook signature verification middleware.
 
-**Core Libraries:** Type definitions for the entire governance model. The handoff state machine (the clean 4-state version that survived stabilization hell). A CODEOWNERS parser that actually understood the full GitHub syntax. Auth utilities for token validation and scope checking.
+The integration layer brought a PR handler for governance-aware pull request workflows, autonomy dial API routes for runtime configuration, and an MCP server with 6 governance tools that any compatible AI assistant could call. And then came the part that takes a project from "code on GitHub" to "actual open-source project": a README with architecture diagrams and quickstart instructions, a CONTRIBUTING guide with development workflow, a CODE_OF_CONDUCT, a SECURITY policy with vulnerability reporting process, an MIT LICENSE, and AGENTS.md, a file I am particularly proud of, documenting how AI agents should interact with the codebase. A GitHub Actions workflow handled build, test, and lint, the kind of pipeline that catches the problems before they reach main.
 
-**Services:** The action classifier for categorizing agent operations by risk level. The autonomy dial (5-level engagement model, the version that made sense). A context service for maintaining governance state across agent interactions. The handoff service for agent-to-human transfers. Permission checker middleware. Webhook signature verification middleware.
+We also shipped something that does not live in the codebase: a pricing proposal and engagement model documentation. Because a Community Edition implies an Enterprise Edition, and an Enterprise Edition requires a business model. This was deliberate: think about product and business alongside the code, not after it. Too many open-source projects ship beautiful code with no sustainability story. I wanted AgentCraftworks-CE to be useful to the community AND to be the foundation of something that could sustain ongoing development.
 
-**Integration Layer:** A PR handler for governance-aware pull request workflows. Autonomy dial API routes for runtime configuration. An MCP server with 6 governance tools that any compatible AI assistant could call.
+Underneath all of it sat deployment infrastructure: Azure OIDC federation for secure CI/CD authentication, a staging deployment pipeline, and self-contained agent instructions so that AI coding assistants could work on the codebase without external context. The kind of operational foundation that turns a repository into a platform.
 
-**Community Infrastructure:** This is the part that takes a project from "code on GitHub" to "actual open-source project." README with architecture diagrams and quickstart instructions. CONTRIBUTING guide with development workflow. CODE_OF_CONDUCT. SECURITY policy with vulnerability reporting process. LICENSE (MIT). AGENTS.md, a file I am particularly proud of, documenting how AI agents should interact with the codebase.
-
-**CI/CD:** GitHub Actions workflow for build, test, and lint. The kind of pipeline that catches the problems before they reach main.
-
-### Product Thinking
-
-We also shipped something that does not live in the codebase: a pricing proposal and engagement model documentation. Because a Community Edition implies an Enterprise Edition, and an Enterprise Edition requires a business model.
-
-This was a deliberate choice, thinking about product and business alongside the code, not after it. Too many open-source projects ship beautiful code with no sustainability story. I wanted AgentCraftworks-CE to be useful to the community AND to be the foundation of something that could sustain ongoing development.
-
-### Deployment Infrastructure
-
-Azure OIDC federation for secure CI/CD authentication. A staging deployment pipeline. Self-contained agent instructions so that AI coding assistants could work on the codebase without external context. The kind of operational foundation that turns a repository into a platform.
-
-## The Emotional Reality
-
-I want to talk about what it actually feels like to delete working code you wrote three weeks ago, because I think we don't talk about this enough in engineering.
+I want to talk about what it feels like to delete working code you wrote three weeks ago, because I don't think we talk about this enough in engineering.
 
 It feels wasteful. It feels like failure. There is a specific grief to `git rm -r` on a directory of code that compiles, passes tests, and does useful things. You wrote those functions. You debugged those edge cases. You have muscle memory for that codebase's patterns.
 
@@ -73,17 +53,17 @@ And now it is gone. Not because it was wrong, but because something else was mor
 
 This is a skill. It is not a natural one. Every instinct says "keep it, you might need it, it cost you something to make." Learning to override that instinct, learning to value focus over completeness, shipping over coverage, is one of the hardest lessons in building products.
 
-I'm not going to pretend I have fully learned it. I archived the .NET code instead of deleting it. It's still sitting in a branch somewhere, just in case. But I stopped spending time on it, and that is the decision that mattered.
-
-## The Lesson
+I'm not going to pretend I have fully learned it. I archived the .NET code instead of deleting it. It's still sitting in a branch somewhere, just in case. But I stopped spending time on it, and that was the decision that mattered.
 
 Shipping one thing well beats shipping two things half-done.
 
 I could have continued maintaining both stacks. I could have spent February fixing `JsonElement` bugs and translating MCP idioms and keeping two CI pipelines green. I'd have ended the month with two mediocre implementations instead of one solid Community Edition.
 
-The 70 commits in four days after killing .NET were the proof. The velocity came from focus. Not from working harder, from working on fewer things. Every decision became simpler when I only had to make it once. Every bug only needed one fix. Every test only ran in one environment.
+The concentrated burst of Community Edition work after choosing a single stack was the proof. The velocity came from focus. Not from working harder, from working on fewer things. Every decision became simpler when I only had to make it once. Every bug only needed one fix. Every test only ran in one environment.
 
 February 2026 gave me 963 commits and a shipped product. But the commit that mattered most was the one that did not happen, the one where I chose not to fix the next .NET bug, and instead opened a new file in TypeScript.
+
+What are you still maintaining out of loyalty instead of clarity?
 
 ---
 
