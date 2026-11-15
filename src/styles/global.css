@@ -73,3 +73,46 @@ html {
   border-color: var(--color-brand-yellow);
   background: rgba(245, 166, 35, 0.1);
 }
+
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--color-brand-yellow);
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -5rem;
+  z-index: 100;
+  background: var(--color-brand-darker);
+  color: var(--color-brand-yellow);
+  padding: 1rem;
+}
+.skip-link:focus { top: 1rem; }
+.preview-banner {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  color: var(--color-brand-yellow);
+  border-bottom: 1px solid currentColor;
+}
+
+.letter-body { overflow-wrap: anywhere; line-height: 1.8; }
+.letter-body > * + * { margin-top: 1.25rem; }
+.letter-body h2 { font-size: 1.6rem; font-weight: 700; margin-top: 2.5rem; }
+.letter-body h3 { font-size: 1.3rem; font-weight: 700; margin-top: 2rem; }
+.letter-body a { color: var(--color-brand-yellow); text-decoration: underline; }
+.letter-body ul { list-style: disc; padding-left: 1.5rem; }
+.letter-body ol { list-style: decimal; padding-left: 1.5rem; }
+.letter-body blockquote { border-left: 3px solid var(--color-brand-pink); padding-left: 1rem; }
+.letter-body pre { overflow-x: auto; padding: 1rem; border-radius: 0.5rem; }
+.letter-body img { max-width: 100%; height: auto; border-radius: 0.5rem; }
+.letter-body table { display: block; overflow-x: auto; border-collapse: collapse; }
+.letter-body th, .letter-body td { padding: 0.5rem; border: 1px solid var(--color-brand-muted); }
+
+#search {
+  --pagefind-ui-primary: var(--color-brand-yellow);
+  --pagefind-ui-text: var(--color-brand-light);
+  --pagefind-ui-background: var(--color-brand-dark);
+  --pagefind-ui-border: var(--color-brand-muted);
+  --pagefind-ui-tag: var(--color-brand-darker);
+}

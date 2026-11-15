@@ -2,6 +2,8 @@
 
 **Status:** Working draft for validation
 
+**Execution tooling:** The [PolyPost distribution workflow](social-media-tooling.md) now supports local, reviewable platform variants from approved www.jenperret.com letters. The [multi-brand publishing plan](multi-brand-publishing-plan.md) describes separate business/product activation; no company or product accounts are connected.
+
 **Scope:** Organic LinkedIn presence and AI-search discoverability for Jennifer Perret, AI CRAFTWORKS, and AgentCraftworks
 
 **North star:** Help Microsoft-oriented organizations understand how to move from AI experimentation toward human-plus-agent ways of working, trust Jennifer's perspective, and take a measurable next step with AICraftworks.

@@ -1,0 +1,16 @@
+---
+import LetterList from '../../../components/LetterList.astro';
+import { getLetters } from '../../../lib/letters';
+import { tagSlug, tagTopics } from '../../../lib/publishing.mjs';
+
+export async function getStaticPaths() {
+  const posts = await getLetters();
+  return tagTopics(posts).map((tag) => ({
+    params: { tag: tag.slug },
+    props: { label: tag.label, posts: posts.filter((post) => post.data.tags.some((name) => tagSlug(name) === tag.slug)) },
+  }));
+}
+const { label, posts } = Astro.props;
+---
+
+<LetterList title={`Letters tagged ${label}`} description={`Writing about ${label}.`} posts={posts} />

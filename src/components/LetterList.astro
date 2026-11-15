@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LetterCard from './LetterCard.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  posts: CollectionEntry<'letter'>[];
+}
+const { title, description, posts } = Astro.props;
+---
+
+<BaseLayout title={`${title} — Jennifer Perret`} description={description}>
+  <div class="max-w-3xl mx-auto px-6 py-20">
+    <h1 class="text-3xl font-bold mb-2">{title}</h1>
+    <p class="text-brand-muted mb-8">{description}</p>
+    <nav aria-label="Letter discovery" class="flex flex-wrap gap-6 mb-12">
+      <a href="/letter" class="text-brand-yellow hover:underline">All letters</a>
+      <a href="/letter/topics" class="text-brand-yellow hover:underline">Browse topics</a>
+      <a href="/search" class="text-brand-yellow hover:underline">Search</a>
+      <a href="/rss.xml" class="text-brand-yellow hover:underline">RSS</a>
+    </nav>
+    {posts.length === 0 ? (
+      <div class="text-center py-16 border border-dashed border-white/10 rounded-xl">
+        <p class="text-brand-muted text-lg mb-2">First letter dropping soon.</p>
+        <p class="text-brand-muted text-sm">
+          <a href="/#subscribe" class="text-brand-yellow hover:underline">Subscribe</a> to get notified.
+        </p>
+      </div>
+    ) : (
+      <div class="space-y-6">{posts.map((post) => <LetterCard post={post} />)}</div>
+    )}
+  </div>
+</BaseLayout>
