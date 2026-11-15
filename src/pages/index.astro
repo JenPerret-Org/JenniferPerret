@@ -8,45 +8,45 @@ const latestPosts = sortedPosts.slice(0, 6);
 const pillarLabels: Record<string, { label: string; color: string; description: string }> = {
   'agents-coding': {
     label: 'Agents Writing Code',
-    color: 'text-brand-pink',
+    color: 'text-brand-blue',
     description: 'How do we ensure the security and compliance guardrails we built for human developers still hold when agents are writing the code? This is where my head is — software supply chain governance in an agentic world.',
   },
   'building-agents': {
     label: 'Building Agentic Solutions',
-    color: 'text-brand-yellow',
+    color: 'text-brand-orange',
     description: 'Patterns, architectures, and hard-won lessons from building multi-agent orchestration systems. The how of making agents work together.',
   },
   'ai-general': {
     label: 'AI — The Bigger Picture',
-    color: 'text-purple-400',
+    color: 'text-brand-pink',
     description: 'The broader AI landscape — tools, trends, takes, and the occasional existential question about where all of this is heading.',
   },
 };
 
 const pillarDots: Record<string, string> = {
+  'text-brand-blue': 'var(--color-brand-blue)',
+  'text-brand-orange': 'var(--color-brand-orange)',
   'text-brand-pink': 'var(--color-brand-pink)',
-  'text-brand-yellow': 'var(--color-brand-yellow)',
-  'text-purple-400': '#a78bfa',
 };
 ---
 
 <BaseLayout title="Jennifer Perret — AI Agentic Adventures & Misadventures">
   <!-- Hero -->
   <section class="relative overflow-hidden">
-    <div class="max-w-5xl mx-auto px-6 pt-20 pb-16">
-      <div class="grid md:grid-cols-2 gap-12 items-center">
+    <div class="max-w-6xl mx-auto px-6 pt-20 pb-16">
+      <div class="grid md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] gap-12 items-center">
         <div>
-          <p class="text-brand-yellow font-semibold text-sm uppercase tracking-widest mb-4">Adventures & Misadventures</p>
+          <p class="text-brand-orange font-semibold text-sm uppercase tracking-widest mb-4">Adventures & Misadventures</p>
           <h1 class="text-4xl md:text-5xl font-black leading-tight mb-6">
             Learning AI Agentic Development
-            <span class="gradient-text"> in public.</span>
+            <span class="text-brand-blue"> in public.</span>
           </h1>
           <p class="text-lg text-brand-muted leading-relaxed mb-8">
             Things are about to get messy. I'm figuring out how agents write code, how to build agentic solutions, and what governance looks like when your developers aren't all human.
             <strong class="text-brand-light">Every week, I share what I've learned — and what went sideways.</strong>
           </p>
           <div class="flex flex-col sm:flex-row gap-4">
-            <a href="#subscribe" class="inline-flex items-center justify-center px-6 py-3 bg-brand-pink text-white font-semibold rounded-lg hover:opacity-90 transition-opacity">
+            <a href="#subscribe" class="inline-flex items-center justify-center px-6 py-3 bg-brand-orange text-brand-darker font-semibold rounded-lg hover:opacity-90 transition-opacity">
               Subscribe to the Weekly Letter
             </a>
             <a href="/letter" class="inline-flex items-center justify-center px-6 py-3 border border-white/10 text-brand-light font-semibold rounded-lg hover:border-white/25 transition-colors">
@@ -68,20 +68,20 @@ const pillarDots: Record<string, string> = {
       </div>
     </div>
     <!-- Background gradient blobs -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-brand-pink/10 rounded-full blur-3xl -z-10"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-3xl -z-10"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-brand-blue/10 rounded-full blur-3xl -z-10"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-brand-orange/10 rounded-full blur-3xl -z-10"></div>
   </section>
 
   <!-- Content Pillars -->
   <section class="py-20 border-t border-white/5">
-    <div class="max-w-5xl mx-auto px-6">
+    <div class="max-w-6xl mx-auto px-6">
       <h2 class="text-2xl font-bold mb-2">What I Write About</h2>
       <p class="text-brand-muted mb-12">Three pillars. One messy journey.</p>
       <div class="grid md:grid-cols-3 gap-8">
         {Object.entries(pillarLabels).map(([key, { label, color, description }]) => (
           <a href={`/letter/pillars/${key}`} class="block p-6 rounded-xl border border-white/5 bg-white/[0.02] card-hover">
-            <h3 class={`flex items-center gap-3 text-lg font-bold mb-3 ${color}`}>
-              <span class="w-3 h-3 shrink-0 rounded-full" aria-hidden="true" style={`background: ${pillarDots[color] ?? '#a78bfa'}`}></span>
+            <h3 class={`flex items-start gap-3 text-lg font-bold mb-3 ${color}`}>
+              <span class="mt-2 w-3 h-3 shrink-0 rounded-full" aria-hidden="true" style={`background: ${pillarDots[color] ?? 'var(--color-brand-blue)'}`}></span>
               {label}
             </h3>
             <p class="text-sm text-brand-muted leading-relaxed">{description}</p>
@@ -99,7 +99,7 @@ const pillarDots: Record<string, string> = {
           <h2 class="text-2xl font-bold">Latest Letters</h2>
           <p class="text-brand-muted">Fresh from the messy frontier.</p>
         </div>
-        <a href="/letter" class="text-sm text-brand-yellow hover:underline">View all &rarr;</a>
+        <a href="/letter" class="text-sm text-brand-orange hover:underline">View all &rarr;</a>
       </div>
       {latestPosts.length === 0 ? (
         <div class="text-center py-16 border border-dashed border-white/10 rounded-xl">
@@ -116,7 +116,7 @@ const pillarDots: Record<string, string> = {
                 </time>
                 <span class="tag-pill">{pillarLabels[post.data.pillar]?.label ?? post.data.pillar}</span>
               </div>
-              <h3 class="text-lg font-bold group-hover:text-brand-yellow transition-colors mb-2">{post.data.title}</h3>
+              <h3 class="text-lg font-bold group-hover:text-brand-orange transition-colors mb-2">{post.data.title}</h3>
               <p class="text-sm text-brand-muted line-clamp-2">{post.data.description}</p>
             </a>
           ))}
@@ -139,7 +139,7 @@ const pillarDots: Record<string, string> = {
           href="https://jenp.substack.com"
           target="_blank"
           rel="noopener"
-          class="inline-flex items-center justify-center px-8 py-3 bg-brand-pink text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+          class="inline-flex items-center justify-center px-8 py-3 bg-brand-orange text-brand-darker font-semibold rounded-lg hover:opacity-90 transition-opacity"
         >
           Subscribe on Substack
         </a>

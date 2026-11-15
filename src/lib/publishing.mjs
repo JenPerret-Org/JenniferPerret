@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 export const platforms = ['linkedin', 'x', 'bluesky', 'threads', 'mastodon', 'facebook', 'instagram'];
 export const pillars = {
-  'agents-coding': { label: 'Agents Writing Code', color: 'text-brand-pink' },
-  'building-agents': { label: 'Building Agentic Solutions', color: 'text-brand-yellow' },
-  'ai-general': { label: 'AI — The Bigger Picture', color: 'text-purple-400' },
+  'agents-coding': { label: 'Agents Writing Code', color: 'text-brand-blue' },
+  'building-agents': { label: 'Building Agentic Solutions', color: 'text-brand-orange' },
+  'ai-general': { label: 'AI — The Bigger Picture', color: 'text-brand-pink' },
 };
 
 /** @param {string} tag */

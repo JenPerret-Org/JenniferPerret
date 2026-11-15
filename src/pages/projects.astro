@@ -37,11 +37,11 @@ const projects = [
           href={project.url}
           target={project.url.startsWith('http') ? '_blank' : undefined}
           rel={project.url.startsWith('http') ? 'noopener' : undefined}
-          class={`block p-8 rounded-xl border card-hover group ${project.highlight ? 'border-brand-pink/30 bg-brand-pink/[0.03]' : 'border-white/5 bg-white/[0.02]'}`}
+          class={`block p-8 rounded-xl border card-hover group ${project.highlight ? 'border-brand-blue/30 bg-brand-blue/[0.03]' : 'border-white/5 bg-white/[0.02]'}`}
         >
           <div class="flex items-start justify-between gap-4">
             <div>
-              <h2 class="text-xl font-bold group-hover:text-brand-yellow transition-colors mb-3">{project.name}</h2>
+              <h2 class="text-xl font-bold group-hover:text-brand-orange transition-colors mb-3">{project.name}</h2>
               <p class="text-brand-muted leading-relaxed mb-4">{project.description}</p>
               <div class="flex flex-wrap gap-2">
                 {project.tags.map((tag) => (

@@ -2,12 +2,13 @@
 
 /* Custom theme tokens */
 @theme {
-  --color-brand-yellow: #F5A623;
-  --color-brand-pink: #E91E7B;
-  --color-brand-dark: #1a1a2e;
-  --color-brand-darker: #0f0f1a;
-  --color-brand-muted: #94a3b8;
-  --color-brand-light: #f8fafc;
+  --color-brand-blue: #38BDF8;
+  --color-brand-orange: #F4A261;
+  --color-brand-pink: #FF70A6;
+  --color-brand-dark: #152237;
+  --color-brand-darker: #0B1220;
+  --color-brand-muted: #C2CEDD;
+  --color-brand-light: #F5F3EE;
   --font-family-heading: 'Inter', system-ui, sans-serif;
   --font-family-body: 'Inter', system-ui, sans-serif;
 }
@@ -26,14 +27,6 @@ html {
   color-scheme: dark;
 }
 
-/* Gradient text utility */
-.gradient-text {
-  background: linear-gradient(135deg, var(--color-brand-yellow), var(--color-brand-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 /* Messy drip accent — used on section dividers */
 .messy-accent {
   position: relative;
@@ -45,7 +38,7 @@ html {
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, var(--color-brand-pink), var(--color-brand-yellow));
+  background: linear-gradient(90deg, var(--color-brand-pink), var(--color-brand-orange));
   border-radius: 2px;
 }
 
@@ -55,7 +48,7 @@ html {
 }
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(233, 30, 123, 0.15);
+  box-shadow: 0 8px 30px rgba(56, 189, 248, 0.12);
 }
 
 /* Tag pill */
@@ -65,17 +58,17 @@ html {
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid rgba(245, 166, 35, 0.3);
-  color: var(--color-brand-yellow);
+  border: 1px solid rgba(244, 162, 97, 0.3);
+  color: var(--color-brand-orange);
   transition: all 0.2s;
 }
 .tag-pill:hover {
-  border-color: var(--color-brand-yellow);
-  background: rgba(245, 166, 35, 0.1);
+  border-color: var(--color-brand-orange);
+  background: rgba(244, 162, 97, 0.1);
 }
 
 a:focus-visible, button:focus-visible, input:focus-visible {
-  outline: 2px solid var(--color-brand-yellow);
+  outline: 2px solid var(--color-brand-orange);
   outline-offset: 4px;
 }
 
@@ -85,14 +78,14 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   top: -5rem;
   z-index: 100;
   background: var(--color-brand-darker);
-  color: var(--color-brand-yellow);
+  color: var(--color-brand-orange);
   padding: 1rem;
 }
 .skip-link:focus { top: 1rem; }
 .preview-banner {
   padding: 0.75rem 1rem;
   text-align: center;
-  color: var(--color-brand-yellow);
+  color: var(--color-brand-orange);
   border-bottom: 1px solid currentColor;
 }
 
@@ -100,7 +93,7 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 .letter-body > * + * { margin-top: 1.25rem; }
 .letter-body h2 { font-size: 1.6rem; font-weight: 700; margin-top: 2.5rem; }
 .letter-body h3 { font-size: 1.3rem; font-weight: 700; margin-top: 2rem; }
-.letter-body a { color: var(--color-brand-yellow); text-decoration: underline; }
+.letter-body a { color: var(--color-brand-orange); text-decoration: underline; }
 .letter-body ul { list-style: disc; padding-left: 1.5rem; }
 .letter-body ol { list-style: decimal; padding-left: 1.5rem; }
 .letter-body blockquote { border-left: 3px solid var(--color-brand-pink); padding-left: 1rem; }
@@ -125,11 +118,11 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 .about-copy h2 + * { margin-top: 0.75rem; }
 .about-copy ul { list-style: disc; margin-top: 0.75rem; padding-left: 1.5rem; }
 .about-copy li + li { margin-top: 0.5rem; }
-.about-copy a { color: var(--color-brand-yellow); text-decoration: underline; }
+.about-copy a { color: var(--color-brand-orange); text-decoration: underline; }
 .about-copy strong { color: var(--color-brand-light); }
 
 #search {
-  --pagefind-ui-primary: var(--color-brand-yellow);
+  --pagefind-ui-primary: var(--color-brand-orange);
   --pagefind-ui-text: var(--color-brand-light);
   --pagefind-ui-background: var(--color-brand-dark);
   --pagefind-ui-border: var(--color-brand-muted);

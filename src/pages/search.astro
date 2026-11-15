@@ -28,7 +28,7 @@ const searchReady = !import.meta.env.DEV && posts.length > 0;
     ) : (
       <p class="text-brand-muted">
         {import.meta.env.DEV ? 'Search is available in the production preview after npm run build.' : 'Search will be available when the first letter is published.'}
-        {' '}<a class="text-brand-yellow hover:underline" href="/letter">Browse the archive</a>.
+        {' '}<a class="text-brand-orange hover:underline" href="/letter">Browse the archive</a>.
       </p>
     )}
   </section>
