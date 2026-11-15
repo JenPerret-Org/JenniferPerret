@@ -12,7 +12,7 @@ interface Props {
 }
 
 const { title, description = "AI Agentic Adventures & Misadventures — Learning in public through the messy transition to AI-driven development.",
-  articleDate, image = '/images/messy-hold-sign-only.jpg', imageAlt = 'A dark navy sign with energetic orange lettering: Things are about to get messy', noindex = false } = Astro.props;
+  articleDate, image = '/images/messy-dimensional-frame.jpg', imageAlt = 'A navy framed sign reads: Things are about to get messy, with orange paint dripping onto the frame', noindex = false } = Astro.props;
 const canonical = canonicalUrl(Astro.url.pathname, Astro.site!);
 const socialImage = new URL(image, Astro.site!).href;
 ---
