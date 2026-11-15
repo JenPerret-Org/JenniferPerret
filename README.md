@@ -29,8 +29,7 @@ These account-level steps must be completed by the owner:
   (or trigger it manually), then check HTTPS and redirects on the live domains.
 - [ ] Create or confirm ownership of `jenp.substack.com` and test subscribing.
   If the handle changes, update the links in `src/pages/index.astro`,
-  `src/pages/letter/index.astro`, `src/pages/letter/[...slug].astro`, and
-  `src/pages/about.astro`.
+  `src/pages/letter/[...slug].astro`, and `src/pages/about.astro`.
 - [ ] Review the bio in `src/pages/about.astro` and project descriptions and
   destinations in `src/pages/projects.astro`; two projects still use `#`
   placeholders and need real links or removal before launch.
