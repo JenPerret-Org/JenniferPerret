@@ -18,11 +18,21 @@ test('publication is opt-in and excludes future posts at the exact date boundary
   assert.throws(() => letterSchema.parse({ ...data, heroImage: '/images/hero.jpg' }), /heroImageAlt/);
 });
 
+test('publication dates reject impossible calendar dates before coercion', () => {
+  for (const pubDate of ['2024-02-29', '2025-02-28', '2026-04-30']) {
+    assert.doesNotThrow(() => letterSchema.parse({ ...data, pubDate }));
+  }
+  for (const pubDate of ['2025-02-29', '2026-02-31', '2026-04-31', '2026-13-01']) {
+    assert.throws(() => letterSchema.parse({ ...data, pubDate }));
+  }
+});
+
 test('YAML parsing preserves the body, handles BOM/CRLF and never treats missing flags as publishable', () => {
   const source = '\uFEFF---\r\ntitle: A letter\r\ndescription: Summary\r\npubDate: 2020-01-02\r\npillar: ai-general\r\n---\r\nBody\n---\nStill body';
   const parsed = parseLetter(source);
   assert.equal(parsed.data.draft, true);
   assert.equal(parsed.body, 'Body\n---\nStill body');
+  assert.throws(() => parseLetter(source.replace('2020-01-02', '2026-02-31')));
   assert.throws(() => parseLetter('No front matter'), /YAML front matter/);
   assert.throws(() => parseLetter('---\ntitle: [broken\n---\n'), /flow sequence/i);
 });
