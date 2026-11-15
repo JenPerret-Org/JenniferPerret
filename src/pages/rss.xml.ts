@@ -1,21 +1,21 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
+import { getLetters } from '../lib/letters';
+import { canonicalUrl, letterPath } from '../lib/publishing.mjs';
 
-export async function GET(context: APIContext) {
-  const posts = await getCollection('letter', ({ data }) => !data.draft);
-
+export async function GET({ site }: APIContext) {
+  const posts = await getLetters(false);
   return rss({
-    title: 'Jennifer Perret — Weekly Letter',
-    description: 'AI Agentic Adventures & Misadventures — Learning in public through the messy transition to AI-driven development.',
-    site: context.site!,
-    items: posts
-      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-      .map((post) => ({
-        title: post.data.title,
-        description: post.data.description,
-        pubDate: post.data.pubDate,
-        link: `/letter/${post.id}/`,
-      })),
+    title: 'Jennifer Perret — The Weekly Letter',
+    description: 'AI Agentic Adventures & Misadventures — learning in public.',
+    site: site!,
+    items: posts.map((post) => ({
+      title: post.data.title,
+      description: post.data.description,
+      pubDate: post.data.pubDate,
+      categories: post.data.tags,
+      link: canonicalUrl(letterPath(post.id), site!),
+    })),
+    customData: '<language>en-us</language>',
   });
 }

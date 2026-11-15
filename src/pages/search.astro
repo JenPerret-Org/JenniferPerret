@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLetters } from '../lib/letters';
+const posts = await getLetters(false);
+const searchReady = !import.meta.env.DEV && posts.length > 0;
+---
+
+<BaseLayout title="Search — Jennifer Perret" description="Search published letters from Jennifer Perret.">
+  <section class="max-w-3xl mx-auto px-6 py-20">
+    <h1 class="text-3xl font-bold mb-4">Search letters</h1>
+    <p class="text-brand-muted mb-8">Search runs in your browser. Only published letters are indexed.</p>
+    {searchReady ? (
+      <>
+        <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+        <div id="search"></div>
+        <p id="search-error" role="alert" hidden>Search could not load. Please use the <a href="/letter/topics">topic index</a>.</p>
+        <script is:inline src="/pagefind/pagefind-ui.js"></script>
+        <script is:inline>
+          try {
+            new PagefindUI({ element: '#search', showSubResults: false, showImages: false });
+          } catch (error) {
+            document.getElementById('search-error').hidden = false;
+            console.error('Search initialization failed:', error);
+          }
+        </script>
+        <noscript>Enable JavaScript to search, or <a href="/letter/topics">browse topics</a>.</noscript>
+      </>
+    ) : (
+      <p class="text-brand-muted">
+        {import.meta.env.DEV ? 'Search is available in the production preview after npm run build.' : 'Search will be available when the first letter is published.'}
+        {' '}<a class="text-brand-orange hover:underline" href="/letter">Browse the archive</a>.
+      </p>
+    )}
+  </section>
+</BaseLayout>

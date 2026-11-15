@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Local social handoffs, never public site assets
+.social/
+
+# Local design-hook cache
+.impeccable/

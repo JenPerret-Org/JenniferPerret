@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { isPublished, letterPath, pillars, tagSlug } from '../lib/publishing.mjs';
+
+interface Props { post: CollectionEntry<'letter'> }
+const { post } = Astro.props;
+---
+
+<article class="p-6 rounded-xl border border-white/5 bg-white/[0.02] card-hover">
+  <div class="flex flex-wrap items-center gap-3 mb-3">
+    <time class="text-xs text-brand-muted" datetime={post.data.pubDate.toISOString()}>
+      {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
+    </time>
+    <a class={`text-xs font-medium ${pillars[post.data.pillar].color}`} href={`/letter/pillars/${post.data.pillar}`}>
+      {pillars[post.data.pillar].label}
+    </a>
+    {!isPublished(post.data) && <span class="tag-pill">Unpublished preview</span>}
+  </div>
+  <h2 class="text-xl font-bold mb-2">
+    <a class="hover:text-brand-orange transition-colors" href={letterPath(post.id)}>{post.data.title}</a>
+  </h2>
+  <p class="text-sm text-brand-muted">{post.data.description}</p>
+  <div class="flex flex-wrap gap-2 mt-4">
+    {post.data.tags.map((tag) => <a class="tag-pill" href={`/letter/tags/${tagSlug(tag)}`}>{tag}</a>)}
+  </div>
+</article>
