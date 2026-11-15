@@ -1,0 +1,36 @@
+{
+  "activeBrand": "jennifer-perret",
+  "polypost": {
+    "url": "https://aka.ms/Polypost",
+    "repository": "https://github.com/markrussinovich/Polypost",
+    "verifiedCommit": "86afeeee05dde6836b588fd04b11beac8517ec50",
+    "backupVersion": 1
+  },
+  "brands": [
+    {
+      "id": "jennifer-perret",
+      "name": "Jennifer Perret",
+      "status": "active",
+      "site": "https://www.jenperret.com",
+      "stagingSite": "https://staging.jenperret.com",
+      "contentDirectory": "src/content/letter",
+      "platforms": ["linkedin", "x", "bluesky", "threads", "mastodon", "facebook", "instagram"]
+    },
+    {
+      "id": "aicraftworks",
+      "name": "AICraftworks",
+      "status": "planned",
+      "site": null,
+      "contentDirectory": null,
+      "platforms": []
+    },
+    {
+      "id": "agentcraftworks",
+      "name": "AgentCraftworks",
+      "status": "planned",
+      "site": null,
+      "contentDirectory": null,
+      "platforms": []
+    }
+  ]
+}

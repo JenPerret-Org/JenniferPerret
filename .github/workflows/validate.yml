@@ -1,0 +1,28 @@
+name: Validate publishing
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main, staging]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deploy-env: [production, staging]
+    env:
+      DEPLOY_ENV: ${{ matrix.deploy-env }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
