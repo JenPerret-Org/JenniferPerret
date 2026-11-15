@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # Local social handoffs, never public site assets
 .social/
+
+# Local design-hook cache
+.impeccable/
