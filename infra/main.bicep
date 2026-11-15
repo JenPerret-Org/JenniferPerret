@@ -11,11 +11,14 @@ param resourceGroupName string = 'rg-jenp-site'
 @allowed(['Free', 'Standard'])
 param skuName string = 'Standard'
 
-param productionDomain string = 'www.jenp.ai'
-param stagingDomain string = 'staging.jenp.ai'
+param productionDomain string = 'www.jenperret.com'
+param stagingDomain string = 'staging.jenperret.com'
 
-@description('Bind custom domains only after their CNAME records resolve to the default hostnames; validation fails otherwise.')
-param bindCustomDomains bool = false
+@description('Bind the production domain after its CNAME resolves to the production hostname.')
+param bindProductionDomain bool = false
+
+@description('Bind the staging domain after its CNAME resolves to the staging hostname.')
+param bindStagingDomain bool = false
 
 param tags object = {
   workload: 'jenp-ai'
@@ -36,7 +39,7 @@ module production 'modules/static-site.bicep' = {
     name: 'swa-jenp-production'
     location: location
     skuName: skuName
-    customDomain: bindCustomDomains ? productionDomain : ''
+    customDomain: bindProductionDomain ? productionDomain : ''
     tags: union(tags, { environment: 'production', branch: 'main' })
   }
 }
@@ -48,7 +51,7 @@ module staging 'modules/static-site.bicep' = {
     name: 'swa-jenp-staging'
     location: location
     skuName: skuName
-    customDomain: bindCustomDomains ? stagingDomain : ''
+    customDomain: bindStagingDomain ? stagingDomain : ''
     tags: union(tags, { environment: 'staging', branch: 'staging' })
   }
 }

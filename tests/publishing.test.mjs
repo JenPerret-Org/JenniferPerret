@@ -39,11 +39,11 @@ test('non-drafts require one author-reviewed and author-approved tracker entry',
 
 test('local link checking is case-sensitive, checks real files, and preserves fragment targets', () => {
   const files = new Set(['index.html', 'letter/test/index.html', 'images/photo.jpg', 'letter/test/assets/photo.jpg']);
-  const resolve = (url) => resolveLocalTarget(url, '/letter/test', files, 'https://jenp.ai');
+  const resolve = (url) => resolveLocalTarget(url, '/letter/test', files, 'https://www.jenperret.com');
   assert.deepEqual(resolve('/letter/test?utm_source=x#section'), { file: 'letter/test/index.html', fragment: 'section' });
   assert.deepEqual(resolve('/images/photo.jpg'), { file: 'images/photo.jpg', fragment: '' });
   assert.equal(resolve('https://example.com/elsewhere'), null);
-  assert.equal(resolveLocalTarget('assets/photo.jpg', '/letter/test/', files, 'https://jenp.ai').file, 'letter/test/assets/photo.jpg');
+  assert.equal(resolveLocalTarget('assets/photo.jpg', '/letter/test/', files, 'https://www.jenperret.com').file, 'letter/test/assets/photo.jpg');
   assert.throws(() => resolve('/images/Photo.jpg'), /Missing local target/);
   assert.throws(() => resolve('/letter/missing'), /Missing local target/);
 });

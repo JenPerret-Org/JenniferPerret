@@ -62,7 +62,16 @@ test('real production build excludes unpublished content everywhere and generate
   await writeFile(path.join(root, 'DRAFT-REVIEW-TRACKER.md'), `# Review tracker\n\n| # | Draft | Date | Reviewed | Approved | Notes |\n| - | [Published](src/content/letter/published.md) | 2020-01-02 | [x] | [x] | Fixture |\n| - | [Scheduled](src/content/letter/unscheduled.md) | 2099-01-01 | [x] | [x] | Fixture |\n\n## Progress\n\n- Reviewed: 2 / 4\n- Approved: 2 / 4\n`);
   await build(root);
   const dist = path.join(root, 'dist');
-  assert.deepEqual(JSON.parse(await readFile(path.join(dist, 'posts.json'), 'utf8')).map((post) => post.id), ['published']);
+  const expectedOrigin = process.env.DEPLOY_ENV === 'staging' ? 'https://staging.jenperret.com' : 'https://www.jenperret.com';
+  const home = await readFile(path.join(dist, 'index.html'), 'utf8');
+  assert(home.includes(`rel="canonical" href="${expectedOrigin}/"`));
+  assert(home.includes(`property="og:url" content="${expectedOrigin}/"`));
+  const posts = JSON.parse(await readFile(path.join(dist, 'posts.json'), 'utf8'));
+  assert.deepEqual(posts.map((post) => post.id), ['published']);
+  assert.equal(posts[0].url, `${expectedOrigin}/letter/published`);
+  assert((await readFile(path.join(dist, 'rss.xml'), 'utf8')).includes(`${expectedOrigin}/letter/published`));
+  const hosting = JSON.parse(await readFile(path.join(dist, 'staticwebapp.config.json'), 'utf8'));
+  assert.equal(hosting.globalHeaders['X-Robots-Tag'], process.env.DEPLOY_ENV === 'staging' ? 'noindex, nofollow' : undefined);
   const searchEntry = JSON.parse(await readFile(path.join(dist, 'pagefind', 'pagefind-entry.json'), 'utf8'));
   assert.equal(searchEntry.languages.en.page_count, 1);
   for (const file of ['index.html', 'letter/index.html', 'letter/topics/index.html', 'rss.xml', 'sitemap.xml', 'posts.json']) {

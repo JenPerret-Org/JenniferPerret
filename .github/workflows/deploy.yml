@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
-      url: ${{ github.ref_name == 'main' && 'https://www.jenp.ai' || 'https://staging.jenp.ai' }}
+      url: ${{ github.ref_name == 'main' && 'https://www.jenperret.com' || 'https://staging.jenperret.com' }}
     env:
       DEPLOY_ENV: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
     steps:

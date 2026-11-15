@@ -2,7 +2,7 @@
 
 ## What is integrated
 
-The local `social:prepare` command converts an author-approved, due, non-draft jenp.ai letter into **PolyPost's native version-1 draft-library backup**. This is a working import/export integration, not a headless publishing API, vendored fork, installed extension, or connection to social accounts.
+The local `social:prepare` command converts an author-approved, due, non-draft www.jenperret.com letter into **PolyPost's native version-1 draft-library backup**. This is a working import/export integration, not a headless publishing API, vendored fork, installed extension, or connection to social accounts.
 
 Upstream sources were examined at [commit 86afeeee05dde6836b588fd04b11beac8517ec50](https://github.com/markrussinovich/Polypost/tree/86afeeee05dde6836b588fd04b11beac8517ec50):
 

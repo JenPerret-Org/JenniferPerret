@@ -8,7 +8,7 @@ Share the machinery, not the voice, approval or signed-in account. Keep one cano
 
 | Brand | Editorial purpose | Content and evidence | Primary next step |
 | --- | --- | --- | --- |
-| Jennifer Perret / jenp.ai | Personal perspective and learning in public | First-person letters, experiments, failures and reflections under the existing writing policy | Read, follow, discuss; newsletter only after its destination is confirmed |
+| Jennifer Perret / www.jenperret.com | Personal perspective and learning in public | First-person letters, experiments, failures and reflections under the existing writing policy | Read, follow, discuss; newsletter only after its destination is confirmed |
 | AICraftworks business | Explain business problems and available services | AI-native operating models, readiness, consulting approaches and approved case evidence | A discovery conversation or an offer whose availability is confirmed |
 | AgentCraftworks product | Make the product understandable and verifiable | Actual capabilities, tutorials, release notes, implementation evidence and clearly labeled roadmap | Documentation, a demo or evaluation only when actually available |
 
@@ -49,7 +49,7 @@ Each site must select exactly one brand. Its content, search index, RSS, sitemap
 ### Phase 1: Finish and rehearse the personal site
 
 1. **Agent:** Preserve all existing drafts, prepare a reviewed publishing PR, and rehearse the due/approved-post and PolyPost import paths using synthetic fixtures.
-2. **You:** Confirm public links, newsletter destination, desired first article, GitHub Pages environment and domain/DNS ownership. Approve content separately from infrastructure.
+2. **You:** Confirm public links, newsletter destination, desired first article, Azure Static Web Apps environments and domain/DNS ownership. Approve content separately from infrastructure.
 3. **Maintainer:** Enable required checks and appropriate deployment approvals. Rehearse a staging release before production DNS changes.
 4. **You:** Approve one personal-site article and a small set of channel variants, manually publish, and retain receipts.
 
@@ -110,7 +110,7 @@ Do not write or publish all three merely to fill a calendar. Start with one or t
 
 ## Copy-ready scope approvals
 
-1. **Personal launch:** "Prepare a staging deployment of jenp.ai. Keep every unapproved letter private. Do not change production DNS or publish social posts."
+1. **Personal launch:** "Prepare a staging deployment of www.jenperret.com. Keep every unapproved letter private. Do not change production DNS or publish social posts."
 2. **Business activation:** "Plan the AICraftworks site using domain `<domain>` and repository `<repository>`. `<owner>` owns editorial approval. Do not deploy or connect accounts until I approve that plan."
 3. **Product activation:** "Plan the AgentCraftworks product blog using `<domain>` and `<repository>`. Use only the approved capability/evidence list. Keep roadmap clearly labeled and do not publish."
 4. **Social pilot:** "Prepare PolyPost variants for `<approved article>` under `<brand>`. Do not send content to AI providers or post to any account. I will approve each destination separately."

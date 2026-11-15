@@ -1,6 +1,6 @@
 # Writing Policy & Voice Guide
 
-**Jennifer Perret — jenp.ai**
+**Jennifer Perret — www.jenperret.com**
 
 _Living document. Update it whenever a new piece reveals a pattern, or the voice shifts._
 

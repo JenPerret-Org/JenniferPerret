@@ -57,7 +57,7 @@ Use descriptive filenames, alt text and reasonably sized images. No automatic im
 1. **Agent:** Help research, fact-check and preview the piece under `WRITING-POLICY.md`. Keep unresolved claims in the tracker. Passing checks is not editorial approval.
 2. **Author:** Resolve outstanding claims, review the final text, and mark the exact letter row **Reviewed** and **Approved** in `DRAFT-REVIEW-TRACKER.md`. A copy-ready approval is:
 
-   > I approve the final text of `<letter-slug>` for publication on jenp.ai. Set `draft: false` and prepare its publishing pull request. Social distribution requires a separate approval.
+   > I approve the final text of `<letter-slug>` for publication on www.jenperret.com. Set `draft: false` and prepare its publishing pull request. Social distribution requires a separate approval.
 
 3. **Agent:** Only after that approval, set `draft: false`, verify the publication date and run the checks below. A date without a time means midnight UTC; use an ISO timestamp with an explicit offset when a particular release time matters.
 4. **Author/maintainer:** Review and merge the pull request. The existing `main` deploy trigger builds and deploys. A date in the future stays out until a later build; use the deploy workflow's manual trigger when due. There is no background scheduling service.
@@ -90,7 +90,7 @@ Search is generated after the build, so it is intentionally unavailable in `npm 
 
 ## CI, hosting and launch boundaries
 
-Pull requests run the same checks for both production and staging builds without deploying or uploading a draft preview. Pushes to `staging` deploy to staging.jenp.ai (robots blocked, `X-Robots-Tag: noindex`); pushes to `main` deploy to www.jenp.ai. Both run Node 22 and must pass checks before upload. Staging applies the same draft/approval rules as production; it is a rehearsal, not a draft preview. See [Hosting and environments](hosting.md).
+Pull requests run the same checks for both production and staging builds without deploying or uploading a draft preview. Pushes to `staging` deploy to staging.jenperret.com (robots blocked, `X-Robots-Tag: noindex`); pushes to `main` deploy to www.jenperret.com once their custom domains are configured. Both run Node 22 and must pass checks before upload. Staging applies the same draft/approval rules as production; it is a rehearsal, not a draft preview. See [Hosting and environments](hosting.md).
 
 **Maintainer actions outside this checkout:** Require the `validate` job in branch protection/rulesets for `staging` and `main`, restrict who can change workflows and editorial approval records, and add required reviewers to the `production` GitHub environment. A production artifact and a protected deployment are different controls.
 

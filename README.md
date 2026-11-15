@@ -1,6 +1,6 @@
-# jenp.ai
+# Jennifer Perret
 
-Jennifer Perret's Markdown-driven Astro site. Letters live in `src/content/letter`; GitHub Actions builds static HTML and deploys it to Azure Static Web Apps: `staging` → [staging.jenp.ai](https://staging.jenp.ai) (not indexed) and `main` → [www.jenp.ai](https://www.jenp.ai). No database or CMS is required. See [Hosting and environments](docs/hosting.md).
+Jennifer Perret's Markdown-driven Astro site. Letters live in `src/content/letter`; GitHub Actions builds static HTML for Azure Static Web Apps: `staging` → [staging.jenperret.com](https://staging.jenperret.com) (not indexed) and `main` → [www.jenperret.com](https://www.jenperret.com). The custom domains require DNS and Azure binding before they work. No database or CMS is required. See [Hosting and environments](docs/hosting.md).
 
 ## Write and preview
 
@@ -23,7 +23,7 @@ npm run preview
 
 Production builds exclude drafts and future letters from **pages, listings, RSS, sitemap, public JSON, and search**. A non-draft must also have both author-review boxes checked in the review tracker. All 18 existing letters remain drafts.
 
-Only the author approves publication. After approval, set `draft: false` in a reviewed pull request to `staging`, check staging.jenp.ai, then promote `staging` to `main` for production. Validation does not deploy. A future publication date requires another build after that date; there is no scheduler.
+Only the author approves publication. After approval, set `draft: false` in a reviewed pull request to `staging`, check staging.jenperret.com, then promote `staging` to `main` for production. Validation does not deploy. A future publication date requires another build after that date; there is no scheduler.
 
 ## Distribute with PolyPost
 

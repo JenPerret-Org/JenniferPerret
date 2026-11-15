@@ -32,7 +32,7 @@ test('native PolyPost backup contains one named draft and complete platform-spec
   for (const [platform, document] of Object.entries(draft.overrides)) {
     assert.equal(document.type, 'doc');
     const url = new URL(text(document).split('\n').at(-1));
-    assert.equal(url.origin, 'https://www.jenp.ai');
+    assert.equal(url.origin, 'https://www.jenperret.com');
     assert.equal(url.pathname, '/letter/test-letter');
     assert.equal(url.searchParams.get('utm_source'), platform);
     assert.equal(url.searchParams.get('utm_medium'), 'social');
@@ -49,14 +49,14 @@ test('native PolyPost backup contains one named draft and complete platform-spec
 });
 
 test('staging builds use the staging host while social links always point to production', () => {
-  assert.equal(getBrand(undefined, { environment: 'staging' }).site, 'https://staging.jenp.ai');
-  assert.equal(getBrand(undefined, { environment: 'production' }).site, 'https://www.jenp.ai');
+  assert.equal(getBrand(undefined, { environment: 'staging' }).site, 'https://staging.jenperret.com');
+  assert.equal(getBrand(undefined, { environment: 'production' }).site, 'https://www.jenperret.com');
   assert.throws(() => getBrand(undefined, { environment: 'preview' }), /Unknown DEPLOY_ENV/);
   const previous = process.env.DEPLOY_ENV;
   process.env.DEPLOY_ENV = 'staging';
   try {
     const kit = prepareSocial(post, undefined, now);
-    assert.equal(new URL(text(kit.backup.drafts[0].overrides.x).split('\n').at(-1)).origin, 'https://www.jenp.ai');
+    assert.equal(new URL(text(kit.backup.drafts[0].overrides.x).split('\n').at(-1)).origin, 'https://www.jenperret.com');
   } finally {
     if (previous === undefined) delete process.env.DEPLOY_ENV; else process.env.DEPLOY_ENV = previous;
   }

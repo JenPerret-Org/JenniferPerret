@@ -11,8 +11,8 @@
       "id": "jennifer-perret",
       "name": "Jennifer Perret",
       "status": "active",
-      "site": "https://www.jenp.ai",
-      "stagingSite": "https://staging.jenp.ai",
+      "site": "https://www.jenperret.com",
+      "stagingSite": "https://staging.jenperret.com",
       "contentDirectory": "src/content/letter",
       "platforms": ["linkedin", "x", "bluesky", "threads", "mastodon", "facebook", "instagram"]
     },
