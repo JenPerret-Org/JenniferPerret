@@ -1,0 +1,16 @@
+---
+import LetterList from '../../../components/LetterList.astro';
+import { getLetters } from '../../../lib/letters';
+import { pillars } from '../../../lib/publishing.mjs';
+
+export async function getStaticPaths() {
+  const posts = await getLetters();
+  return Object.entries(pillars).map(([id, pillar]) => ({
+    params: { pillar: id },
+    props: { label: pillar.label, posts: posts.filter((post) => post.data.pillar === id) },
+  }));
+}
+const { label, posts } = Astro.props;
+---
+
+<LetterList title={label} description={`Letters exploring ${label.toLowerCase()}.`} posts={posts} />

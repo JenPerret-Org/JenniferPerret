@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLetters } from '../../lib/letters';
+import { pillars, tagTopics } from '../../lib/publishing.mjs';
+const posts = await getLetters();
+const tags = tagTopics(posts);
+---
+
+<BaseLayout title="Browse topics — Jennifer Perret" description="Explore letters by focus area and topic.">
+  <section class="max-w-3xl mx-auto px-6 py-20">
+    <h1 class="text-3xl font-bold mb-8">Browse topics</h1>
+    <h2 class="text-xl font-bold mb-4">Focus areas</h2>
+    <ul class="space-y-4 mb-12">
+      {Object.entries(pillars).map(([id, pillar]) => (
+        <li><a class={`${pillar.color} hover:underline`} href={`/letter/pillars/${id}`}>{pillar.label}</a></li>
+      ))}
+    </ul>
+    <h2 class="text-xl font-bold mb-4">Tags</h2>
+    {tags.length ? (
+      <div class="flex flex-wrap gap-3">
+        {tags.map((tag) => <a class="tag-pill" href={`/letter/tags/${tag.slug}`}>{tag.label}</a>)}
+      </div>
+    ) : <p class="text-brand-muted">Topics will appear as letters are published.</p>}
+  </section>
+</BaseLayout>

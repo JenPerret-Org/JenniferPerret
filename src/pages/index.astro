@@ -1,9 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getLetters } from '../lib/letters';
 
-const allPosts = await getCollection('letter', ({ data }) => !data.draft);
-const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const sortedPosts = await getLetters();
 const latestPosts = sortedPosts.slice(0, 6);
 
 const pillarLabels: Record<string, { label: string; color: string; description: string }> = {
@@ -57,8 +56,12 @@ const pillarDots: Record<string, string> = {
         </div>
         <div class="relative">
           <img
-            src="/images/messy-hold.jpg"
-            alt="Things are about to get messy — poster held up setting the tone for learning through mistakes"
+            src="/images/messy-hold-sign-only.jpg"
+            alt="A dark navy sign with energetic orange lettering: Things are about to get messy"
+            width="1561"
+            height="1007"
+            fetchpriority="high"
+            decoding="async"
             class="rounded-xl shadow-2xl shadow-brand-pink/20 rotate-1 hover:rotate-0 transition-transform duration-300"
           />
         </div>
@@ -76,11 +79,11 @@ const pillarDots: Record<string, string> = {
       <p class="text-brand-muted mb-12">Three pillars. One messy journey.</p>
       <div class="grid md:grid-cols-3 gap-8">
         {Object.entries(pillarLabels).map(([key, { label, color, description }]) => (
-          <div class="p-6 rounded-xl border border-white/5 bg-white/[0.02] card-hover">
+          <a href={`/letter/pillars/${key}`} class="block p-6 rounded-xl border border-white/5 bg-white/[0.02] card-hover">
             <div class="w-3 h-3 rounded-full mb-4" style={`background: ${pillarDots[color] ?? '#a78bfa'}`}></div>
             <h3 class={`text-lg font-bold mb-3 ${color}`}>{label}</h3>
             <p class="text-sm text-brand-muted leading-relaxed">{description}</p>
-          </div>
+          </a>
         ))}
       </div>
     </div>
@@ -107,7 +110,7 @@ const pillarDots: Record<string, string> = {
             <a href={`/letter/${post.id}`} class="block p-6 rounded-xl border border-white/5 bg-white/[0.02] card-hover group">
               <div class="flex items-center gap-3 mb-3">
                 <time class="text-xs text-brand-muted" datetime={post.data.pubDate.toISOString()}>
-                  {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                  {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}
                 </time>
                 <span class="tag-pill">{pillarLabels[post.data.pillar]?.label ?? post.data.pillar}</span>
               </div>

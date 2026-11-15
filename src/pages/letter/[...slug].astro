@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
+import { getLetters } from '../../lib/letters';
+import { isPublished, letterPath, pillars, tagSlug } from '../../lib/publishing.mjs';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('letter');
+  const posts = await getLetters();
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -13,32 +15,33 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
-const pillarLabels: Record<string, string> = {
-  'agents-coding': 'Agents Writing Code',
-  'building-agents': 'Building Agentic Solutions',
-  'ai-general': 'AI — The Bigger Picture',
-};
+const posts = await getLetters();
+const related = posts.filter((entry) => entry.id !== post.id && entry.data.pillar === post.data.pillar).slice(0, 3);
 ---
 
-<BaseLayout title={`${post.data.title} — Jennifer Perret`} description={post.data.description}>
+<BaseLayout title={`${post.data.title} — Jennifer Perret`} description={post.data.description}
+  articleDate={post.data.pubDate} image={post.data.heroImage} imageAlt={post.data.heroImageAlt}>
   <article class="max-w-3xl mx-auto px-6 py-20">
     <header class="mb-12">
       <div class="flex items-center gap-3 mb-4">
         <time class="text-sm text-brand-muted" datetime={post.data.pubDate.toISOString()}>
-          {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
         </time>
-        <span class="text-sm text-brand-yellow">{pillarLabels[post.data.pillar] ?? post.data.pillar}</span>
+        <a class="text-sm text-brand-yellow" href={`/letter/pillars/${post.data.pillar}`}>{pillars[post.data.pillar].label}</a>
       </div>
       <h1 class="text-3xl md:text-4xl font-black leading-tight mb-4">{post.data.title}</h1>
       <p class="text-lg text-brand-muted">{post.data.description}</p>
-      <div class="flex gap-2 mt-6">
-        {post.data.tags.map((tag: string) => (
-          <span class="tag-pill">{tag}</span>
+      {!isPublished(post.data) && <p class="mt-4 text-brand-yellow">Unpublished preview. Not included in production, RSS, or search.</p>}
+      <div class="flex flex-wrap gap-2 mt-6">
+        {post.data.tags.map((tag) => (
+          <a class="tag-pill" href={`/letter/tags/${tagSlug(tag)}`}>{tag}</a>
         ))}
       </div>
     </header>
 
-    <div class="prose prose-invert prose-lg max-w-none
+    {post.data.heroImage && <img class="rounded-xl mb-12 w-full" src={post.data.heroImage} alt={post.data.heroImageAlt} />}
+
+    <div data-pagefind-body class="letter-body prose prose-invert prose-lg max-w-none
       prose-headings:font-bold prose-headings:text-brand-light
       prose-a:text-brand-yellow prose-a:no-underline hover:prose-a:underline
       prose-strong:text-brand-light
@@ -50,6 +53,14 @@ const pillarLabels: Record<string, string> = {
     </div>
 
     <footer class="mt-16 pt-8 border-t border-white/5">
+      {related.length > 0 && (
+        <aside class="mb-12" aria-label="Related letters">
+          <h2 class="text-xl font-bold mb-4">More on this topic</h2>
+          <ul class="space-y-3">
+            {related.map((entry) => <li><a class="text-brand-yellow hover:underline" href={letterPath(entry.id)}>{entry.data.title}</a></li>)}
+          </ul>
+        </aside>
+      )}
       <div class="bg-white/[0.03] border border-white/10 rounded-xl p-8 text-center">
         <p class="text-lg font-bold mb-2">Enjoyed this letter?</p>
         <p class="text-brand-muted mb-4">Get the next one delivered to your inbox.</p>
