@@ -17,7 +17,7 @@ When I finally dug in, the answer was humbling in its simplicity. I had run out 
 
 Not "hit an edge case." Not "discovered a subtle distributed systems problem." Ran out. Like forgetting to check the gas gauge.
 
-GitHub's REST API generally gives authenticated users 5,000 requests per hour, with different limits for some authentication methods and endpoints. That is a lot, for a human. It is almost nothing once you have agents. My issue triage sweep scanned every open issue, fetched labels, hunted duplicates, checked PR state — two to four hundred calls per run. The CI coach read workflow logs, fetched annotations, posted comments: another fifty to a hundred per failure. The review responder read diffs and fetched CODEOWNERS. The standup report aggregated across repos. The link checker fetched every URL in the docs, unbounded, because I had never once asked myself how many URLs were in the docs.
+GitHub's REST API generally gives authenticated users 5,000 requests per hour, with different limits for some authentication methods and endpoints. That is a lot, for a human. It is almost nothing once you have agents. My issue triage sweep scanned every open issue, fetched labels, hunted duplicates, and checked PR state, using two to four hundred calls per run. The CI coach read workflow logs, fetched annotations, posted comments: another fifty to a hundred per failure. The review responder read diffs and fetched CODEOWNERS. The standup report aggregated across repos. The link checker fetched every URL in the docs, unbounded, because I had never once asked myself how many URLs were in the docs.
 
 Now schedule all of them at 9am and watch them race to spend the whole budget before the first coffee. Everything afterward gets a 403 for the next forty-five minutes.
 
@@ -57,7 +57,7 @@ concurrency:
   cancel-in-progress: true
 ```
 
-Even so, bad days happen. Webhook floods. A giant PR touching hundreds of files. A dependency update rippling across every repo. The outcome I feared most was an important workflow — diagnosing a CI failure during a real incident — getting a 403 because the link checker had cheerfully spent the last two hundred requests validating a footnote.
+Even so, bad days happen. Webhook floods. A giant PR touching hundreds of files. A dependency update rippling across every repo. The outcome I feared most was an important workflow, such as diagnosing a CI failure during a real incident, getting a 403 because the link checker had cheerfully spent the last two hundred requests validating a footnote.
 
 The budget check is meant to make bulk work stand down while there's still room for a webhook handler or a PR comment. Three hundred remaining requests is a proposed reserve, not a GitHub requirement or a guarantee that it covers every sweep. If the check fails, an unknown balance is not a full balance. Bulk work should defer or use a bounded, observable fallback, while critical work follows an explicit policy and still honors rate-limit responses. Every subsequent step also needs to gate on the result, which sounds too obvious to say out loud until you see a pre-check that politely warns and then runs the work anyway.
 
@@ -71,7 +71,7 @@ Then cross-workflow deduplication, because five workflows starting within ten mi
 
 The last layer is the one that runs when everything above has already failed: a rate governor wrapping every outbound call. It is a token bucket that pays attention. Before a call goes out, the governor checks not just its local bucket but the actual `X-RateLimit-Remaining` value from the last response, so it tracks reality rather than a model of reality. Above sixty percent remaining, everything runs full speed. Between twenty and sixty, low-priority work gets throttled while normal work proceeds. Below twenty, only critical requests pass and the rest queue for retry.
 
-Underneath that sits a circuit breaker. When a call fails with a rate limit error, the breaker trips for that endpoint and reports to the orchestrator. If enough endpoints trip at once, the orchestrator does not crash the squad — it checkpoints the work in progress and schedules a resume. The difference between "the agent died because it hit a rate limit" and "the squad paused for four minutes and picked up where it left off" is entirely in that decision. Most systems get the first behavior by default.
+Underneath that sits a circuit breaker. When a call fails with a rate limit error, the breaker trips for that endpoint and reports to the orchestrator. If enough endpoints trip at once, the orchestrator does not crash the squad; it checkpoints the work in progress and schedules a resume. The difference between "the agent died because it hit a rate limit" and "the squad paused for four minutes and picked up where it left off" is entirely in that decision. Most systems get the first behavior by default.
 
 The last thing I added was visibility, and I only added it because I kept asking "why did the squad stall at 2pm yesterday?" and not being able to answer without an hour in the logs. Rate limit history charts in the [Hub](https://github.com/AgentCraftworks/AgentCraftworks-Hub) made consumption legible: when it spiked, which workflows were running, which agent behaviors were expensive. That turned rate limits from a debugging problem into a capacity planning one. The wall is still there. We just see it coming now.
 
@@ -85,13 +85,13 @@ GitHub cited high concurrency, intense usage, shared infrastructure strain, and 
 
 Here is the part I keep sitting with.
 
-When I use the GitHub API interactively, there is often thinking time between requests. That was the rhythm I had in mind when I added the automations, one at a time. Agents call in parallel, on schedules, in response to webhooks, in coordinated bursts. GitHub has primary and secondary limits for that traffic; I had not designed my work to respect both. My instinct — the same drive to results that has always been my workhorse, the one that asks *can I make it go faster* — was precisely what built the pile-on.
+When I use the GitHub API interactively, there is often thinking time between requests. That was the rhythm I had in mind when I added the automations, one at a time. Agents call in parallel, on schedules, in response to webhooks, in coordinated bursts. GitHub has primary and secondary limits for that traffic; I had not designed my work to respect both. My instinct, the same drive to results that has always been my workhorse and asks *can I make it go faster*, was precisely what built the pile-on.
 
 You don't need all five layers on day one. App identity and staggered schedules with concurrency groups buy back most of the room. The rest can follow as your agent footprint grows. But the mindset shift has to come first: in a multi-agent system, agents using the same credential or installation may spend from the same budget. They are not independent. They are roommates sharing a bank account, and none of them can see the balance.
 
 I built all of this because I was too busy shipping to notice my own agents were fighting each other.
 
-So the real question for all of us is not whether we hit this wall. It is what else our agents are quietly competing over right now — and whether we will see it before 9am tomorrow.
+So the real question for all of us is not whether we hit this wall. It is what else our agents are quietly competing over right now, and whether we will see it before 9am tomorrow.
 
 ---
 
