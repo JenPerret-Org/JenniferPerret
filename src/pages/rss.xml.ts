@@ -6,8 +6,8 @@ import { canonicalUrl, letterPath } from '../lib/publishing.mjs';
 export async function GET({ site }: APIContext) {
   const posts = await getLetters(false);
   return rss({
-    title: 'Jennifer Perret — The Weekly Letter',
-    description: 'AI Agentic Adventures & Misadventures — learning in public.',
+    title: 'Jennifer Perret | The Weekly Letter',
+    description: 'AI Agentic Adventures & Misadventures: learning in public.',
     site: site!,
     items: posts.map((post) => ({
       title: post.data.title,

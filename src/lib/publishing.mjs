@@ -4,7 +4,7 @@ export const platforms = ['linkedin', 'x', 'bluesky', 'threads', 'mastodon', 'fa
 export const pillars = {
   'agents-coding': { label: 'Agents Writing Code', color: 'text-brand-blue' },
   'building-agents': { label: 'Building Agentic Solutions', color: 'text-brand-orange' },
-  'ai-general': { label: 'AI — The Bigger Picture', color: 'text-brand-pink' },
+  'ai-general': { label: 'AI: The Bigger Picture', color: 'text-brand-pink' },
 };
 
 /** @param {string} tag */
