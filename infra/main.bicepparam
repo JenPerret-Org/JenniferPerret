@@ -5,6 +5,6 @@ param resourceGroupName = 'rg-jenp-site'
 param skuName = 'Standard'
 param productionDomain = 'www.jenperret.com'
 param stagingDomain = 'staging.jenperret.com'
-// Enable each binding only after its CNAME resolves to the corresponding Azure site.
-param bindProductionDomain = false
-param bindStagingDomain = false
+// Both CNAMEs resolve in Azure DNS and both domains are bound (Ready). Keep enabled.
+param bindProductionDomain = true
+param bindStagingDomain = true
