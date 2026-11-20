@@ -49,6 +49,7 @@ export async function checkSite(root = process.cwd()) {
   assertEditorialApproval(source, await readFile(path.join(root, 'DRAFT-REVIEW-TRACKER.md'), 'utf8'));
   const posts = source.filter((post) => isPublished(post.data));
   const files = new Set((await walk(dist)).map((file) => path.relative(dist, file).split(path.sep).join('/')));
+  assert(!files.has('CNAME'), 'Legacy GitHub Pages CNAME must not be included in Azure output');
   const html = new Map();
   const indexable = new Set();
   for (const file of files) {

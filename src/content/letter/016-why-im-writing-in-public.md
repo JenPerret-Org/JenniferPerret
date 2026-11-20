@@ -7,19 +7,19 @@ pillar: "ai-general"
 draft: true
 ---
 
-This is Letter 016. Letters 000 through 015 were backfill — written after the fact, reconstructed from commit logs, pull requests, and memory. Starting now, the intention is to write alongside the work rather than reconstruct it later.
+This is Letter 016. Letters 000 through 015 were backfill, written after the fact and reconstructed from commit logs, pull requests, and memory. Starting now, the intention is to write alongside the work rather than reconstruct it later.
 
 Which means starting now, I don't get to know how the story ends before I write it down.
 
 The AI agentic transition is moving too fast to learn alone. I don't mean that as hyperbole. The tooling changes weekly. Best practices from January are stale by March. Patterns that work for one model provider break on another. Existing security and AI management frameworks give us a starting point. Translating them into evidence for rapidly changing agent workflows is the work I'm trying to do.
 
-Nobody has this figured out. Not the big tech companies, not the startups, not the researchers. We are all learning as we go. The difference is that most of that learning happens in private — inside corporate walls, behind NDAs, in Slack channels that evaporate.
+Nobody has this figured out. Not the big tech companies, not the startups, not the researchers. We are all learning as we go. The difference is that most of that learning happens in private, inside corporate walls, behind NDAs, in Slack channels that evaporate.
 
 So I decided to do mine in public.
 
 The tagline on this site, "things are about to get messy," isn't a warning. It's a promise. Messy is where the learning happens. Clean narratives are for case studies written after the outcome is known, and I don't know the outcome yet. Some days the platform works beautifully. Some days the Windows file system throws EPERM errors at me for six hours. Both days are worth writing about, though only one of them is fun.
 
-A growth mindset isn't believing you'll succeed. It's believing that the process of trying — including, especially, the failures — makes you better. Every revert taught me more than every merge. Every killed architecture taught me more than every shipping one. I threw away an entire .NET stack before landing on TypeScript, and the weeks of work I burned to get there taught me more about platform architecture than any of the code I kept.
+A growth mindset isn't believing you'll succeed. It's believing that the process of trying, including and especially the failures, makes you better. Every revert taught me more than every merge. Every killed architecture taught me more than every shipping one. I threw away an entire .NET stack before landing on TypeScript, and the weeks of work I burned to get there taught me more about platform architecture than any of the code I kept.
 
 Some numbers, so the scale is clear. I started in May of 2025 with a Hello World. I had not written code in decades. I was a Microsoft veteran who had spent years on the business side, and the last time I shipped software we were still arguing about whether XML or JSON was the future.
 
@@ -29,7 +29,7 @@ I'm not listing that to impress anyone. I'm listing it because none of it would 
 
 Everything I write here falls into one of three pillars. They look different from the ground but they hold up the same roof.
 
-The first is agents writing code, and it's the one nobody is answering well. When an AI agent writes code, who is responsible for it? When that code gets committed, reviewed, merged, deployed — what is the supply chain governance story? We spent decades building software supply chain security practices, and agents are about to route around every one of them unless we build governance into the agentic layer itself. That is what AgentCraftworks exists to solve, and these letters document the building of it.
+The first is agents writing code, and it's the one nobody is answering well. When an AI agent writes code, who is responsible for it? When that code gets committed, reviewed, merged, and deployed, what is the supply chain governance story? We spent decades building software supply chain security practices, and agents are about to route around every one of them unless we build governance into the agentic layer itself. That is what AgentCraftworks exists to solve, and these letters document the building of it.
 
 The second is the engineering. Rate governors, circuit breakers, cascade detectors, scope isolation, TTL-based pruning, orchestration patterns for multi-agent squads. The nuts and bolts of making agent systems reliable, observable, and governable. If you're building with agents, this is the pillar where you'll find patterns worth stealing. I write about what works, what doesn't, and why.
 
@@ -37,13 +37,13 @@ The third is the wider view. Where is this heading? What does the agentic transi
 
 Ten months of this has taught me something I didn't expect: the misadventures are worth more than the adventures.
 
-When everything works, you learn your plan was correct. Satisfying, not educational. When something breaks — when the .NET stack has to die, when the EPERM bug eats six hours, when you commit the same sprint on two different branches and spend an evening untangling the merge — that's when you learn how things actually work. The revert teaches more than the merge. The bug teaches more than the feature. The deleted code teaches more than the shipped code.
+When everything works, you learn your plan was correct. Satisfying, not educational. When something breaks, when the .NET stack has to die, when the EPERM bug eats six hours, when you commit the same sprint on two different branches and spend an evening untangling the merge, that's when you learn how things actually work. The revert teaches more than the merge. The bug teaches more than the feature. The deleted code teaches more than the shipped code.
 
-I've also learned that AI agents are extraordinary amplifiers and terrible decision-makers. They generate code at a pace that is genuinely shocking. They cannot tell you whether that code should exist. The judgment — what to build, why, whether it serves the mission — stays stubbornly, irreducibly human.
+I've also learned that AI agents are extraordinary amplifiers and terrible decision-makers. They generate code at a pace that is genuinely shocking. They cannot tell you whether that code should exist. The judgment about what to build, why, and whether it serves the mission stays stubbornly, irreducibly human.
 
 If the pace here has felt relentless, there's context: the Agentic AI Hackathon, with judging extended to April 3. The last few weeks were driven partly by that deadline and partly by the momentum of a platform finally reaching the point where its pieces fit together. After April 3 the pace changes. Not slower, different. Less sprinting, more deliberate building. The foundation is laid.
 
-From here these letters come weekly. They'll go deep on specific governance patterns — how the cascade detector works, why scope isolation matters for multi-tenant agent systems, what compliance-as-code looks like in practice. They'll also pull back to the questions that keep me up at night. And as pieces of the platform stabilize enough to share, they'll become open source.
+From here these letters come weekly. They'll go deep on specific governance patterns, such as how the cascade detector works, why scope isolation matters for multi-tenant agent systems, and what compliance-as-code looks like in practice. They'll also pull back to the questions that keep me up at night. And as pieces of the platform stabilize enough to share, they'll become open source.
 
 If you're building with agents, I want to hear about your messy journey too. The entire point of learning in public is that it isn't a solo activity. It's a conversation, and so far I've been doing most of the talking.
 

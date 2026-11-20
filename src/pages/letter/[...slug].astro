@@ -19,7 +19,7 @@ const posts = await getLetters();
 const related = posts.filter((entry) => entry.id !== post.id && entry.data.pillar === post.data.pillar).slice(0, 3);
 ---
 
-<BaseLayout title={`${post.data.title} — Jennifer Perret`} description={post.data.description}
+<BaseLayout title={`${post.data.title} | Jennifer Perret`} description={post.data.description}
   articleDate={post.data.pubDate} image={post.data.heroImage} imageAlt={post.data.heroImageAlt}>
   <article class="max-w-3xl mx-auto px-6 py-20">
     <header class="mb-12">
@@ -27,11 +27,11 @@ const related = posts.filter((entry) => entry.id !== post.id && entry.data.pilla
         <time class="text-sm text-brand-muted" datetime={post.data.pubDate.toISOString()}>
           {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
         </time>
-        <a class="text-sm text-brand-yellow" href={`/letter/pillars/${post.data.pillar}`}>{pillars[post.data.pillar].label}</a>
+        <a class="text-sm text-brand-orange" href={`/letter/pillars/${post.data.pillar}`}>{pillars[post.data.pillar].label}</a>
       </div>
       <h1 class="text-3xl md:text-4xl font-black leading-tight mb-4">{post.data.title}</h1>
       <p class="text-lg text-brand-muted">{post.data.description}</p>
-      {!isPublished(post.data) && <p class="mt-4 text-brand-yellow">Unpublished preview. Not included in production, RSS, or search.</p>}
+      {!isPublished(post.data) && <p class="mt-4 text-brand-orange">Unpublished preview. Not included in production, RSS, or search.</p>}
       <div class="flex flex-wrap gap-2 mt-6">
         {post.data.tags.map((tag) => (
           <a class="tag-pill" href={`/letter/tags/${tagSlug(tag)}`}>{tag}</a>
@@ -43,7 +43,7 @@ const related = posts.filter((entry) => entry.id !== post.id && entry.data.pilla
 
     <div data-pagefind-body class="letter-body prose prose-invert prose-lg max-w-none
       prose-headings:font-bold prose-headings:text-brand-light
-      prose-a:text-brand-yellow prose-a:no-underline hover:prose-a:underline
+      prose-a:text-brand-orange prose-a:no-underline hover:prose-a:underline
       prose-strong:text-brand-light
       prose-code:text-brand-pink prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
       prose-blockquote:border-brand-pink prose-blockquote:text-brand-muted
@@ -57,7 +57,7 @@ const related = posts.filter((entry) => entry.id !== post.id && entry.data.pilla
         <aside class="mb-12" aria-label="Related letters">
           <h2 class="text-xl font-bold mb-4">More on this topic</h2>
           <ul class="space-y-3">
-            {related.map((entry) => <li><a class="text-brand-yellow hover:underline" href={letterPath(entry.id)}>{entry.data.title}</a></li>)}
+            {related.map((entry) => <li><a class="text-brand-orange hover:underline" href={letterPath(entry.id)}>{entry.data.title}</a></li>)}
           </ul>
         </aside>
       )}
@@ -68,13 +68,13 @@ const related = posts.filter((entry) => entry.id !== post.id && entry.data.pilla
           href="https://jenp.substack.com"
           target="_blank"
           rel="noopener"
-          class="inline-flex items-center justify-center px-6 py-3 bg-brand-pink text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+          class="inline-flex items-center justify-center px-6 py-3 bg-brand-orange text-brand-darker font-semibold rounded-lg hover:opacity-90 transition-opacity"
         >
           Subscribe on Substack
         </a>
       </div>
       <div class="mt-8 text-center">
-        <a href="/letter" class="text-brand-yellow hover:underline text-sm">&larr; Back to all letters</a>
+        <a href="/letter" class="text-brand-orange hover:underline text-sm">&larr; Back to all letters</a>
       </div>
     </footer>
   </article>

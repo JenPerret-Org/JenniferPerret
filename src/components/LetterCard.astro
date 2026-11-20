@@ -17,7 +17,7 @@ const { post } = Astro.props;
     {!isPublished(post.data) && <span class="tag-pill">Unpublished preview</span>}
   </div>
   <h2 class="text-xl font-bold mb-2">
-    <a class="hover:text-brand-yellow transition-colors" href={letterPath(post.id)}>{post.data.title}</a>
+    <a class="hover:text-brand-orange transition-colors" href={letterPath(post.id)}>{post.data.title}</a>
   </h2>
   <p class="text-sm text-brand-muted">{post.data.description}</p>
   <div class="flex flex-wrap gap-2 mt-4">
