@@ -40,15 +40,15 @@ Repeat with `swa-jenp-production` and `--env production`.
 
 ## DNS and custom domains
 
-The `jenperret.com` nameservers are hosted at GoDaddy. Set each CNAME to the corresponding Azure hostname:
+The `jenperret.com` zone is hosted in Azure DNS (zone `jenperret.com`, resource group `aicraftworkstenant-rg`, in the same subscription as `rg-jenp-site`). The domain registration remains at GoDaddy. Current records:
 
 | Type | Name | Value |
 | --- | --- | --- |
 | CNAME | `staging` | `gentle-stone-01b2d751e.5.azurestaticapps.net` |
 | CNAME | `www` | `jolly-sky-0f8f78e1e.6.azurestaticapps.net` |
 
-1. Add the staging record, set `bindStagingDomain = true` in `infra/main.bicepparam`, and redeploy after DNS resolves. Merge to `staging` and verify the site over HTTPS before production cutover.
-2. The existing `www.jenperret.com` CNAME points to `jenperret.com`; replacing it changes existing traffic. Once production is deployed and ready, use Microsoft's [TXT-based zero-downtime domain validation](https://learn.microsoft.com/en-us/azure/static-web-apps/custom-domain#zero-downtime-migration) before replacing the `www` CNAME. Set `bindProductionDomain = true` and redeploy once the new CNAME resolves. Azure provides managed TLS certificates for the bound domains.
-3. After the new production site is working, forward `jenperret.com`, `jenp.ai`, and any other desired domains to `https://www.jenperret.com`. Use permanent HTTPS redirects that preserve paths and query strings, and verify that the forwarding provider serves a valid certificate for each source hostname. A DNS CNAME alone does not provide an HTTP redirect or automatically bind a hostname in Azure.
+1. `staging.jenperret.com` is bound to `swa-jenp-staging` and serves HTTPS with an Azure-managed certificate.
+2. `www.jenperret.com` is bound to `swa-jenp-production` and serves HTTPS with an Azure-managed certificate. Both binding flags in `infra/main.bicepparam` are enabled.
+3. The apex `jenperret.com` still has A records pointing to GoDaddy's parking page. Forward `jenperret.com`, `jenp.ai`, and any other desired domains to `https://www.jenperret.com`. Use permanent HTTPS redirects that preserve paths and query strings, and verify that the forwarding provider serves a valid certificate for each source hostname. A DNS CNAME alone does not provide an HTTP redirect or automatically bind a hostname in Azure.
 
 The hostnames can also be retrieved with `az staticwebapp show -n <site-name> -g rg-jenp-site --query defaultHostname -o tsv`. Keep the staging and production binding flags enabled in the parameter file after each domain is bound.
